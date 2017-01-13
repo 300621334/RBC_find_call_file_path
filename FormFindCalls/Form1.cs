@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 //using Oracle.DataAccess.Client;
 using System.Data.SqlClient;
-
+using System.IO;
 
 namespace FormFindCalls
 {
@@ -31,6 +31,8 @@ namespace FormFindCalls
 
             lbl_paths.Text += "\n";
 
+            File.WriteAllText(@"C:\Users\Zoya\Google Drive\RBC\Form_find_contacts\paths.txt", string.Empty);//clear content of file if any
+
             while (reader.Read())
             {
                 string x = reader.GetString(1);//audio_module_no
@@ -47,13 +49,25 @@ namespace FormFindCalls
                     
 
                 lbl_paths.Text += x + y + "\n";
-                lbl_paths.Text += "Path is: \\\\SE441903.maple.fg.rbc.com\\h$\\Calls\\" +
+
+
+                //Now write a text file
+                //http://stackoverflow.com/questions/2695444/clearing-content-of-text-file-using-c-sharp
+                //http://stackoverflow.com/questions/7569904/easiest-way-to-read-from-and-write-to-files
+                //http://stackoverflow.com/questions/2837020/open-existing-file-append-a-single-line
+
+               
+
+                string path = "Path is: \\\\SE441903.maple.fg.rbc.com\\h$\\Calls\\" +
                     x +
                     "\\" + y.Substring(0, 3) +
                     "\\" + y.Substring(3, 2) +
                     "\\" + y.Substring(5, 2) +
                     "\\" + y.Substring(7, 2) +
                     "\n\n";
+
+                File.AppendAllText(@"C:\Users\Zoya\Google Drive\RBC\Form_find_contacts\paths.txt", path+Environment.NewLine);
+                lbl_paths.Text += path;
             }
             con.Close();
             
