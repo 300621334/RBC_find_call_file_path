@@ -28,9 +28,10 @@ namespace FormFindCalls
             SqlCommand query = new SqlCommand("select * from rbc_contacts", con);
             con.Open();
             SqlDataReader reader = query.ExecuteReader();
-            
 
-            while(reader.Read())
+            lbl_paths.Text += "\n";
+
+            while (reader.Read())
             {
                 string x = reader.GetString(1);//audio_module_no
                 string y = reader.GetString(2);//audio_channel_no
@@ -42,9 +43,17 @@ namespace FormFindCalls
                     zeros += "0";
                     howManyZeros--;
                 }
+                y = zeros + y;
                     
 
-                lbl_paths.Text += x + zeros + y + "\n";
+                lbl_paths.Text += x + y + "\n";
+                lbl_paths.Text += "Path is: \\\\SE441903.maple.fg.rbc.com\\h$\\Calls\\" +
+                    x +
+                    "\\" + y.Substring(0, 3) +
+                    "\\" + y.Substring(3, 2) +
+                    "\\" + y.Substring(5, 2) +
+                    "\\" + y.Substring(7, 2) +
+                    "\n\n";
             }
             con.Close();
             
