@@ -31,44 +31,22 @@ namespace FormFindCalls
         {
             lbl_paths.Text = "Paths ro call-files are:";
 
-            query = "select * from rbc_contacts";
+            query = "select * from rbc_contacts where 1=1 ";
+            
+            query += (!string.IsNullOrWhiteSpace(contactID.Text))? " and contact_ID = '" + contactID.Text+"'" : "";//without single quotes err=invalid column name
+            query += (!string.IsNullOrWhiteSpace(kvp1.Text)) ? " and pcd1_value = '" + kvp1.Text+"'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp2.Text)) ? " and pcd2_value = '" + kvp2.Text+"'" : "";
+            query += " and start_time >= @startTime and end_time <= @endTime";
 
-            /*query = "select * from rbc_contacts where"+
-                " contact_ID =     @contactID" +
-                " and  pcd1_value = @pcd1Value" +
-                " and  pcd2_value =@pcd2Value"+
-                " and  start_time > @startTime"+
-                " and  end_time <   @endTime";*/
 
-            string searchWord = "";
             string conStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RBC_call_path;Integrated Security=True";
             con = new SqlConnection(conStr);
             //SqlCommand cmd = new SqlCommand("select * from rbc_contacts", con);
             cmd = new SqlCommand(query, con);
-            cmd.Parameters.AddWithValue("searchWord", searchWord);
-            
-            //string query = "select * from rbc_contacts where pcd1_value = " + kvp1.Text;//error because no quotes around value of kvp1.Text
-            //string query = "select * from rbc_contacts where pcd1_value = @searchWord";
 
-           
-           
-            cmd.Parameters.AddWithValue("contactID", !string.IsNullOrWhiteSpace(contactID.Text)?contactID.Text : "contact_ID");
-            cmd.Parameters.AddWithValue("pcd1Value", !string.IsNullOrWhiteSpace(kvp1.Text) ? kvp1.Text : "pcd1_value");
-            cmd.Parameters.AddWithValue("pcd2Value", !string.IsNullOrWhiteSpace(kvp2.Text) ? kvp2.Text : "pcd2_value");
-            //since condtional exp above wants BOTH sides of : to be same type. So DateTime and string won't do it. Hence if-else below needed.
-            //at (reader.Read()) got err//http://stackoverflow.com/questions/14119133/conversion-failed-when-converting-date-and-or-time-from-character-string-while-i
-            if (dateFromChkBx.Checked) cmd.Parameters.AddWithValue("startTime", dateFrom.Value);
-                                  else cmd.Parameters.AddWithValue("startTime", "start_time");
-            if (dateToChkBx.Checked) cmd.Parameters.AddWithValue("endTime", dateTo.Value);
-                                else cmd.Parameters.AddWithValue("endTime", "end_time");
+            cmd.Parameters.AddWithValue("startTime", dateFrom.Value);
+            cmd.Parameters.AddWithValue("endTime", dateTo.Value);
 
-
-
-           
-
-            
-
-      
 
 
             //open the connection to DB
@@ -145,11 +123,11 @@ namespace FormFindCalls
 
         private void dateFromChkBx_CheckedChanged(object sender, EventArgs e)
         {
-            dateFrom.Visible = dateFromChkBx.Checked ?true:false;
+            //dateFrom.Visible = dateFromChkBx.Checked ?true:false;
         }
         private void dateToChkBx_CheckedChanged(object sender, EventArgs e)
         {
-            dateTo.Visible = dateToChkBx.Checked ?true:false;
+            //dateTo.Visible = dateToChkBx.Checked ?true:false;
         }
 
         private void timeRange_CheckedChanged(object sender, EventArgs e)

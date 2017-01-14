@@ -38,14 +38,14 @@
             this.lbl_paths = new System.Windows.Forms.Label();
             this.timeFrom = new System.Windows.Forms.DateTimePicker();
             this.dateFrom = new System.Windows.Forms.DateTimePicker();
-            this.dateFromChkBx = new System.Windows.Forms.CheckBox();
             this.timeTo = new System.Windows.Forms.DateTimePicker();
             this.timeRange = new System.Windows.Forms.CheckBox();
             this.dateTo = new System.Windows.Forms.DateTimePicker();
-            this.dateToChkBx = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // contactID
@@ -134,18 +134,6 @@
             this.dateFrom.Name = "dateFrom";
             this.dateFrom.Size = new System.Drawing.Size(200, 20);
             this.dateFrom.TabIndex = 9;
-            this.dateFrom.Visible = false;
-            // 
-            // dateFromChkBx
-            // 
-            this.dateFromChkBx.AutoSize = true;
-            this.dateFromChkBx.Location = new System.Drawing.Point(371, 18);
-            this.dateFromChkBx.Name = "dateFromChkBx";
-            this.dateFromChkBx.Size = new System.Drawing.Size(169, 17);
-            this.dateFromChkBx.TabIndex = 11;
-            this.dateFromChkBx.Text = "From This Date/On This Date:";
-            this.dateFromChkBx.UseVisualStyleBackColor = true;
-            this.dateFromChkBx.CheckedChanged += new System.EventHandler(this.dateFromChkBx_CheckedChanged);
             // 
             // timeTo
             // 
@@ -174,18 +162,6 @@
             this.dateTo.Name = "dateTo";
             this.dateTo.Size = new System.Drawing.Size(200, 20);
             this.dateTo.TabIndex = 18;
-            this.dateTo.Visible = false;
-            // 
-            // dateToChkBx
-            // 
-            this.dateToChkBx.AutoSize = true;
-            this.dateToChkBx.Location = new System.Drawing.Point(371, 64);
-            this.dateToChkBx.Name = "dateToChkBx";
-            this.dateToChkBx.Size = new System.Drawing.Size(91, 17);
-            this.dateToChkBx.TabIndex = 19;
-            this.dateToChkBx.Text = "To This Date:";
-            this.dateToChkBx.UseVisualStyleBackColor = true;
-            this.dateToChkBx.CheckedChanged += new System.EventHandler(this.dateToChkBx_CheckedChanged);
             // 
             // label1
             // 
@@ -215,19 +191,37 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(371, 18);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(150, 13);
+            this.label3.TabIndex = 23;
+            this.label3.Text = "From This Date/On This Date:";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(374, 64);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(72, 13);
+            this.label4.TabIndex = 24;
+            this.label4.Text = "To This Date:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(619, 499);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.dateToChkBx);
             this.Controls.Add(this.dateTo);
             this.Controls.Add(this.timeRange);
             this.Controls.Add(this.timeTo);
-            this.Controls.Add(this.dateFromChkBx);
             this.Controls.Add(this.dateFrom);
             this.Controls.Add(this.timeFrom);
             this.Controls.Add(this.lbl_paths);
@@ -257,14 +251,14 @@
         private System.Windows.Forms.Label lbl_paths;
         private System.Windows.Forms.DateTimePicker timeFrom;
         private System.Windows.Forms.DateTimePicker dateFrom;
-        private System.Windows.Forms.CheckBox dateFromChkBx;
         private System.Windows.Forms.DateTimePicker timeTo;
         private System.Windows.Forms.CheckBox timeRange;
         private System.Windows.Forms.DateTimePicker dateTo;
-        private System.Windows.Forms.CheckBox dateToChkBx;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
     }
 }
 
