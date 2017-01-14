@@ -32,39 +32,48 @@ namespace FormFindCalls
             lbl_paths.Text = "Paths ro call-files are:";
 
             query = "select * from rbc_contacts";
-            //query += string.IsNullOrWhiteSpace(contactID.Text) ? "" : " where contact_ID = \"" + contactID.Text + "\"";
-            //query += string.IsNullOrWhiteSpace(kvp1.Text) ? "" : " where pcd1_value = \"" + kvp1.Text + "\"";
-            //query += string.IsNullOrWhiteSpace(kvp2.Text) ? "" : " where  pcd2_value = \"" + kvp2.Text + "\"";
 
-            //string query = "select * from rbc_contacts where pcd1_value = " + kvp1.Text;//error because no quotes around value of kvp1.Text
-            //string query = "select * from rbc_contacts where pcd1_value = @searchWord";
+            /*query = "select * from rbc_contacts where"+
+                " contact_ID =     @contactID" +
+                " and  pcd1_value = @pcd1Value" +
+                " and  pcd2_value =@pcd2Value"+
+                " and  start_time > @startTime"+
+                " and  end_time <   @endTime";*/
+
             string searchWord = "";
-            if(!string.IsNullOrWhiteSpace(contactID.Text))
-            {
-                query += " where contact_ID = @searchWord";
-                searchWord = contactID.Text;
-            }
-            else if(!string.IsNullOrWhiteSpace(kvp1.Text))
-            {
-                query += " where pcd1_value = @searchWord";
-                searchWord = kvp1.Text;
-            }
-            else if(!string.IsNullOrWhiteSpace(kvp2.Text))
-            {
-                query += " where  pcd2_value = @searchWord";
-                searchWord = kvp2.Text;
-            }
-
-            
-
             string conStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RBC_call_path;Integrated Security=True";
             con = new SqlConnection(conStr);
             //SqlCommand cmd = new SqlCommand("select * from rbc_contacts", con);
             cmd = new SqlCommand(query, con);
             cmd.Parameters.AddWithValue("searchWord", searchWord);
+            
+            //string query = "select * from rbc_contacts where pcd1_value = " + kvp1.Text;//error because no quotes around value of kvp1.Text
+            //string query = "select * from rbc_contacts where pcd1_value = @searchWord";
 
+           
+           
+            cmd.Parameters.AddWithValue("contactID", !string.IsNullOrWhiteSpace(contactID.Text)?contactID.Text : "contact_ID");
+            cmd.Parameters.AddWithValue("pcd1Value", !string.IsNullOrWhiteSpace(kvp1.Text) ? kvp1.Text : "pcd1_value");
+            cmd.Parameters.AddWithValue("pcd2Value", !string.IsNullOrWhiteSpace(kvp2.Text) ? kvp2.Text : "pcd2_value");
+            //since condtional exp above wants BOTH sides of : to be same type. So DateTime and string won't do it. Hence if-else below needed.
+            //at (reader.Read()) got err//http://stackoverflow.com/questions/14119133/conversion-failed-when-converting-date-and-or-time-from-character-string-while-i
+            if (dateFromChkBx.Checked) cmd.Parameters.AddWithValue("startTime", dateFrom.Value);
+                                  else cmd.Parameters.AddWithValue("startTime", "start_time");
+            if (dateToChkBx.Checked) cmd.Parameters.AddWithValue("endTime", dateTo.Value);
+                                else cmd.Parameters.AddWithValue("endTime", "end_time");
+
+
+
+           
+
+            
+
+      
+
+
+            //open the connection to DB
             con.Open();
-             reader = cmd.ExecuteReader();
+            reader = cmd.ExecuteReader();
 
             lbl_paths.Text += "\n";
 
@@ -105,6 +114,8 @@ namespace FormFindCalls
 
                 File.AppendAllText(@"C:\Users\Zoya\Google Drive\RBC\Form_find_contacts\paths.txt", path+Environment.NewLine);
                 lbl_paths.Text += path;
+                //lbl_paths.Text += reader.GetDateTime(7).ToString();
+
             }
             con.Close();
 
@@ -116,20 +127,20 @@ namespace FormFindCalls
 
         private void contactID_MouseClick(object sender, MouseEventArgs e)
         {
-            kvp1.Text = "";
-            kvp2.Text = "";
+            //kvp1.Text = "";
+            //kvp2.Text = "";
         }
 
         private void kvp1_MouseClick(object sender, MouseEventArgs e)
         {
-            kvp2.Text = "";
-            contactID.Text = "";
+            //kvp2.Text = "";
+            //contactID.Text = "";
         }
 
         private void kvp2_MouseClick(object sender, MouseEventArgs e)
         {
-            kvp1.Text = "";
-            contactID.Text = "";
+            //kvp1.Text = "";
+            //contactID.Text = "";
         }
 
         private void dateFromChkBx_CheckedChanged(object sender, EventArgs e)

@@ -32,7 +32,7 @@ end_time datetime;
 
 --http://stackoverflow.com/questions/12957635/sql-query-to-insert-datetime-in-sql-server
 --implicit casting of varchar to datetime etc: https://msdn.microsoft.com/en-us/library/ms187928.aspx
-UPDATE rbc_contacts set start_time='20160101 10:34:09 AM', end_time='20160101 10:36:09 AM' where contact_id = '9128328744020010000';
-UPDATE rbc_contacts set start_time='20160110 11:59:09 AM', end_time='20160110 12:04:09 PM' where contact_id = '9128328744020010001';
-UPDATE rbc_contacts set start_time='20160115 11:58:09 PM', end_time='20160116 01:02:09 AM' where contact_id = '9128328744020010003';
-UPDATE rbc_contacts set start_time='20160120 10:01:09 AM', end_time='20160120 10:07:09 AM' where contact_id = '9128328744020010004';
+UPDATE rbc_contacts set start_time='20170101 10:34:09 AM', end_time='20170101 10:36:09 AM' where contact_id = '9128328744020010000';
+UPDATE rbc_contacts set start_time='20170110 11:59:09 AM', end_time='20170110 12:04:09 PM' where contact_id = '9128328744020010001';
+UPDATE rbc_contacts set start_time='20170115 11:58:09 PM', end_time='20170116 01:02:09 AM' where contact_id = '9128328744020010003';
+UPDATE rbc_contacts set start_time='20170120 10:01:09 AM', end_time='20170120 10:07:09 AM' where contact_id = '9128328744020010004';
