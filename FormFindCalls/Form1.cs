@@ -132,14 +132,36 @@ namespace FormFindCalls
             dateTo.Visible = dateToChkBx.Checked ?true:false;
         }
 
-
-
         private void timeRange_CheckedChanged(object sender, EventArgs e)
         {
             timeFrom.Visible = timeRange.Checked ? true : false;
             timeTo.Visible = timeRange.Checked ? true : false;
         }
-        
-    
+
+
+        //copy files btn
+        //http://stackoverflow.com/questions/21733756/best-way-to-split-string-by-last-occurrence-of-character
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            List<string> paths = new List<string>();
+            paths.Add(@"C:\Users\Zoya\Google Drive\RBC\a\file1.txt");
+            paths.Add(@"C:\Users\Zoya\Google Drive\RBC\a\file2.txt");
+            paths.Add(@"C:\Users\Zoya\Google Drive\RBC\b\file3.txt");
+
+            string destinationPath = @"C:\Users\Zoya\Google Drive\RBC\c\";
+            //string filesToDelete = @"*_DONE.wav";   // Only delete WAV files ending by "_DONE" in their filenames
+            //string[] fileList = System.IO.Directory.GetFiles(rootFolderPath, filesToDelete);
+
+
+
+
+            foreach (string file in paths)
+            {
+                string moveTo = destinationPath + file.Substring(file.LastIndexOf('\\') + 1);
+
+                File.Copy(file, moveTo);
+            }
+        }
     }
 }
