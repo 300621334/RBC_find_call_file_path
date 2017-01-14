@@ -19,7 +19,7 @@ namespace FormFindCalls
         {
             InitializeComponent();
         }
-        /*single Query Approach
+        /*single Query Approach.
          */
 
         SqlConnection con;
