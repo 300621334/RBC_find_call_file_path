@@ -21,11 +21,17 @@ namespace FormFindCalls
         }
         /*
          */
+
+        SqlConnection con;
+        SqlCommand cmd;
+        SqlDataReader reader;
+        string query;
+
         private void button1_Click(object sender, EventArgs e)
         {
             lbl_paths.Text = "Paths ro call-files are:";
 
-            string query = "select * from rbc_contacts";
+            query = "select * from rbc_contacts";
             //query += string.IsNullOrWhiteSpace(contactID.Text) ? "" : " where contact_ID = \"" + contactID.Text + "\"";
             //query += string.IsNullOrWhiteSpace(kvp1.Text) ? "" : " where pcd1_value = \"" + kvp1.Text + "\"";
             //query += string.IsNullOrWhiteSpace(kvp2.Text) ? "" : " where  pcd2_value = \"" + kvp2.Text + "\"";
@@ -49,17 +55,16 @@ namespace FormFindCalls
                 searchWord = kvp2.Text;
             }
 
-
-
+            
 
             string conStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RBC_call_path;Integrated Security=True";
-            SqlConnection con = new SqlConnection(conStr);
+            con = new SqlConnection(conStr);
             //SqlCommand cmd = new SqlCommand("select * from rbc_contacts", con);
-            SqlCommand cmd = new SqlCommand(query, con);
+            cmd = new SqlCommand(query, con);
             cmd.Parameters.AddWithValue("searchWord", searchWord);
 
             con.Open();
-            SqlDataReader reader = cmd.ExecuteReader();
+             reader = cmd.ExecuteReader();
 
             lbl_paths.Text += "\n";
 
@@ -102,7 +107,11 @@ namespace FormFindCalls
                 lbl_paths.Text += path;
             }
             con.Close();
-            
+
+            //just testing what timePicker outputs
+            lbl_paths.Text += dateFrom.Value.ToString();//it's 1/21/2017 1:55:56 PM
+
+
         }
 
         private void contactID_MouseClick(object sender, MouseEventArgs e)
