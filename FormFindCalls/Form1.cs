@@ -23,11 +23,43 @@ namespace FormFindCalls
          */
         private void button1_Click(object sender, EventArgs e)
         {
+            lbl_paths.Text = "Paths ro call-files are:";
+
+            string query = "select * from rbc_contacts";
+            //query += string.IsNullOrWhiteSpace(contactID.Text) ? "" : " where contact_ID = \"" + contactID.Text + "\"";
+            //query += string.IsNullOrWhiteSpace(kvp1.Text) ? "" : " where pcd1_value = \"" + kvp1.Text + "\"";
+            //query += string.IsNullOrWhiteSpace(kvp2.Text) ? "" : " where  pcd2_value = \"" + kvp2.Text + "\"";
+
+            //string query = "select * from rbc_contacts where pcd1_value = " + kvp1.Text;//error because no quotes around value of kvp1.Text
+            //string query = "select * from rbc_contacts where pcd1_value = @searchWord";
+            string searchWord = "";
+            if(!string.IsNullOrWhiteSpace(contactID.Text))
+            {
+                query += " where contact_ID = @searchWord";
+                searchWord = contactID.Text;
+            }
+            else if(!string.IsNullOrWhiteSpace(kvp1.Text))
+            {
+                query += " where pcd1_value = @searchWord";
+                searchWord = kvp1.Text;
+            }
+            else if(!string.IsNullOrWhiteSpace(kvp2.Text))
+            {
+                query += " where  pcd2_value = @searchWord";
+                searchWord = kvp2.Text;
+            }
+
+
+
+
             string conStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RBC_call_path;Integrated Security=True";
             SqlConnection con = new SqlConnection(conStr);
-            SqlCommand query = new SqlCommand("select * from rbc_contacts", con);
+            //SqlCommand cmd = new SqlCommand("select * from rbc_contacts", con);
+            SqlCommand cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("searchWord", searchWord);
+
             con.Open();
-            SqlDataReader reader = query.ExecuteReader();
+            SqlDataReader reader = cmd.ExecuteReader();
 
             lbl_paths.Text += "\n";
 
@@ -72,5 +104,42 @@ namespace FormFindCalls
             con.Close();
             
         }
+
+        private void contactID_MouseClick(object sender, MouseEventArgs e)
+        {
+            kvp1.Text = "";
+            kvp2.Text = "";
+        }
+
+        private void kvp1_MouseClick(object sender, MouseEventArgs e)
+        {
+            kvp2.Text = "";
+            contactID.Text = "";
+        }
+
+        private void kvp2_MouseClick(object sender, MouseEventArgs e)
+        {
+            kvp1.Text = "";
+            contactID.Text = "";
+        }
+
+        private void dateFromChkBx_CheckedChanged(object sender, EventArgs e)
+        {
+            dateFrom.Visible = dateFromChkBx.Checked ?true:false;
+        }
+        private void dateToChkBx_CheckedChanged(object sender, EventArgs e)
+        {
+            dateTo.Visible = dateToChkBx.Checked ?true:false;
+        }
+
+
+
+        private void timeRange_CheckedChanged(object sender, EventArgs e)
+        {
+            timeFrom.Visible = timeRange.Checked ? true : false;
+            timeTo.Visible = timeRange.Checked ? true : false;
+        }
+        
+    
     }
 }
