@@ -99,35 +99,6 @@ namespace FormFindCalls
 
             //just testing what timePicker outputs
             lbl_paths.Text += dateFrom.Value.ToString();//it's 1/21/2017 1:55:56 PM
-
-
-        }
-
-        private void contactID_MouseClick(object sender, MouseEventArgs e)
-        {
-            //kvp1.Text = "";
-            //kvp2.Text = "";
-        }
-
-        private void kvp1_MouseClick(object sender, MouseEventArgs e)
-        {
-            //kvp2.Text = "";
-            //contactID.Text = "";
-        }
-
-        private void kvp2_MouseClick(object sender, MouseEventArgs e)
-        {
-            //kvp1.Text = "";
-            //contactID.Text = "";
-        }
-
-        private void dateFromChkBx_CheckedChanged(object sender, EventArgs e)
-        {
-            //dateFrom.Visible = dateFromChkBx.Checked ?true:false;
-        }
-        private void dateToChkBx_CheckedChanged(object sender, EventArgs e)
-        {
-            //dateTo.Visible = dateToChkBx.Checked ?true:false;
         }
 
         private void timeRange_CheckedChanged(object sender, EventArgs e)

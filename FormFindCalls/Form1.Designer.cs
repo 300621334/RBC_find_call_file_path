@@ -54,7 +54,6 @@
             this.contactID.Name = "contactID";
             this.contactID.Size = new System.Drawing.Size(100, 20);
             this.contactID.TabIndex = 0;
-            this.contactID.MouseClick += new System.Windows.Forms.MouseEventHandler(this.contactID_MouseClick);
             // 
             // kvp1
             // 
@@ -62,7 +61,6 @@
             this.kvp1.Name = "kvp1";
             this.kvp1.Size = new System.Drawing.Size(100, 20);
             this.kvp1.TabIndex = 1;
-            this.kvp1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.kvp1_MouseClick);
             // 
             // lbl_contactID
             // 
@@ -97,7 +95,6 @@
             this.kvp2.Name = "kvp2";
             this.kvp2.Size = new System.Drawing.Size(100, 20);
             this.kvp2.TabIndex = 5;
-            this.kvp2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.kvp2_MouseClick);
             // 
             // button1
             // 
