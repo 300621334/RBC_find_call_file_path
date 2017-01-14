@@ -1,4 +1,5 @@
 ﻿--https://www.techonthenet.com/sql_server/index.php
+--select * from BB_PRODUCT where type=type or idproduct=1;--type=type meand if type matches ANY value under type then that's selected. i.e. Everything
 
 create table rbc_contacts
 (
