@@ -46,6 +46,8 @@
             this.button2 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
+            this.test = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // contactID
@@ -206,11 +208,32 @@
             this.label4.TabIndex = 24;
             this.label4.Text = "To This Date:";
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(532, 464);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 25;
+            this.button3.Text = "Test";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // test
+            // 
+            this.test.AutoSize = true;
+            this.test.Location = new System.Drawing.Point(30, 464);
+            this.test.Name = "test";
+            this.test.Size = new System.Drawing.Size(57, 13);
+            this.test.TabIndex = 26;
+            this.test.Text = "Test Label";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(619, 499);
+            this.Controls.Add(this.test);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.button2);
@@ -256,6 +279,8 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Label test;
     }
 }
 

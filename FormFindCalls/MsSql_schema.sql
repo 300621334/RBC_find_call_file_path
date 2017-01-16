@@ -1,6 +1,8 @@
 ﻿--https://www.techonthenet.com/sql_server/index.php
 --select * from BB_PRODUCT where type=type or idproduct=1;--type=type meand if type matches ANY value under type then that's selected. i.e. Everything
 
+--sp_help rbc_contacts; -- same as desc  rbc_contacts; in Oracle.
+
 create table rbc_contacts
 (
 contact_id varchar(20),
@@ -36,3 +38,5 @@ UPDATE rbc_contacts set start_time='20170101 10:34:09 AM', end_time='20170101 10
 UPDATE rbc_contacts set start_time='20170110 11:59:09 AM', end_time='20170110 12:04:09 PM' where contact_id = '9128328744020010001';
 UPDATE rbc_contacts set start_time='20170115 11:58:09 PM', end_time='20170116 01:02:09 AM' where contact_id = '9128328744020010003';
 UPDATE rbc_contacts set start_time='20170120 10:01:09 AM', end_time='20170120 10:07:09 AM' where contact_id = '9128328744020010004';
+
+update rbc_contacts set pcd1_value = 'insurance' where contact_ID = 9128328744020010004;

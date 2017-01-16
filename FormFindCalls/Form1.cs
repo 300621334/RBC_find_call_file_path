@@ -20,6 +20,9 @@ namespace FormFindCalls
             InitializeComponent();
         }
         /*single Query Approach.
+         * //Extract time only: http://stackoverflow.com/questions/1026841/how-to-get-only-time-from-date-time-c-sharp
+         * //compare TimeOfDay in if-else: http://stackoverflow.com/questions/10290187/how-to-compare-time-part-of-datetime
+         * --search entire DB in MS-Sql Server: http://stackoverflow.com/questions/15757263/find-a-string-by-searching-all-tables-in-sql-server-management-studio-2008
          */
 
         SqlConnection con;
@@ -131,6 +134,11 @@ namespace FormFindCalls
 
                 File.Copy(file, moveTo);
             }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            test.Text = dateFrom.Value.ToString();
         }
     }
 }
