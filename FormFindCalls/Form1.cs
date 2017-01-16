@@ -39,7 +39,13 @@ namespace FormFindCalls
             query += (!string.IsNullOrWhiteSpace(contactID.Text))? " and contact_ID = '" + contactID.Text+"'" : "";//without single quotes err=invalid column name
             query += (!string.IsNullOrWhiteSpace(kvp1.Text)) ? " and pcd1_value = '" + kvp1.Text+"'" : "";
             query += (!string.IsNullOrWhiteSpace(kvp2.Text)) ? " and pcd2_value = '" + kvp2.Text+"'" : "";
-            query += " and convert(date, start_time) >= @startTime and convert(date, end_time) <= @endTime";
+            query += " and convert(date, start_time) >= @startDate and convert(date, end_time) <= @endDate";
+            
+            //if(timeRange.Checked)
+            //{
+            //    query += " and convert(time, start_time) >= @startTime and convert(time, end_time) <= @endTime";
+            //}
+
 
 
             string conStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RBC_call_path;Integrated Security=True";
@@ -47,9 +53,14 @@ namespace FormFindCalls
             //SqlCommand cmd = new SqlCommand("select * from rbc_contacts", con);
             cmd = new SqlCommand(query, con);
 
-            cmd.Parameters.AddWithValue("startTime", dateFrom.Value.Date);
-            cmd.Parameters.AddWithValue("endTime", dateTo.Value.Date);
+            cmd.Parameters.AddWithValue("startDate", dateFrom.Value.Date);
+            cmd.Parameters.AddWithValue("endDate", dateTo.Value.Date);
 
+            //if (timeRange.Checked)
+            //{
+            //    cmd.Parameters.AddWithValue("startTime", dateFrom.Value.TimeOfDay);
+            //    cmd.Parameters.AddWithValue("endTime", dateTo.Value.TimeOfDay);
+            //}
 
 
             //open the connection to DB
@@ -138,7 +149,7 @@ namespace FormFindCalls
 
         private void button3_Click(object sender, EventArgs e)
         {
-            test.Text = dateFrom.Value.ToString();
+            test.Text = timeFrom.Value.TimeOfDay.ToString();
         }
     }
 }
