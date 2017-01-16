@@ -39,7 +39,7 @@ namespace FormFindCalls
             query += (!string.IsNullOrWhiteSpace(contactID.Text))? " and contact_ID = '" + contactID.Text+"'" : "";//without single quotes err=invalid column name
             query += (!string.IsNullOrWhiteSpace(kvp1.Text)) ? " and pcd1_value = '" + kvp1.Text+"'" : "";
             query += (!string.IsNullOrWhiteSpace(kvp2.Text)) ? " and pcd2_value = '" + kvp2.Text+"'" : "";
-            query += " and start_time >= @startTime and end_time <= @endTime";
+            query += " and convert(date, start_time) >= @startTime and convert(date, end_time) <= @endTime";
 
 
             string conStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RBC_call_path;Integrated Security=True";
@@ -47,8 +47,8 @@ namespace FormFindCalls
             //SqlCommand cmd = new SqlCommand("select * from rbc_contacts", con);
             cmd = new SqlCommand(query, con);
 
-            cmd.Parameters.AddWithValue("startTime", dateFrom.Value);
-            cmd.Parameters.AddWithValue("endTime", dateTo.Value);
+            cmd.Parameters.AddWithValue("startTime", dateFrom.Value.Date);
+            cmd.Parameters.AddWithValue("endTime", dateTo.Value.Date);
 
 
 
