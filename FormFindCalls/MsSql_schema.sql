@@ -1,7 +1,28 @@
-﻿--https://www.techonthenet.com/sql_server/index.php
+﻿--==============================
+----write to console the time part of BUT date part is changed to year 1900 etc!!!
+--declare @x datetime2;
+--select @x =  convert(time, start_time) from rbc_contacts where contact_ID=9128328744020010003;
+--print(@x);
+--==============================
+----convert whole DateTime2 to varchar, then substring TIME part only. Then re-Convert to datetime. This puts date as 1900-01-01
+--declare @x datetime2;
+--select @x =  cast(substring(convert(varchar, start_time, 113),13,8) as datetime) from rbc_contacts where contact_ID=9128328744020010003;
+--print(@x);
+--==============================
+
+
+----Whole datetime2 converts to Char BUT ONLY 1st 11 chars chosen i.e. date part only. Then that date part re-cast back to datetime.
+--declare @x datetime2;
+--select @x =  cast(convert(char(11), start_time, 113) as datetime) from rbc_contacts where contact_ID=9128328744020010003;
+--print(@x);
+--==============================
+--https://www.techonthenet.com/sql_server/index.php
 --select * from BB_PRODUCT where type=type or idproduct=1;--type=type meand if type matches ANY value under type then that's selected. i.e. Everything
 
 --sp_help rbc_contacts; -- same as desc  rbc_contacts; in Oracle.
+--==============================
+
+
 
 create table rbc_contacts
 (

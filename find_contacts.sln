@@ -5,16 +5,29 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormFindCalls", "FormFindCalls\FormFindCalls.csproj", "{9BC2FB22-8314-4624-96B8-819F0768136B}"
 EndProject
+Project("{F14B399A-7131-4C87-9E4B-1186C45EF12D}") = "Report Project1", "Report Project1\Report Project1.rptproj", "{BA44A885-F58F-472A-A9F7-185A592C67E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		DebugLocal|Any CPU = DebugLocal|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9BC2FB22-8314-4624-96B8-819F0768136B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9BC2FB22-8314-4624-96B8-819F0768136B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BC2FB22-8314-4624-96B8-819F0768136B}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BC2FB22-8314-4624-96B8-819F0768136B}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
 		{9BC2FB22-8314-4624-96B8-819F0768136B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9BC2FB22-8314-4624-96B8-819F0768136B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA44A885-F58F-472A-A9F7-185A592C67E5}.Debug|Any CPU.ActiveCfg = Debug
+		{BA44A885-F58F-472A-A9F7-185A592C67E5}.Debug|Any CPU.Build.0 = Debug
+		{BA44A885-F58F-472A-A9F7-185A592C67E5}.Debug|Any CPU.Deploy.0 = Debug
+		{BA44A885-F58F-472A-A9F7-185A592C67E5}.DebugLocal|Any CPU.ActiveCfg = DebugLocal
+		{BA44A885-F58F-472A-A9F7-185A592C67E5}.DebugLocal|Any CPU.Build.0 = DebugLocal
+		{BA44A885-F58F-472A-A9F7-185A592C67E5}.Release|Any CPU.ActiveCfg = Release
+		{BA44A885-F58F-472A-A9F7-185A592C67E5}.Release|Any CPU.Build.0 = Release
+		{BA44A885-F58F-472A-A9F7-185A592C67E5}.Release|Any CPU.Deploy.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
