@@ -20,10 +20,10 @@ namespace FormFindCalls
         {
             InitializeComponent();
 
-            //dateFrom.Format = DateTimePickerFormat.Custom;
-            //dateFrom.CustomFormat = "MMM/dd/yyyy --- HH:mm:ss";
-            //dateTo.Format = DateTimePickerFormat.Custom;
-            //dateTo.CustomFormat = "MMM/dd/yyyy --- HH:mm:ss";
+            dateFrom.Format = DateTimePickerFormat.Custom;
+            dateFrom.CustomFormat = "MMM/dd/yyyy --- HH:mm:ss";
+            dateTo.Format = DateTimePickerFormat.Custom;
+            dateTo.CustomFormat = "MMM/dd/yyyy --- HH:mm:ss";
 
             //timeFrom.MaxDate = DateTime.ParseExact("1900-01-01", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
             //timeTo.MaxDate = DateTime.ParseExact("1900-01-01", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
@@ -56,7 +56,7 @@ namespace FormFindCalls
             query += (!string.IsNullOrWhiteSpace(contactID.Text))? " and contact_ID = '" + contactID.Text+"'" : "";//without single quotes err=invalid column name
             query += (!string.IsNullOrWhiteSpace(kvp1.Text)) ? " and pcd1_value = '" + kvp1.Text+"'" : "";
             query += (!string.IsNullOrWhiteSpace(kvp2.Text)) ? " and pcd2_value = '" + kvp2.Text+"'" : "";
-            query += " and convert(date, start_time) >= @startDate and convert(date, end_time) <= @endDate";
+            query += " and start_time >= @startDate and end_time <= @endDate";
 
             //query += " and DatePart(yyyy, start_time) >= @yearStart and DatePart(yyyy, end_time) <= @yearEnd";//http://www.w3schools.com/sql/func_datepart.asp
             //query += " and DatePart(mm, start_time) >= @monthStart and DatePart(mm, end_time) <= @monthEnd";
@@ -70,11 +70,11 @@ namespace FormFindCalls
             //https://msdn.microsoft.com/en-CA/library/hh213505.aspx
 
 
-            if (timeRange.Checked)
-            {
-                query += " and cast(substring(convert(varchar, start_time, 113),13,8) as datetime) >= @startTime and cast(substring(convert(varchar, end_time, 113),13,8) as datetime) <= @endTime";//'time' instead of 'datetime' gave err= data type time not compatible with datetime
-                //    query += " and convert(time, start_time) >= @startTime and convert(time, end_time) <= @endTime";
-            }
+            //if (timeRange.Checked)
+            //{
+            //    query += " and cast(substring(convert(varchar, start_time, 113),13,8) as datetime) >= @startTime and cast(substring(convert(varchar, end_time, 113),13,8) as datetime) <= @endTime";//'time' instead of 'datetime' gave err= data type time not compatible with datetime
+            //    //    query += " and convert(time, start_time) >= @startTime and convert(time, end_time) <= @endTime";
+            //}
 
 
 
@@ -83,21 +83,21 @@ namespace FormFindCalls
             //SqlCommand cmd = new SqlCommand("select * from rbc_contacts", con);
             cmd = new SqlCommand(query, con);
 
-            cmd.Parameters.AddWithValue("startDate", dateFrom.Value.Date);
-            cmd.Parameters.AddWithValue("endDate", dateTo.Value.Date);
+            cmd.Parameters.AddWithValue("startDate", dateFrom.Value);
+            cmd.Parameters.AddWithValue("endDate", dateTo.Value);
 
-            if (timeRange.Checked)
-            {
-                //timePicker has millisec when app launches. But as soon as manually change it, ms r gone. So format .ffffff is needed BEFORE manually changing time, but AFT changing it it gives err "str not recognized as valid format"!!!
-                //            DateTime modifiedTimeFrom = DateTime.ParseExact("1900-01-01 " + timeFrom.Value.TimeOfDay.ToString().Substring(0,8), "yyyy-MM-dd hh:mm:ss.fffffff", System.Globalization.CultureInfo.InvariantCulture);//last arg to avoid yyyy/mm/dd format that might cause confusion //
+            //if (timeRange.Checked)
+            //{
+            //    //timePicker has millisec when app launches. But as soon as manually change it, ms r gone. So format .ffffff is needed BEFORE manually changing time, but AFT changing it it gives err "str not recognized as valid format"!!!
+            //    //            DateTime modifiedTimeFrom = DateTime.ParseExact("1900-01-01 " + timeFrom.Value.TimeOfDay.ToString().Substring(0,8), "yyyy-MM-dd hh:mm:ss.fffffff", System.Globalization.CultureInfo.InvariantCulture);//last arg to avoid yyyy/mm/dd format that might cause confusion //
 
 
-            DateTime modifiedTimeFrom = DateTime.ParseExact("1900-01-01 " + timeFrom.Value.TimeOfDay.ToString().Substring(0,8), "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);//hh: instead of HH: caused incorrect query results. bcoz hh: has AM/PM and substr dropped that AM/PM part//last arg to avoid yyyy/mm/dd format that might cause confusion //
-                //Console.WriteLine(modifiedTimeFrom.ToString());
-            DateTime modifiedTimeTo = DateTime.ParseExact("1900-01-01 " + timeTo.Value.TimeOfDay.ToString().Substring(0, 8), "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-            cmd.Parameters.AddWithValue("startTime", modifiedTimeFrom);
-            cmd.Parameters.AddWithValue("endTime", modifiedTimeTo);
-            }
+            //DateTime modifiedTimeFrom = DateTime.ParseExact("1900-01-01 " + timeFrom.Value.TimeOfDay.ToString().Substring(0,8), "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);//hh: instead of HH: caused incorrect query results. bcoz hh: has AM/PM and substr dropped that AM/PM part//last arg to avoid yyyy/mm/dd format that might cause confusion //
+            //    //Console.WriteLine(modifiedTimeFrom.ToString());
+            //DateTime modifiedTimeTo = DateTime.ParseExact("1900-01-01 " + timeTo.Value.TimeOfDay.ToString().Substring(0, 8), "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+            //cmd.Parameters.AddWithValue("startTime", modifiedTimeFrom);
+            //cmd.Parameters.AddWithValue("endTime", modifiedTimeTo);
+            //}
 
 
             //open the connection to DB
