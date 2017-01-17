@@ -19,10 +19,12 @@ namespace FormFindCalls
         public Form1()
         {
             InitializeComponent();
-            dateFrom.Format = DateTimePickerFormat.Custom;
-            dateFrom.CustomFormat = "MMM/dd/yyyy --- HH:mm:ss";
-            dateTo.Format = DateTimePickerFormat.Custom;
-            dateTo.CustomFormat = "MMM/dd/yyyy --- HH:mm:ss";
+
+            //dateFrom.Format = DateTimePickerFormat.Custom;
+            //dateFrom.CustomFormat = "MMM/dd/yyyy --- HH:mm:ss";
+            //dateTo.Format = DateTimePickerFormat.Custom;
+            //dateTo.CustomFormat = "MMM/dd/yyyy --- HH:mm:ss";
+
             //timeFrom.MaxDate = DateTime.ParseExact("1900-01-01", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
             //timeTo.MaxDate = DateTime.ParseExact("1900-01-01", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
             //custom format //http://stackoverflow.com/questions/13711358/datetime-picker-c-sharp-format
