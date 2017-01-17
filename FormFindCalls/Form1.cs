@@ -41,6 +41,7 @@ namespace FormFindCalls
         SqlCommand cmd;
         SqlDataReader reader;
         string query;
+        List<string> audioFilesList = new List<string>();
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -49,7 +50,7 @@ namespace FormFindCalls
             //pictureBox1.Visible = false;
 
 
-            lbl_paths.Text = "Paths ro call-files are:";
+            lbl_paths.Text = "Paths to call-files are:";
 
             query = "select * from rbc_contacts where 1=1 ";
             
@@ -110,7 +111,7 @@ namespace FormFindCalls
 
             while (reader.Read())
             {
-                string x = reader.GetString(1);//audio_module_no
+                string x = reader.GetString(1);//audio_module_no//zero based index//getValue(1) same as Java's getObject().
                 string y = reader.GetString(2);//audio_channel_no
                 int L = (x + y).Length;//combined length of above two
                 int howManyZeros = (L != 15) ? 15-L : 0;//if x+y is 15 then do NOT insert any zeros. 
@@ -120,7 +121,7 @@ namespace FormFindCalls
                     zeros += "0";
                     howManyZeros--;
                 }
-                y = zeros + y;
+                y = zeros + y;//insert zeros before channel#
                     
 
                 lbl_paths.Text += x + y + "\n";
@@ -141,6 +142,7 @@ namespace FormFindCalls
                     "\\" + y.Substring(7, 2) +
                     "\n\n";
 
+                audioFilesList.Add(path);
                 File.AppendAllText(@"C:\Users\Zoya\Google Drive\RBC\Form_find_contacts\paths.txt", path+Environment.NewLine);
                 lbl_paths.Text += path;
                 //lbl_paths.Text += reader.GetDateTime(7).ToString();
@@ -153,15 +155,12 @@ namespace FormFindCalls
             lbl_paths.Text += dateFrom.Value.ToString();//it's 1/21/2017 1:55:56 PM
         }
 
-        private void timeRange_CheckedChanged(object sender, EventArgs e)
-        {
-            timeFrom.Visible = timeRange.Checked ? true : false;
-            timeTo.Visible = timeRange.Checked ? true : false;
-        }
+
 
 
         //copy files btn
         //http://stackoverflow.com/questions/21733756/best-way-to-split-string-by-last-occurrence-of-character
+        //https://msdn.microsoft.com/en-us/library/cc148994.aspx
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -174,23 +173,33 @@ namespace FormFindCalls
             //string filesToDelete = @"*_DONE.wav";   // Only delete WAV files ending by "_DONE" in their filenames
             //string[] fileList = System.IO.Directory.GetFiles(rootFolderPath, filesToDelete);
 
+            //open dialogue to overwrite "destinationPath"
+            //OpenFileDialog d = new OpenFileDialog();//it's to OPEN files
+            //SaveFileDialog d = new SaveFileDialog();
+            //d.Title = "Where to save files?";
+
+            FolderBrowserDialog d = new FolderBrowserDialog();
+            //d.ShowDialog();
+            if (d.ShowDialog() == DialogResult.OK)//this pops up dialogue as well as checks if OK was clicked aft that.
+            {
+                destinationPath = d.SelectedPath + "\\";//need a backslash aft folder path
+            }//if cancel or close is pressed then "destinationPath" is NOT overriden
 
 
-
-            foreach (string file in paths)
+            foreach (string file in paths) //switch 'paths' e 'audioFilesList' for actual files
             {
                 string moveTo = destinationPath + file.Substring(file.LastIndexOf('\\') + 1);
 
-                File.Copy(file, moveTo);
+                File.Copy(file, moveTo, true);//true to overwrite existing files, else err
             }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
+            test.Text = DateTime.Now.ToString();
 
-            DateTime myDate = DateTime.ParseExact("1900-01-01 " + timeFrom.Value.TimeOfDay.ToString().Substring(0, 8), "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);//last arg to avoid yyyy/mm/dd format that might cause confusion //
-            test.Text = myDate.ToString();
-
+            //=======================================================
+            //DateTime myDate = DateTime.ParseExact("1900-01-01 " + timeFrom.Value.TimeOfDay.ToString().Substring(0, 8), "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);//last arg to avoid yyyy/mm/dd format that might cause confusion //
             //=======================================================
             //test.Text = timeFrom.Value.TimeOfDay.ToString();
 

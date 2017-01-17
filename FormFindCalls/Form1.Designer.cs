@@ -36,13 +36,8 @@
             this.kvp2 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.lbl_paths = new System.Windows.Forms.Label();
-            this.timeFrom = new System.Windows.Forms.DateTimePicker();
             this.dateFrom = new System.Windows.Forms.DateTimePicker();
-            this.timeTo = new System.Windows.Forms.DateTimePicker();
-            this.timeRange = new System.Windows.Forms.CheckBox();
             this.dateTo = new System.Windows.Forms.DateTimePicker();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -117,16 +112,6 @@
             this.lbl_paths.TabIndex = 7;
             this.lbl_paths.Text = "Paths ro call-files are:";
             // 
-            // timeFrom
-            // 
-            this.timeFrom.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.timeFrom.Location = new System.Drawing.Point(439, 162);
-            this.timeFrom.Name = "timeFrom";
-            this.timeFrom.ShowUpDown = true;
-            this.timeFrom.Size = new System.Drawing.Size(101, 20);
-            this.timeFrom.TabIndex = 8;
-            this.timeFrom.Visible = false;
-            // 
             // dateFrom
             // 
             this.dateFrom.Location = new System.Drawing.Point(371, 37);
@@ -134,51 +119,12 @@
             this.dateFrom.Size = new System.Drawing.Size(200, 20);
             this.dateFrom.TabIndex = 9;
             // 
-            // timeTo
-            // 
-            this.timeTo.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.timeTo.Location = new System.Drawing.Point(439, 188);
-            this.timeTo.Name = "timeTo";
-            this.timeTo.ShowUpDown = true;
-            this.timeTo.Size = new System.Drawing.Size(101, 20);
-            this.timeTo.TabIndex = 14;
-            this.timeTo.Visible = false;
-            // 
-            // timeRange
-            // 
-            this.timeRange.AutoSize = true;
-            this.timeRange.Location = new System.Drawing.Point(373, 139);
-            this.timeRange.Name = "timeRange";
-            this.timeRange.Size = new System.Drawing.Size(87, 17);
-            this.timeRange.TabIndex = 15;
-            this.timeRange.Text = "Time Range:";
-            this.timeRange.UseVisualStyleBackColor = true;
-            this.timeRange.CheckedChanged += new System.EventHandler(this.timeRange_CheckedChanged);
-            // 
             // dateTo
             // 
             this.dateTo.Location = new System.Drawing.Point(371, 81);
             this.dateTo.Name = "dateTo";
             this.dateTo.Size = new System.Drawing.Size(200, 20);
             this.dateTo.TabIndex = 18;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(403, 164);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(33, 13);
-            this.label1.TabIndex = 20;
-            this.label1.Text = "From:";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(404, 189);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(23, 13);
-            this.label2.TabIndex = 21;
-            this.label2.Text = "To:";
             // 
             // button2
             // 
@@ -237,13 +183,8 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.dateTo);
-            this.Controls.Add(this.timeRange);
-            this.Controls.Add(this.timeTo);
             this.Controls.Add(this.dateFrom);
-            this.Controls.Add(this.timeFrom);
             this.Controls.Add(this.lbl_paths);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.kvp2);
@@ -269,13 +210,8 @@
         private System.Windows.Forms.TextBox kvp2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label lbl_paths;
-        private System.Windows.Forms.DateTimePicker timeFrom;
         private System.Windows.Forms.DateTimePicker dateFrom;
-        private System.Windows.Forms.DateTimePicker timeTo;
-        private System.Windows.Forms.CheckBox timeRange;
         private System.Windows.Forms.DateTimePicker dateTo;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
