@@ -51,6 +51,7 @@ namespace FormFindCalls
             query += (!string.IsNullOrWhiteSpace(kvp1.Text)) ? " and pcd1_value = '" + kvp1.Text+"'" : "";
             query += (!string.IsNullOrWhiteSpace(kvp2.Text)) ? " and pcd2_value = '" + kvp2.Text+"'" : "";
             query += " and convert(date, start_time) >= @startDate and convert(date, end_time) <= @endDate";
+
             //query += " and DatePart(yyyy, start_time) >= @yearStart and DatePart(yyyy, end_time) <= @yearEnd";//http://www.w3schools.com/sql/func_datepart.asp
             //query += " and DatePart(mm, start_time) >= @monthStart and DatePart(mm, end_time) <= @monthEnd";
             //query += " and DatePart(dd, start_time) >= @dayStart and DatePart(dd, end_time) <= @dayEnd";
@@ -63,10 +64,11 @@ namespace FormFindCalls
             //https://msdn.microsoft.com/en-CA/library/hh213505.aspx
 
 
-            //if (timeRange.Checked)
-            //{
-            //    query += " and convert(time, start_time) >= @startTime and convert(time, end_time) <= @endTime";
-            //}
+            if (timeRange.Checked)
+            {
+                query += " and cast(substring(convert(varchar, start_time, 113),13,8) as datetime) >= @startTime and cast(substring(convert(varchar, end_time, 113),13,8) as datetime) <= @endTime";//'time' instead of 'datetime' gave err= data type time not compatible with datetime
+                //    query += " and convert(time, start_time) >= @startTime and convert(time, end_time) <= @endTime";
+            }
 
 
 
@@ -78,11 +80,18 @@ namespace FormFindCalls
             cmd.Parameters.AddWithValue("startDate", dateFrom.Value.Date);
             cmd.Parameters.AddWithValue("endDate", dateTo.Value.Date);
 
-            //if (timeRange.Checked)
-            //{
-            //    cmd.Parameters.AddWithValue("startTime", timeFrom.Value.TimeOfDay);
-            //    cmd.Parameters.AddWithValue("endTime", timeFrom.Value.TimeOfDay);
-            //}
+            if (timeRange.Checked)
+            {
+                //timePicker has millisec when app launches. But as soon as manually change it, ms r gone. So format .ffffff is needed BEFORE manually changing time, but AFT changing it it gives err "str not recognized as valid format"!!!
+                //            DateTime modifiedTimeFrom = DateTime.ParseExact("1900-01-01 " + timeFrom.Value.TimeOfDay.ToString().Substring(0,8), "yyyy-MM-dd hh:mm:ss.fffffff", System.Globalization.CultureInfo.InvariantCulture);//last arg to avoid yyyy/mm/dd format that might cause confusion //
+
+
+            DateTime modifiedTimeFrom = DateTime.ParseExact("1900-01-01 " + timeFrom.Value.TimeOfDay.ToString().Substring(0,8), "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);//hh: instead of HH: caused incorrect query results. bcoz hh: has AM/PM and substr dropped that AM/PM part//last arg to avoid yyyy/mm/dd format that might cause confusion //
+                //Console.WriteLine(modifiedTimeFrom.ToString());
+            DateTime modifiedTimeTo = DateTime.ParseExact("1900-01-01 " + timeTo.Value.TimeOfDay.ToString().Substring(0, 8), "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+            cmd.Parameters.AddWithValue("startTime", modifiedTimeFrom);
+            cmd.Parameters.AddWithValue("endTime", modifiedTimeTo);
+            }
 
 
             //open the connection to DB
@@ -172,14 +181,21 @@ namespace FormFindCalls
 
         private void button3_Click(object sender, EventArgs e)
         {
-            //test.Text = timeFrom.Value.TimeOfDay.ToString();
 
-
-            DateTime myDate = DateTime.ParseExact("1900-01-01 " + timeFrom.Value.TimeOfDay.ToString(), "yyyy-MM-dd hh:mm:ss.fffffff", System.Globalization.CultureInfo.InvariantCulture);//last arg to avoid yyyy/mm/dd format that might cause confusion //
+            DateTime myDate = DateTime.ParseExact("1900-01-01 " + timeFrom.Value.TimeOfDay.ToString().Substring(0, 8), "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);//last arg to avoid yyyy/mm/dd format that might cause confusion //
             test.Text = myDate.ToString();
 
+            //=======================================================
+            //test.Text = timeFrom.Value.TimeOfDay.ToString();
+
+            //            DateTime myDate = DateTime.ParseExact("1900-01-01 " + timeFrom.Value.TimeOfDay.ToString(), "yyyy-MM-dd HH:mm:ss.fffffff", System.Globalization.CultureInfo.InvariantCulture);//last arg to avoid yyyy/mm/dd format that might cause confusion //
+            //=======================================================
+            //DateTime myDate = DateTime.ParseExact("1900-01-01 " + timeFrom.Value.TimeOfDay.ToString().Substring(0,8), "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);//last arg to avoid yyyy/mm/dd format that might cause confusion //
+            //test.Text = myDate.ToString();//test.Text = myDate.ToString("HH:mm:ss");//24he format display
+            //=======================================================
             //DateTime myDate = DateTime.ParseExact("2009-05-08 14:40:52,531", "yyyy-MM-dd HH:mm:ss,fff", System.Globalization.CultureInfo.InvariantCulture)//http://stackoverflow.com/questions/919244/converting-a-string-to-datetime
             //string text = dateTime.ToString("MM/dd/yyyy HH:mm:ss.fff", CultureInfo.InvariantCulture);//http://stackoverflow.com/questions/18874102/net-datetime-tostringmm-dd-yyyy-hhmmss-fff-resulted-in-something-like
+            //=======================================================
         }
     }
 }
