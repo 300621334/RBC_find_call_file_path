@@ -108,9 +108,9 @@
             this.lbl_paths.AutoSize = true;
             this.lbl_paths.Location = new System.Drawing.Point(15, 229);
             this.lbl_paths.Name = "lbl_paths";
-            this.lbl_paths.Size = new System.Drawing.Size(107, 13);
+            this.lbl_paths.Size = new System.Drawing.Size(106, 13);
             this.lbl_paths.TabIndex = 7;
-            this.lbl_paths.Text = "Paths ro call-files are:";
+            this.lbl_paths.Text = "Paths will show here:";
             // 
             // dateFrom
             // 

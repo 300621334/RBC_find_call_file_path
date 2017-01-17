@@ -42,6 +42,7 @@ namespace FormFindCalls
         SqlDataReader reader;
         string query;
         List<string> audioFilesList = new List<string>();
+        int howManyFilesFound = 0;
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -49,8 +50,8 @@ namespace FormFindCalls
             //Thread.Sleep(3000);
             //pictureBox1.Visible = false;
 
-
-            lbl_paths.Text = "Paths to call-files are:";
+            howManyFilesFound = 0;
+            lbl_paths.Text = "Paths will show here:";
 
             query = "select * from rbc_contacts where 1=1 ";
             
@@ -111,6 +112,7 @@ namespace FormFindCalls
 
             while (reader.Read())
             {
+                howManyFilesFound++;
                 string x = reader.GetString(1);//audio_module_no//zero based index//getValue(1) same as Java's getObject().
                 string y = reader.GetString(2);//audio_channel_no
                 int L = (x + y).Length;//combined length of above two
@@ -122,7 +124,6 @@ namespace FormFindCalls
                     howManyZeros--;
                 }
                 y = zeros + y;//insert zeros before channel#
-                    
 
                 lbl_paths.Text += x + y + "\n";
 
@@ -148,11 +149,9 @@ namespace FormFindCalls
                 //lbl_paths.Text += reader.GetDateTime(7).ToString();
 
             }
-            con.Close();
-            
+            lbl_paths.Text = howManyFilesFound + " files found. \n\n" + lbl_paths.Text;//total files found appended at beginning of all results
 
-            //just testing what timePicker outputs
-            lbl_paths.Text += dateFrom.Value.ToString();//it's 1/21/2017 1:55:56 PM
+            con.Close();
         }
 
 
