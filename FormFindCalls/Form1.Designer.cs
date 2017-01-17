@@ -48,8 +48,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
             this.test = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // contactID
@@ -229,23 +227,11 @@
             this.test.TabIndex = 26;
             this.test.Text = "Test Label";
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::FormFindCalls.Properties.Resources.loading;
-            this.pictureBox1.Location = new System.Drawing.Point(223, 218);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(54, 42);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.pictureBox1.TabIndex = 27;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Visible = false;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(619, 499);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.test);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.label4);
@@ -268,7 +254,6 @@
             this.Controls.Add(this.contactID);
             this.Name = "Form1";
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -296,7 +281,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label test;
-        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 
