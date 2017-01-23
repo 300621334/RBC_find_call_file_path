@@ -37,12 +37,16 @@ namespace FormFindCalls
          * --search entire DB in MS-Sql Server: http://stackoverflow.com/questions/15757263/find-a-string-by-searching-all-tables-in-sql-server-management-studio-2008
          */
 
+        
         SqlConnection con;
         SqlCommand cmd;
         SqlDataReader reader;
         string query;
         List<string> audioFilesList = new List<string>();
         int howManyFilesFound = 0;
+        Form popUp;
+        TextBox txtPass, txtUser;
+        string popUsrName, popPass;
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -79,9 +83,17 @@ namespace FormFindCalls
             //}
 
 
+            SqlConnectionStringBuilder conStrBuilder = new SqlConnectionStringBuilder();
+            conStrBuilder.DataSource = @"(localdb)\MSSQLLocalDB";
+            conStrBuilder.InitialCatalog = "RBC_call_path";
+            conStrBuilder.IntegratedSecurity = true;//if false then put username & password
+            //x.UserID = "";
+            //x.Password = "";
+            string conStr = conStrBuilder.ConnectionString;
 
-            string conStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RBC_call_path;Integrated Security=True";
+            //string conStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RBC_call_path;Integrated Security=True";
             con = new SqlConnection(conStr);
+
             //SqlCommand cmd = new SqlCommand("select * from rbc_contacts", con);
             cmd = new SqlCommand(query, con);
 
@@ -195,7 +207,42 @@ namespace FormFindCalls
 
         private void button3_Click(object sender, EventArgs e)
         {
-            test.Text = DateTime.Now.ToString();
+
+            popUp = new Form();
+            Label userName = new Label();
+            userName.Text = "User Name: ";
+            userName.Location = new Point(10, 20);
+            txtUser = new TextBox();
+            txtUser.Location = new Point(120, 20);
+
+
+            Label pass = new Label();
+            pass.Text = "Password: ";
+            pass.Location = new Point(10, 60);
+            txtPass = new TextBox();
+            txtPass.Location = new Point(120, 60);
+            txtPass.UseSystemPasswordChar = true;//shows default black circles 
+            //txtPass.PasswordChar = '*';//Notice it's a char so single quotes.//Shows * instead of circles
+
+
+            Button btnLogin = new Button();
+            btnLogin.Text = "Login";
+            btnLogin.Location = new Point(30, 90);
+            btnLogin.Click += new System.EventHandler(btnLogin_Click);//notice +=
+
+            popUp.Controls.Add(userName);
+            popUp.Controls.Add(pass);
+            popUp.Controls.Add(txtUser);
+            popUp.Controls.Add(txtPass);
+
+
+
+            popUp.Controls.Add(btnLogin);
+            popUp.Show();//display pop up window asking for userName and Password
+
+
+
+            //test.Text = DateTime.Now.ToString();
 
             //=======================================================
             //DateTime myDate = DateTime.ParseExact("1900-01-01 " + timeFrom.Value.TimeOfDay.ToString().Substring(0, 8), "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);//last arg to avoid yyyy/mm/dd format that might cause confusion //
@@ -210,6 +257,14 @@ namespace FormFindCalls
             //DateTime myDate = DateTime.ParseExact("2009-05-08 14:40:52,531", "yyyy-MM-dd HH:mm:ss,fff", System.Globalization.CultureInfo.InvariantCulture)//http://stackoverflow.com/questions/919244/converting-a-string-to-datetime
             //string text = dateTime.ToString("MM/dd/yyyy HH:mm:ss.fff", CultureInfo.InvariantCulture);//http://stackoverflow.com/questions/18874102/net-datetime-tostringmm-dd-yyyy-hhmmss-fff-resulted-in-something-like
             //=======================================================
+        }
+
+        private void btnLogin_Click(object sender, EventArgs e)
+        {
+            popUsrName = txtUser.Text;
+            popPass = txtPass.Text;
+            popUp.Close();
+            test.Text = popUsrName + popPass;
         }
     }
 }
