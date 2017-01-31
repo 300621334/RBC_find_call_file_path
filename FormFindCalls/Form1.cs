@@ -165,40 +165,58 @@ namespace FormFindCalls
                     //http://stackoverflow.com/questions/2837020/open-existing-file-append-a-single-line
 
                     string fullDomain;
+                    #region Remotely access files. Asks for password/usrname!!!
+                    //switch (x)
+                    //{
+                    //    case "871001":
+                    //        fullDomain = "Path is: \\\\SE104421.saimaple.fg.rbc.com\\h$\\Calls\\";
+                    //        break;
+                    //    case "871002":
+                    //        fullDomain = "Path is: \\\\SE104422.saimaple.fg.rbc.com\\h$\\Calls\\";
+                    //        break;
+                    //    case "871003":
+                    //        fullDomain = "Path is: \\\\SE104426.saimaple.fg.rbc.com\\h$\\Calls\\";
+                    //        break;
+                    //    case "871004":
+                    //        fullDomain = "Path is: \\\\SE104427.saimaple.fg.rbc.com\\h$\\Calls\\";
+                    //        break;
+                    //    default: fullDomain = "Undefined Domain";
+                    //        break;
+                    //}
+                    #endregion
+                    #region access files LOCALLY... instead of remotely to avoid entering username/Password!!!
                     switch (x)
                     {
                         case "871001":
-                            fullDomain = "Path is: \\\\SE104421.maple.fg.rbc.com\\h$\\Calls\\";
+                            fullDomain = "H:\\Calls\\";
                             break;
                         case "871002":
-                            fullDomain = "Path is: \\\\SE104422.maple.fg.rbc.com\\h$\\Calls\\";
+                            fullDomain = "H:\\Calls\\";
                             break;
                         case "871003":
-                            fullDomain = "Path is: \\\\SE104426.maple.fg.rbc.com\\h$\\Calls\\";
+                            fullDomain = "H:\\Calls\\";
                             break;
                         case "871004":
-                            fullDomain = "Path is: \\\\SE104427.maple.fg.rbc.com\\h$\\Calls\\";
+                            fullDomain = "H:\\Calls\\";
                             break;
-                        default: fullDomain = "Undefined Domain";
+                        default:
+                            fullDomain = "H:\\Calls\\";
                             break;
                     }
+                    #endregion
 
-                    //fullDomain = (x == "871001") ? "Path is: \\\\SE104421.maple.fg.rbc.com\\h$\\Calls\\" : "";//audio_module_no (Recorder serial#) 871001 etc is there in database. Then server is so-&-so
-                    //fullDomain = (x == "871002") ? "Path is: \\\\SE104422.maple.fg.rbc.com\\h$\\Calls\\" : "";
-                    //fullDomain = (x == "871003") ? "Path is: \\\\SE104426.maple.fg.rbc.com\\h$\\Calls\\" : "";
-                    //fullDomain = (x == "871004") ? "Path is: \\\\SE104427.maple.fg.rbc.com\\h$\\Calls\\" : "";
 
-                    string path = fullDomain +
+                    string path = fullDomain + //e.g. \\SE104427.saimaple.fg.rbc.com\h$\Calls\871001\000\04\92\871001000049202.wav
                         x +
-                        "\\" + y.Substring(0, 3) +
-                        "\\" + y.Substring(3, 2) +
-                        "\\" + y.Substring(5, 2) +
-                        "\\" + y.Substring(7, 2) +
-                        "\n\n";
+                        "\\" + y.Substring(0, 3) + //871001-000-049202
+                        "\\" + y.Substring(3, 2) + //871001-000-04-9202
+                        "\\" + y.Substring(5, 2) + //871001-000-04-92-02
+                        "\\" + x + y + ".wav"; //871001000049202.wav
+                        //+"\n\n";//this causes err sometimes when try to open file or copy: "Illegal characters in path". But if manually delete last few chars like .wav and reType then no-err bcoz that removes \n\n. Also have to hit back arrow few times before delete takes effect on last few chars again bcoz \n\n!!!
 
                     audioFilesList.Add(path);
-                    //File.AppendAllText(@"C:\Users\Zoya\Google Drive\RBC\Form_find_contacts\paths.txt", path + Environment.NewLine);
-                    lbl_paths.Text += path;
+                    File.AppendAllText(@"C:\Users\SVYX0SRVOAT\Desktop\Test\paths.txt", path + Environment.NewLine);
+                    lbl_paths.Text += "\n\n"+ path;
                     //lbl_paths.Text += reader.GetDateTime(7).ToString();
 
                 }
@@ -220,12 +238,13 @@ namespace FormFindCalls
 
         private void button2_Click(object sender, EventArgs e)
         {
-            List<string> paths = new List<string>();
-            paths.Add(@"C:\Users\Zoya\Google Drive\RBC\a\file1.txt");
-            paths.Add(@"C:\Users\Zoya\Google Drive\RBC\a\file2.txt");
-            paths.Add(@"C:\Users\Zoya\Google Drive\RBC\b\file3.txt");
+            //List<string> paths = new List<string>();
+            //paths.Add(@"C:\Users\Zoya\Google Drive\RBC\a\file1.txt");
+            //paths.Add(@"C:\Users\Zoya\Google Drive\RBC\a\file2.txt");
+            //paths.Add(@"C:\Users\Zoya\Google Drive\RBC\b\file3.txt");
 
-            string destinationPath = @"C:\Users\Zoya\Google Drive\RBC\c\";
+            string destinationPath = @"C:\Users\SVYX0SRVOAT\Desktop\Test\"; //this might as well be an empty str as it's being changed later based on dialogue box selection
+
             //string filesToDelete = @"*_DONE.wav";   // Only delete WAV files ending by "_DONE" in their filenames
             //string[] fileList = System.IO.Directory.GetFiles(rootFolderPath, filesToDelete);
 
@@ -242,9 +261,9 @@ namespace FormFindCalls
             }//if cancel or close is pressed then "destinationPath" is NOT overriden
 
 
-            foreach (string file in paths) //switch 'paths' e 'audioFilesList' for actual files
+            foreach (string file in audioFilesList) //switch 'paths' e 'audioFilesList' for actual files
             {
-                string moveTo = destinationPath + file.Substring(file.LastIndexOf('\\') + 1);
+                string moveTo = destinationPath + file.Substring(file.LastIndexOf('\\') + 1); //\\SE104427.saimaple.fg.rbc.com\h$\Calls\871001\000\04\92\871001000049202.wav
 
                 File.Copy(file, moveTo, true);//true to overwrite existing files, else err
             }
