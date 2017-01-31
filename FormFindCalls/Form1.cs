@@ -125,60 +125,67 @@ namespace FormFindCalls
 
 
             //open the connection to DB
-            con.Open();
-            reader = cmd.ExecuteReader();
-
-            lbl_paths.Text += "\n";
-
-            File.WriteAllText(@"C:\Users\Zoya\Google Drive\RBC\Form_find_contacts\paths.txt", string.Empty);//clear content of file if any
-
-            while (reader.Read())
+            try
             {
-                howManyFilesFound++;
-                //To getValue(byColName) //http://stackoverflow.com/questions/8655965/how-to-get-data-by-sqldatareader-getvalue-by-column-name
-                string x = reader["audio_module_no"].ToString(); //reader.GetString(1);//audio_module_no//zero based index//getValue(1) same as Java's getObject().
-                string y = reader["audio_ch_no"].ToString(); //reader.GetString(2);//audio_channel_no
-                int L = (x + y).Length;//combined length of above two
-                int howManyZeros = (L != 15) ? 15-L : 0;//if x+y is 15 then do NOT insert any zeros. 
-                string zeros = "";
-                while(howManyZeros != 0)//add string of zeros to be inserted between x & y
+                con.Open();
+                reader = cmd.ExecuteReader();
+
+                lbl_paths.Text += "\n";
+
+                File.WriteAllText(@"C:\Users\Zoya\Google Drive\RBC\Form_find_contacts\paths.txt", string.Empty);//clear content of file if any
+
+                while (reader.Read())
                 {
-                    zeros += "0";
-                    howManyZeros--;
+                    howManyFilesFound++;
+                    //To getValue(byColName) //http://stackoverflow.com/questions/8655965/how-to-get-data-by-sqldatareader-getvalue-by-column-name
+                    string x = reader["audio_module_no"].ToString(); //reader.GetString(1);//audio_module_no//zero based index//getValue(1) same as Java's getObject().
+                    string y = reader["audio_ch_no"].ToString(); //reader.GetString(2);//audio_channel_no
+                    int L = (x + y).Length;//combined length of above two
+                    int howManyZeros = (L != 15) ? 15 - L : 0;//if x+y is 15 then do NOT insert any zeros. 
+                    string zeros = "";
+                    while (howManyZeros != 0)//add string of zeros to be inserted between x & y
+                    {
+                        zeros += "0";
+                        howManyZeros--;
+                    }
+                    y = zeros + y;//insert zeros before channel#
+
+                    lbl_paths.Text += x + y + "\n";
+
+
+                    //Now write a text file
+                    //http://stackoverflow.com/questions/2695444/clearing-content-of-text-file-using-c-sharp
+                    //http://stackoverflow.com/questions/7569904/easiest-way-to-read-from-and-write-to-files
+                    //http://stackoverflow.com/questions/2837020/open-existing-file-append-a-single-line
+
+                    string fullDomain;
+                    fullDomain = (x == "871001") ? "Path is: \\\\SE104421.maple.fg.rbc.com\\h$\\Calls\\" : "";//audio_module_no (Recorder serial#) 871001 etc is there in database. Then server is so-&-so
+                    fullDomain = (x == "871002") ? "Path is: \\\\SE104422.maple.fg.rbc.com\\h$\\Calls\\" : "";
+                    fullDomain = (x == "871003") ? "Path is: \\\\SE104426.maple.fg.rbc.com\\h$\\Calls\\" : "";
+                    fullDomain = (x == "871004") ? "Path is: \\\\SE104427.maple.fg.rbc.com\\h$\\Calls\\" : "";
+
+                    string path = fullDomain +
+                        x +
+                        "\\" + y.Substring(0, 3) +
+                        "\\" + y.Substring(3, 2) +
+                        "\\" + y.Substring(5, 2) +
+                        "\\" + y.Substring(7, 2) +
+                        "\n\n";
+
+                    audioFilesList.Add(path);
+                    File.AppendAllText(@"C:\Users\Zoya\Google Drive\RBC\Form_find_contacts\paths.txt", path + Environment.NewLine);
+                    lbl_paths.Text += path;
+                    //lbl_paths.Text += reader.GetDateTime(7).ToString();
+
                 }
-                y = zeros + y;//insert zeros before channel#
-
-                lbl_paths.Text += x + y + "\n";
-
-
-                //Now write a text file
-                //http://stackoverflow.com/questions/2695444/clearing-content-of-text-file-using-c-sharp
-                //http://stackoverflow.com/questions/7569904/easiest-way-to-read-from-and-write-to-files
-                //http://stackoverflow.com/questions/2837020/open-existing-file-append-a-single-line
-
-                string fullDomain;
-                fullDomain = (x=="871001") ?"Path is: \\\\SE104421.maple.fg.rbc.com\\h$\\Calls\\":"";//audio_module_no (Recorder serial#) 871001 etc is there in database. Then server is so-&-so
-                fullDomain = (x=="871002") ?"Path is: \\\\SE104422.maple.fg.rbc.com\\h$\\Calls\\":"";
-                fullDomain = (x=="871003") ?"Path is: \\\\SE104426.maple.fg.rbc.com\\h$\\Calls\\":"";
-                fullDomain = (x=="871004") ?"Path is: \\\\SE104427.maple.fg.rbc.com\\h$\\Calls\\":"";
-
-                string path = fullDomain +
-                    x +
-                    "\\" + y.Substring(0, 3) +
-                    "\\" + y.Substring(3, 2) +
-                    "\\" + y.Substring(5, 2) +
-                    "\\" + y.Substring(7, 2) +
-                    "\n\n";
-
-                audioFilesList.Add(path);
-                File.AppendAllText(@"C:\Users\Zoya\Google Drive\RBC\Form_find_contacts\paths.txt", path+Environment.NewLine);
-                lbl_paths.Text += path;
-                //lbl_paths.Text += reader.GetDateTime(7).ToString();
-
+            }
+            finally
+            {
+                con.Close();
             }
             lbl_paths.Text = howManyFilesFound + " files found. \n\n" + lbl_paths.Text;//total files found appended at beginning of all results
 
-            con.Close();
+            
         }
 
         #endregion
