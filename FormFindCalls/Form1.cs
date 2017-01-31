@@ -93,15 +93,21 @@ namespace FormFindCalls
             //}
 
 
-            SqlConnectionStringBuilder conStrBuilder = new SqlConnectionStringBuilder();
-            conStrBuilder.DataSource = "SE104499.saimaple.saifg.rbc.com"; //Lab2 server
-            conStrBuilder.InitialCatalog = "CentralContact";
-            conStrBuilder.IntegratedSecurity = true;//if false then put username & password
-            //x.UserID = "";
-            //x.Password = "";
-            string conStr = conStrBuilder.ConnectionString;
+            //SqlConnectionStringBuilder conStrBuilder = new SqlConnectionStringBuilder();
+            ////conStrBuilder.DataSource = @"SE104499.saimaple.saifg.rbc.com\MSSQLSERVER"; //Lab2 server -- add fully qualified server name backslash instance name
+            //conStrBuilder.DataSource = @"(local)\MSSQLSERVER";
+
+            //conStrBuilder.InitialCatalog = "CentralContact";
+            //conStrBuilder.IntegratedSecurity = true;//if false then put username & password
+            ////conStrBuilder.UserID = "svyx0srvoat"; //OAT is Lab2
+            ////conStrBuilder.Password = "Password1";
+            //string conStr = conStrBuilder.ConnectionString;
+            string conStr = "Persist Security Info=False;Integrated Security=true;Initial Catalog=CentralContact;server=(local)";
 
             //string conStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RBC_call_path;Integrated Security=True";
+
+
+
             con = new SqlConnection(conStr);
 
             //SqlCommand cmd = new SqlCommand("select * from rbc_contacts", con);
@@ -159,10 +165,28 @@ namespace FormFindCalls
                     //http://stackoverflow.com/questions/2837020/open-existing-file-append-a-single-line
 
                     string fullDomain;
-                    fullDomain = (x == "871001") ? "Path is: \\\\SE104421.maple.fg.rbc.com\\h$\\Calls\\" : "";//audio_module_no (Recorder serial#) 871001 etc is there in database. Then server is so-&-so
-                    fullDomain = (x == "871002") ? "Path is: \\\\SE104422.maple.fg.rbc.com\\h$\\Calls\\" : "";
-                    fullDomain = (x == "871003") ? "Path is: \\\\SE104426.maple.fg.rbc.com\\h$\\Calls\\" : "";
-                    fullDomain = (x == "871004") ? "Path is: \\\\SE104427.maple.fg.rbc.com\\h$\\Calls\\" : "";
+                    switch (x)
+                    {
+                        case "871001":
+                            fullDomain = "Path is: \\\\SE104421.maple.fg.rbc.com\\h$\\Calls\\";
+                            break;
+                        case "871002":
+                            fullDomain = "Path is: \\\\SE104422.maple.fg.rbc.com\\h$\\Calls\\";
+                            break;
+                        case "871003":
+                            fullDomain = "Path is: \\\\SE104426.maple.fg.rbc.com\\h$\\Calls\\";
+                            break;
+                        case "871004":
+                            fullDomain = "Path is: \\\\SE104427.maple.fg.rbc.com\\h$\\Calls\\";
+                            break;
+                        default: fullDomain = "Undefined Domain";
+                            break;
+                    }
+
+                    //fullDomain = (x == "871001") ? "Path is: \\\\SE104421.maple.fg.rbc.com\\h$\\Calls\\" : "";//audio_module_no (Recorder serial#) 871001 etc is there in database. Then server is so-&-so
+                    //fullDomain = (x == "871002") ? "Path is: \\\\SE104422.maple.fg.rbc.com\\h$\\Calls\\" : "";
+                    //fullDomain = (x == "871003") ? "Path is: \\\\SE104426.maple.fg.rbc.com\\h$\\Calls\\" : "";
+                    //fullDomain = (x == "871004") ? "Path is: \\\\SE104427.maple.fg.rbc.com\\h$\\Calls\\" : "";
 
                     string path = fullDomain +
                         x +
@@ -173,7 +197,7 @@ namespace FormFindCalls
                         "\n\n";
 
                     audioFilesList.Add(path);
-                    File.AppendAllText(@"C:\Users\Zoya\Google Drive\RBC\Form_find_contacts\paths.txt", path + Environment.NewLine);
+                    //File.AppendAllText(@"C:\Users\Zoya\Google Drive\RBC\Form_find_contacts\paths.txt", path + Environment.NewLine);
                     lbl_paths.Text += path;
                     //lbl_paths.Text += reader.GetDateTime(7).ToString();
 
