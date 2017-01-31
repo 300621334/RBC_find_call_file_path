@@ -67,7 +67,7 @@ namespace FormFindCalls
             howManyFilesFound = 0;
             lbl_paths.Text = "Paths will show here:";
 
-            query = "select * from centralcontact.dbo.sessions where 1=1 ";
+            query = "select * from centralcontact.dbo.sessions where 1=1 and audio_module_no = 871001 ";
             
             query += (!string.IsNullOrWhiteSpace(contactID.Text))? " and contact_id = " +contactID.Text : "";//without single quotes err=invalid column name
             query += (!string.IsNullOrWhiteSpace(kvp1.Text)) ? " and pcd1_value = '" + kvp1.Text+"'" : "";
@@ -84,7 +84,7 @@ namespace FormFindCalls
 
             //Format(cast('2016-03-03 23:59:59' as datetime),'dd-MMM-yyyy HH:mm:ss','en-us')//http://stackoverflow.com/questions/19563261/convert-a-12-hour-format-to-24-hour-format-in-sql-2000
             //https://msdn.microsoft.com/en-CA/library/hh213505.aspx
-
+            //Password1
 
             //if (timeRange.Checked)
             //{
@@ -132,14 +132,14 @@ namespace FormFindCalls
 
                 lbl_paths.Text += "\n";
 
-                File.WriteAllText(@"C:\Users\Zoya\Google Drive\RBC\Form_find_contacts\paths.txt", string.Empty);//clear content of file if any
+                //File.WriteAllText(@"C:\Users\Zoya\Google Drive\RBC\Form_find_contacts\paths.txt", string.Empty);//clear content of file if any
 
                 while (reader.Read())
                 {
                     howManyFilesFound++;
                     //To getValue(byColName) //http://stackoverflow.com/questions/8655965/how-to-get-data-by-sqldatareader-getvalue-by-column-name
-                    string x = reader["audio_module_no"].ToString(); //reader.GetString(1);//audio_module_no//zero based index//getValue(1) same as Java's getObject().
-                    string y = reader["audio_ch_no"].ToString(); //reader.GetString(2);//audio_channel_no
+                    string x = reader.GetValue(2).ToString(); //reader["audio_module_no"].ToString(); //reader.GetString(1);//audio_module_no//zero based index//getValue(1) same as Java's getObject().
+                    string y = reader.GetValue(3).ToString();//reader["audio_ch_no"].ToString(); //reader.GetString(2);//audio_channel_no
                     int L = (x + y).Length;//combined length of above two
                     int howManyZeros = (L != 15) ? 15 - L : 0;//if x+y is 15 then do NOT insert any zeros. 
                     string zeros = "";
