@@ -1,5 +1,13 @@
-﻿--SearchAllTables "Finance";--Have to "new query" on EmployeeDatabase, then run this search
-SearchAllTables "Levinson"; --in EmployeeDatabase
+﻿select * from sys.all_objects x inner join sys.all_columns y on x.object_id=y.object_id where x.type_desc='USER_TABLE' and x.object_id >0 ;--negative object_id for system tables that still are declared as "USER_TABLES" for some reason
+select * from trace_xe_action_map;
+
+--SearchAllTables "Finance";--Have to "new query" on EmployeeDatabase, then run this search
+--SearchAllTables "Levinson"; --in EmployeeDatabase
+----select * FROM sys.all_objects order by type_desc;
+--select * FROM sys.all_columns order by object_id;
+--select *  FROM     INFORMATION_SCHEMA.views;
+
+
 
 --drop proc SearchAllTables;
 

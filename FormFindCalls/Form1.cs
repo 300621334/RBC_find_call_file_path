@@ -265,6 +265,7 @@ namespace FormFindCalls
             popPass = txtPass.Text;
             popUp.Close();
             test.Text = popUsrName + popPass;
+            
         }
     }
 }

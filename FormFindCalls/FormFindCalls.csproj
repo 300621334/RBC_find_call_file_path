@@ -85,6 +85,8 @@
     <Content Include="MsSql_schema.sql" />
     <Content Include="progressBar.gif" />
     <Content Include="SearchEntireDB.sql" />
+    <Content Include="SearchEntireDB2.sql" />
+    <Content Include="search_Entire_DB.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
