@@ -16,6 +16,8 @@ namespace FormFindCalls
 {
     public partial class Form1 : Form
     {
+        #region GUI form initializer
+
         public Form1()
         {
             InitializeComponent();
@@ -30,14 +32,19 @@ namespace FormFindCalls
             //custom format //http://stackoverflow.com/questions/13711358/datetime-picker-c-sharp-format
 
         }
+        #endregion
+
+        #region helpful web sites
 
         /*single Query Approach.
          * //Extract time only: http://stackoverflow.com/questions/1026841/how-to-get-only-time-from-date-time-c-sharp
          * //compare TimeOfDay in if-else: http://stackoverflow.com/questions/10290187/how-to-compare-time-part-of-datetime
          * --search entire DB in MS-Sql Server: http://stackoverflow.com/questions/15757263/find-a-string-by-searching-all-tables-in-sql-server-management-studio-2008
          */
+        #endregion
 
-        
+        #region declare global vars
+
         SqlConnection con;
         SqlCommand cmd;
         SqlDataReader reader;
@@ -47,6 +54,9 @@ namespace FormFindCalls
         Form popUp;
         TextBox txtPass, txtUser;
         string popUsrName, popPass;
+        #endregion
+
+        #region btn to connect DB and generate PATHs
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -57,12 +67,12 @@ namespace FormFindCalls
             howManyFilesFound = 0;
             lbl_paths.Text = "Paths will show here:";
 
-            query = "select * from rbc_contacts where 1=1 ";
+            query = "select * from centralcontact.dbo.sessions where 1=1 ";
             
-            query += (!string.IsNullOrWhiteSpace(contactID.Text))? " and contact_ID = '" + contactID.Text+"'" : "";//without single quotes err=invalid column name
+            query += (!string.IsNullOrWhiteSpace(contactID.Text))? " and contact_id = " +contactID.Text : "";//without single quotes err=invalid column name
             query += (!string.IsNullOrWhiteSpace(kvp1.Text)) ? " and pcd1_value = '" + kvp1.Text+"'" : "";
             query += (!string.IsNullOrWhiteSpace(kvp2.Text)) ? " and pcd2_value = '" + kvp2.Text+"'" : "";
-            query += " and start_time >= @startDate and end_time <= @endDate";
+            query += " and local_start_time >= @startDate and local_end_time <= @endDate";
 
             //query += " and DatePart(yyyy, start_time) >= @yearStart and DatePart(yyyy, end_time) <= @yearEnd";//http://www.w3schools.com/sql/func_datepart.asp
             //query += " and DatePart(mm, start_time) >= @monthStart and DatePart(mm, end_time) <= @monthEnd";
@@ -84,8 +94,8 @@ namespace FormFindCalls
 
 
             SqlConnectionStringBuilder conStrBuilder = new SqlConnectionStringBuilder();
-            conStrBuilder.DataSource = @"(localdb)\MSSQLLocalDB";
-            conStrBuilder.InitialCatalog = "RBC_call_path";
+            conStrBuilder.DataSource = "SE104499.saimaple.saifg.rbc.com"; //Lab2 server
+            conStrBuilder.InitialCatalog = "CentralContact";
             conStrBuilder.IntegratedSecurity = true;//if false then put username & password
             //x.UserID = "";
             //x.Password = "";
@@ -125,8 +135,9 @@ namespace FormFindCalls
             while (reader.Read())
             {
                 howManyFilesFound++;
-                string x = reader.GetString(1);//audio_module_no//zero based index//getValue(1) same as Java's getObject().
-                string y = reader.GetString(2);//audio_channel_no
+                //To getValue(byColName) //http://stackoverflow.com/questions/8655965/how-to-get-data-by-sqldatareader-getvalue-by-column-name
+                string x = reader["audio_module_no"].ToString(); //reader.GetString(1);//audio_module_no//zero based index//getValue(1) same as Java's getObject().
+                string y = reader["audio_ch_no"].ToString(); //reader.GetString(2);//audio_channel_no
                 int L = (x + y).Length;//combined length of above two
                 int howManyZeros = (L != 15) ? 15-L : 0;//if x+y is 15 then do NOT insert any zeros. 
                 string zeros = "";
@@ -145,9 +156,13 @@ namespace FormFindCalls
                 //http://stackoverflow.com/questions/7569904/easiest-way-to-read-from-and-write-to-files
                 //http://stackoverflow.com/questions/2837020/open-existing-file-append-a-single-line
 
-               
+                string fullDomain;
+                fullDomain = (x=="871001") ?"Path is: \\\\SE104421.maple.fg.rbc.com\\h$\\Calls\\":"";//audio_module_no (Recorder serial#) 871001 etc is there in database. Then server is so-&-so
+                fullDomain = (x=="871002") ?"Path is: \\\\SE104422.maple.fg.rbc.com\\h$\\Calls\\":"";
+                fullDomain = (x=="871003") ?"Path is: \\\\SE104426.maple.fg.rbc.com\\h$\\Calls\\":"";
+                fullDomain = (x=="871004") ?"Path is: \\\\SE104427.maple.fg.rbc.com\\h$\\Calls\\":"";
 
-                string path = "Path is: \\\\SE441903.maple.fg.rbc.com\\h$\\Calls\\" +
+                string path = fullDomain +
                     x +
                     "\\" + y.Substring(0, 3) +
                     "\\" + y.Substring(3, 2) +
@@ -166,10 +181,9 @@ namespace FormFindCalls
             con.Close();
         }
 
-
-
-
-        //copy files btn
+        #endregion
+        
+        #region btn to copy the files
         //http://stackoverflow.com/questions/21733756/best-way-to-split-string-by-last-occurrence-of-character
         //https://msdn.microsoft.com/en-us/library/cc148994.aspx
 
@@ -204,42 +218,54 @@ namespace FormFindCalls
                 File.Copy(file, moveTo, true);//true to overwrite existing files, else err
             }
         }
+        #endregion
+
+        #region btn for Testing 
 
         private void button3_Click(object sender, EventArgs e)
         {
 
-            popUp = new Form();
-            Label userName = new Label();
-            userName.Text = "User Name: ";
-            userName.Location = new Point(10, 20);
-            txtUser = new TextBox();
-            txtUser.Location = new Point(120, 20);
-
-
-            Label pass = new Label();
-            pass.Text = "Password: ";
-            pass.Location = new Point(10, 60);
-            txtPass = new TextBox();
-            txtPass.Location = new Point(120, 60);
-            txtPass.UseSystemPasswordChar = true;//shows default black circles 
-            //txtPass.PasswordChar = '*';//Notice it's a char so single quotes.//Shows * instead of circles
-
-
-            Button btnLogin = new Button();
-            btnLogin.Text = "Login";
-            btnLogin.Location = new Point(30, 90);
-            btnLogin.Click += new System.EventHandler(btnLogin_Click);//notice +=
-
-            popUp.Controls.Add(userName);
-            popUp.Controls.Add(pass);
-            popUp.Controls.Add(txtUser);
-            popUp.Controls.Add(txtPass);
 
 
 
-            popUp.Controls.Add(btnLogin);
-            popUp.Show();//display pop up window asking for userName and Password
+            //=================================================================================================
+            #region Pop-up Login Window
 
+
+            //popUp = new Form();
+            //Label userName = new Label();
+            //userName.Text = "User Name: ";
+            //userName.Location = new Point(10, 20);
+            //txtUser = new TextBox();
+            //txtUser.Location = new Point(120, 20);
+
+
+            //Label pass = new Label();
+            //pass.Text = "Password: ";
+            //pass.Location = new Point(10, 60);
+            //txtPass = new TextBox();
+            //txtPass.Location = new Point(120, 60);
+            //txtPass.UseSystemPasswordChar = true;//shows default black circles 
+            ////txtPass.PasswordChar = '*';//Notice it's a char so single quotes.//Shows * instead of circles
+
+
+            //Button btnLogin = new Button();
+            //btnLogin.Text = "Login";
+            //btnLogin.Location = new Point(30, 90);
+            //btnLogin.Click += new System.EventHandler(btnLogin_Click);//notice +=
+
+            //popUp.Controls.Add(userName);
+            //popUp.Controls.Add(pass);
+            //popUp.Controls.Add(txtUser);
+            //popUp.Controls.Add(txtPass);
+
+
+
+            //popUp.Controls.Add(btnLogin);
+            //popUp.Show();//display pop up window asking for userName and Password
+            #endregion
+
+            #region  Experimenting DateTime
 
 
             //test.Text = DateTime.Now.ToString();
@@ -257,7 +283,12 @@ namespace FormFindCalls
             //DateTime myDate = DateTime.ParseExact("2009-05-08 14:40:52,531", "yyyy-MM-dd HH:mm:ss,fff", System.Globalization.CultureInfo.InvariantCulture)//http://stackoverflow.com/questions/919244/converting-a-string-to-datetime
             //string text = dateTime.ToString("MM/dd/yyyy HH:mm:ss.fff", CultureInfo.InvariantCulture);//http://stackoverflow.com/questions/18874102/net-datetime-tostringmm-dd-yyyy-hhmmss-fff-resulted-in-something-like
             //=======================================================
+            #endregion
+
         }
+        #endregion
+
+        #region button click on pop-up window
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
@@ -267,5 +298,9 @@ namespace FormFindCalls
             test.Text = popUsrName + popPass;
             
         }
+        #endregion
+
+
+
     }
 }
