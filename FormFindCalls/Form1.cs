@@ -31,6 +31,39 @@ namespace FormFindCalls
             //timeTo.MaxDate = DateTime.ParseExact("1900-01-01", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
             //custom format //http://stackoverflow.com/questions/13711358/datetime-picker-c-sharp-format
 
+            //Add items to dropDownKvp(comboBox)
+            //in C#, a Dictionary contains key-value
+            Dictionary<string, string> kvp = new Dictionary<string, string>();
+            kvp.Add("p1", "Account_Aspect");
+            kvp.Add("p2", "SRF");
+            kvp.Add("p3", "IXN_Purpose");
+            kvp.Add("p4", "Language");
+            kvp.Add("p5", "Auth");
+            kvp.Add("p6", "CONNID");
+            kvp.Add("p7", "RG");
+            kvp.Add("p8", "CallPurpose");
+            kvp.Add("p9", "Original_SkillSet");
+            kvp.Add("p10", "CallPurpose_ID");
+            kvp.Add("p11", "DM_Campaign_Name");
+            kvp.Add("p12", "Province");
+            kvp.Add("p13", "Original_Language");
+            kvp.Add("p14", "Queue_Aspect");
+            kvp.Add("p15", "Termination_Aspect");
+            kvp.Add("p16", "CallId");
+            kvp.Add("p17", "ChannelName");
+            kvp.Add("p18", "DTMFdigits");
+            kvp.Add("p19", "EndDate");
+            kvp.Add("p20", "Custom_ThirdParty");
+            kvp.Add("p21", "CallDirection");
+            kvp.Add("p22", "NumberOfHolds");
+            kvp.Add("p23", "TimeOnHold");
+            kvp.Add("p43", "GSW_Phone");
+            kvp.Add("p48", "IPG");
+            //kvp.Add("", "");
+            foreach(KeyValuePair<string, string> x in kvp)//instead of Dictionary<> use KeyValuePair<>
+            {
+                dropDownKvp.Items.Add(x.Value);//in prop pane set "Sorted=true" for alphabetical sorting
+            }
         }
         #endregion
 
@@ -156,7 +189,7 @@ namespace FormFindCalls
                     }
                     y = zeros + y;//insert zeros before channel#
 
-                    lbl_paths.Text += x + y + "\n";
+                    //lbl_paths.Text += x + y + "\n";
 
 
                     //Now write a text file
@@ -184,6 +217,7 @@ namespace FormFindCalls
                     //        break;
                     //}
                     #endregion
+
                     #region access files LOCALLY... instead of remotely to avoid entering username/Password!!!
                     switch (x)
                     {
@@ -205,6 +239,7 @@ namespace FormFindCalls
                     }
                     #endregion
 
+                    #region path created here
 
                     string path = fullDomain + //e.g. \\SE104427.saimaple.fg.rbc.com\h$\Calls\871001\000\04\92\871001000049202.wav
                         x +
@@ -212,10 +247,16 @@ namespace FormFindCalls
                         "\\" + y.Substring(3, 2) + //871001-000-04-9202
                         "\\" + y.Substring(5, 2) + //871001-000-04-92-02
                         "\\" + x + y + ".wav"; //871001000049202.wav
-                        //+"\n\n";//this causes err sometimes when try to open file or copy: "Illegal characters in path". But if manually delete last few chars like .wav and reType then no-err bcoz that removes \n\n. Also have to hit back arrow few times before delete takes effect on last few chars again bcoz \n\n!!!
+                                               //+"\n\n";//this causes err sometimes when try to open file or copy: "Illegal characters in path". But if manually delete last few chars like .wav and reType then no-err bcoz that removes \n\n. Also have to hit back arrow few times before delete takes effect on last few chars again bcoz \n\n!!!
+                    #endregion
 
+                    #region paths added to a List & log file created
                     audioFilesList.Add(path);
+
                     File.AppendAllText(@"C:\Users\SVYX0SRVOAT\Desktop\Test\paths.txt", path + Environment.NewLine);
+                    #endregion
+
+
                     lbl_paths.Text += "\n\n"+ path;
                     //lbl_paths.Text += reader.GetDateTime(7).ToString();
 

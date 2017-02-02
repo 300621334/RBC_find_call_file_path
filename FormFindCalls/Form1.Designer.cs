@@ -43,18 +43,21 @@
             this.label4 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
             this.test = new System.Windows.Forms.Label();
+            this.txtBxPaths = new System.Windows.Forms.TextBox();
+            this.dropDownKvp = new System.Windows.Forms.ComboBox();
+            this.txtBxKvp1 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // contactID
             // 
-            this.contactID.Location = new System.Drawing.Point(177, 38);
+            this.contactID.Location = new System.Drawing.Point(177, 11);
             this.contactID.Name = "contactID";
             this.contactID.Size = new System.Drawing.Size(100, 20);
             this.contactID.TabIndex = 0;
             // 
             // kvp1
             // 
-            this.kvp1.Location = new System.Drawing.Point(177, 80);
+            this.kvp1.Location = new System.Drawing.Point(177, 40);
             this.kvp1.Name = "kvp1";
             this.kvp1.Size = new System.Drawing.Size(100, 20);
             this.kvp1.TabIndex = 1;
@@ -62,7 +65,7 @@
             // lbl_contactID
             // 
             this.lbl_contactID.AutoSize = true;
-            this.lbl_contactID.Location = new System.Drawing.Point(110, 41);
+            this.lbl_contactID.Location = new System.Drawing.Point(110, 14);
             this.lbl_contactID.Name = "lbl_contactID";
             this.lbl_contactID.Size = new System.Drawing.Size(61, 13);
             this.lbl_contactID.TabIndex = 2;
@@ -71,7 +74,7 @@
             // lbl_kvp1
             // 
             this.lbl_kvp1.AutoSize = true;
-            this.lbl_kvp1.Location = new System.Drawing.Point(27, 83);
+            this.lbl_kvp1.Location = new System.Drawing.Point(27, 43);
             this.lbl_kvp1.Name = "lbl_kvp1";
             this.lbl_kvp1.Size = new System.Drawing.Size(148, 13);
             this.lbl_kvp1.TabIndex = 3;
@@ -80,7 +83,7 @@
             // lbl_kvp2
             // 
             this.lbl_kvp2.AutoSize = true;
-            this.lbl_kvp2.Location = new System.Drawing.Point(44, 128);
+            this.lbl_kvp2.Location = new System.Drawing.Point(44, 69);
             this.lbl_kvp2.Name = "lbl_kvp2";
             this.lbl_kvp2.Size = new System.Drawing.Size(128, 13);
             this.lbl_kvp2.TabIndex = 4;
@@ -88,7 +91,7 @@
             // 
             // kvp2
             // 
-            this.kvp2.Location = new System.Drawing.Point(177, 125);
+            this.kvp2.Location = new System.Drawing.Point(177, 66);
             this.kvp2.Name = "kvp2";
             this.kvp2.Size = new System.Drawing.Size(100, 20);
             this.kvp2.TabIndex = 5;
@@ -173,11 +176,38 @@
             this.test.TabIndex = 26;
             this.test.Text = "Test Label";
             // 
+            // txtBxPaths
+            // 
+            this.txtBxPaths.Location = new System.Drawing.Point(371, 229);
+            this.txtBxPaths.Multiline = true;
+            this.txtBxPaths.Name = "txtBxPaths";
+            this.txtBxPaths.Size = new System.Drawing.Size(236, 219);
+            this.txtBxPaths.TabIndex = 27;
+            // 
+            // dropDownKvp
+            // 
+            this.dropDownKvp.FormattingEnabled = true;
+            this.dropDownKvp.Location = new System.Drawing.Point(9, 109);
+            this.dropDownKvp.Name = "dropDownKvp";
+            this.dropDownKvp.Size = new System.Drawing.Size(121, 21);
+            this.dropDownKvp.Sorted = true;
+            this.dropDownKvp.TabIndex = 28;
+            // 
+            // txtBxKvp1
+            // 
+            this.txtBxKvp1.Location = new System.Drawing.Point(177, 109);
+            this.txtBxKvp1.Name = "txtBxKvp1";
+            this.txtBxKvp1.Size = new System.Drawing.Size(100, 20);
+            this.txtBxKvp1.TabIndex = 29;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(619, 499);
+            this.Controls.Add(this.txtBxKvp1);
+            this.Controls.Add(this.dropDownKvp);
+            this.Controls.Add(this.txtBxPaths);
             this.Controls.Add(this.test);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.label4);
@@ -217,6 +247,9 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label test;
+        private System.Windows.Forms.TextBox txtBxPaths;
+        private System.Windows.Forms.ComboBox dropDownKvp;
+        private System.Windows.Forms.TextBox txtBxKvp1;
     }
 }
 
