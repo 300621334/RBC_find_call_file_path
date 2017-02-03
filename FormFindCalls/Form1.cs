@@ -63,10 +63,21 @@ namespace FormFindCalls
             kvp.Add("p43", "GSW_Phone");
             kvp.Add("p48", "IPG");
             //kvp.Add("", "");
+            dropDownKvp.Text = "select KVP";
             foreach(KeyValuePair<string, string> x in kvp)//instead of Dictionary<> use KeyValuePair<>
             {
                 dropDownKvp.Items.Add(x.Value);//in prop pane set "Sorted=true" for alphabetical sorting
             }
+            #endregion
+
+            #region populate month's comboBox
+            string[] tblToSearch = { "Sessions_month_1", "Sessions_month_2", "Sessions_month_3", "Sessions_month_4", "Sessions_month_5", "Sessions_month_6", "Sessions_month_7", "Sessions_month_8", "Sessions_month_9", "Sessions_month_10", "Sessions_month_11", "Sessions_month_12", };
+            //tblToSearchDD.Text = "select Table";//sets this str when no item is selected, BUT selectedIndex remains negative
+            foreach(string x in tblToSearch)
+            {
+                tblToSearchDD.Items.Add(x);
+            }
+            tblToSearchDD.SelectedIndex = 0;
             #endregion
         }
         #endregion
@@ -91,6 +102,7 @@ namespace FormFindCalls
         Form popUp;
         TextBox txtPass, txtUser;
         string popUsrName, popPass;
+        string tblToSearchStr;
         #endregion
 
         #region btn to connect DB and generate PATHs
@@ -105,12 +117,14 @@ namespace FormFindCalls
             lbl_paths.Text = "Paths will show here:";
 
             #region Query
-
            
-            query = "select * from centralcontact.dbo.sessions where 1=1 and audio_module_no = 871001 ";
+            tblToSearchStr = tblToSearchDD.SelectedItem.ToString();//if NO item selected from DD then err.
             
-            query += (!string.IsNullOrWhiteSpace(contactID.Text))? " and contact_id = " +contactID.Text : "";//without single quotes err=invalid column name
-            query += (!string.IsNullOrWhiteSpace(kvp1.Text)) ? " and pcd1_value = '" + kvp1.Text+"'" : "";
+
+            query = "select * from " + tblToSearchStr + " where 1=1 and unit_num = 871001 "; //old: query = "select * from centralcontact.dbo.sessions where 1=1 and audio_module_no = 871001 ";
+
+            query += (!string.IsNullOrWhiteSpace(contactID.Text)) ? " and contact_key = " + contactID.Text : ""; //old: query += (!string.IsNullOrWhiteSpace(contactID.Text))? " and contact_id = " +contactID.Text : "";//without single quotes err=invalid column name
+            query += (!string.IsNullOrWhiteSpace(kvp1.Text)) ? " and p7_value = '" + kvp1.Text + "'" : ""; //query += (!string.IsNullOrWhiteSpace(kvp1.Text)) ? " and pcd1_value = '" + kvp1.Text+"'" : "";
             query += (!string.IsNullOrWhiteSpace(kvp2.Text)) ? " and pcd2_value = '" + kvp2.Text+"'" : "";
             query += " and local_start_time >= @startDate and local_end_time <= @endDate";
 
@@ -146,7 +160,7 @@ namespace FormFindCalls
             ////conStrBuilder.UserID = "svyx0srvoat"; //OAT is Lab2
             ////conStrBuilder.Password = "Password1";
             //string conStr = conStrBuilder.ConnectionString;
-            string conStr = "Persist Security Info=False;Integrated Security=true;Initial Catalog=CentralContact;server=(local)";
+            string conStr = "Persist Security Info=False;Integrated Security=true;Initial Catalog=CentralDWH;server=(local)";
 
             //string conStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RBC_call_path;Integrated Security=True";
 
@@ -192,8 +206,8 @@ namespace FormFindCalls
                   
                     howManyFilesFound++;
                     //To getValue(byColName) //http://stackoverflow.com/questions/8655965/how-to-get-data-by-sqldatareader-getvalue-by-column-name
-                    string x = reader.GetValue(2).ToString(); //reader["audio_module_no"].ToString(); //reader.GetString(1);//audio_module_no//zero based index//getValue(1) same as Java's getObject().
-                    string y = reader.GetValue(3).ToString();//reader["audio_ch_no"].ToString(); //reader.GetString(2);//audio_channel_no
+                    string x = reader.GetValue(12).ToString();//old: GetValue(2) //reader["audio_module_no"].ToString(); //reader.GetString(1);//audio_module_no//zero based index//getValue(1) same as Java's getObject().
+                    string y = reader.GetValue(13).ToString();//old: GetValue(3)//reader["audio_ch_no"].ToString(); //reader.GetString(2);//audio_channel_no
                     int L = (x + y).Length;//combined length of above two
                     int howManyZeros = (L != 15) ? 15 - L : 0;//if x+y is 15 then do NOT insert any zeros. 
                     string zeros = "";

@@ -46,6 +46,8 @@
             this.txtBxPaths = new System.Windows.Forms.TextBox();
             this.dropDownKvp = new System.Windows.Forms.ComboBox();
             this.txtBxKvp1 = new System.Windows.Forms.TextBox();
+            this.tblToSearchDD = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // contactID
@@ -74,11 +76,11 @@
             // lbl_kvp1
             // 
             this.lbl_kvp1.AutoSize = true;
-            this.lbl_kvp1.Location = new System.Drawing.Point(27, 43);
+            this.lbl_kvp1.Location = new System.Drawing.Point(91, 43);
             this.lbl_kvp1.Name = "lbl_kvp1";
-            this.lbl_kvp1.Size = new System.Drawing.Size(148, 13);
+            this.lbl_kvp1.Size = new System.Drawing.Size(76, 13);
             this.lbl_kvp1.TabIndex = 3;
-            this.lbl_kvp1.Text = "pcd1_ID (KVP) e.g. insurance";
+            this.lbl_kvp1.Text = "RG - p7_value";
             // 
             // lbl_kvp2
             // 
@@ -187,7 +189,7 @@
             // dropDownKvp
             // 
             this.dropDownKvp.FormattingEnabled = true;
-            this.dropDownKvp.Location = new System.Drawing.Point(9, 109);
+            this.dropDownKvp.Location = new System.Drawing.Point(9, 151);
             this.dropDownKvp.Name = "dropDownKvp";
             this.dropDownKvp.Size = new System.Drawing.Size(121, 21);
             this.dropDownKvp.Sorted = true;
@@ -195,16 +197,35 @@
             // 
             // txtBxKvp1
             // 
-            this.txtBxKvp1.Location = new System.Drawing.Point(177, 109);
+            this.txtBxKvp1.Location = new System.Drawing.Point(143, 152);
             this.txtBxKvp1.Name = "txtBxKvp1";
             this.txtBxKvp1.Size = new System.Drawing.Size(100, 20);
             this.txtBxKvp1.TabIndex = 29;
+            // 
+            // tblToSearchDD
+            // 
+            this.tblToSearchDD.FormattingEnabled = true;
+            this.tblToSearchDD.Location = new System.Drawing.Point(96, 106);
+            this.tblToSearchDD.Name = "tblToSearchDD";
+            this.tblToSearchDD.Size = new System.Drawing.Size(121, 21);
+            this.tblToSearchDD.TabIndex = 30;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(17, 109);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(76, 13);
+            this.label1.TabIndex = 31;
+            this.label1.Text = "Select a Table";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(619, 499);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.tblToSearchDD);
             this.Controls.Add(this.txtBxKvp1);
             this.Controls.Add(this.dropDownKvp);
             this.Controls.Add(this.txtBxPaths);
@@ -250,6 +271,8 @@
         private System.Windows.Forms.TextBox txtBxPaths;
         private System.Windows.Forms.ComboBox dropDownKvp;
         private System.Windows.Forms.TextBox txtBxKvp1;
+        private System.Windows.Forms.ComboBox tblToSearchDD;
+        private System.Windows.Forms.Label label1;
     }
 }
 
