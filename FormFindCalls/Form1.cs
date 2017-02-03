@@ -21,7 +21,9 @@ namespace FormFindCalls
         public Form1()
         {
             InitializeComponent();
+            #region DateTime Box's format
 
+           
             dateFrom.Format = DateTimePickerFormat.Custom;
             dateFrom.CustomFormat = "MMM/dd/yyyy --- HH:mm:ss";
             dateTo.Format = DateTimePickerFormat.Custom;
@@ -30,8 +32,9 @@ namespace FormFindCalls
             //timeFrom.MaxDate = DateTime.ParseExact("1900-01-01", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
             //timeTo.MaxDate = DateTime.ParseExact("1900-01-01", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
             //custom format //http://stackoverflow.com/questions/13711358/datetime-picker-c-sharp-format
+            #endregion
 
-            //Add items to dropDownKvp(comboBox)
+            #region Add items to dropDownKvp(comboBox)
             //in C#, a Dictionary contains key-value
             Dictionary<string, string> kvp = new Dictionary<string, string>();
             kvp.Add("p1", "Account_Aspect");
@@ -64,6 +67,7 @@ namespace FormFindCalls
             {
                 dropDownKvp.Items.Add(x.Value);//in prop pane set "Sorted=true" for alphabetical sorting
             }
+            #endregion
         }
         #endregion
 
@@ -100,6 +104,9 @@ namespace FormFindCalls
             howManyFilesFound = 0;
             lbl_paths.Text = "Paths will show here:";
 
+            #region Query
+
+           
             query = "select * from centralcontact.dbo.sessions where 1=1 and audio_module_no = 871001 ";
             
             query += (!string.IsNullOrWhiteSpace(contactID.Text))? " and contact_id = " +contactID.Text : "";//without single quotes err=invalid column name
@@ -124,8 +131,12 @@ namespace FormFindCalls
             //    query += " and cast(substring(convert(varchar, start_time, 113),13,8) as datetime) >= @startTime and cast(substring(convert(varchar, end_time, 113),13,8) as datetime) <= @endTime";//'time' instead of 'datetime' gave err= data type time not compatible with datetime
             //    //    query += " and convert(time, start_time) >= @startTime and convert(time, end_time) <= @endTime";
             //}
+            #endregion
 
 
+            #region connection String
+
+           
             //SqlConnectionStringBuilder conStrBuilder = new SqlConnectionStringBuilder();
             ////conStrBuilder.DataSource = @"SE104499.saimaple.saifg.rbc.com\MSSQLSERVER"; //Lab2 server -- add fully qualified server name backslash instance name
             //conStrBuilder.DataSource = @"(local)\MSSQLSERVER";
@@ -149,6 +160,7 @@ namespace FormFindCalls
             cmd.Parameters.AddWithValue("startDate", dateFrom.Value);
             cmd.Parameters.AddWithValue("endDate", dateTo.Value);
 
+
             //if (timeRange.Checked)
             //{
             //    //timePicker has millisec when app launches. But as soon as manually change it, ms r gone. So format .ffffff is needed BEFORE manually changing time, but AFT changing it it gives err "str not recognized as valid format"!!!
@@ -161,9 +173,9 @@ namespace FormFindCalls
             //cmd.Parameters.AddWithValue("startTime", modifiedTimeFrom);
             //cmd.Parameters.AddWithValue("endTime", modifiedTimeTo);
             //}
+            #endregion
 
-
-            //open the connection to DB
+          
             try
             {
                 con.Open();
@@ -198,45 +210,45 @@ namespace FormFindCalls
                     //http://stackoverflow.com/questions/2837020/open-existing-file-append-a-single-line
 
                     string fullDomain;
-                    #region Remotely access files. Asks for password/usrname!!!
-                    //switch (x)
-                    //{
-                    //    case "871001":
-                    //        fullDomain = "Path is: \\\\SE104421.saimaple.fg.rbc.com\\h$\\Calls\\";
-                    //        break;
-                    //    case "871002":
-                    //        fullDomain = "Path is: \\\\SE104422.saimaple.fg.rbc.com\\h$\\Calls\\";
-                    //        break;
-                    //    case "871003":
-                    //        fullDomain = "Path is: \\\\SE104426.saimaple.fg.rbc.com\\h$\\Calls\\";
-                    //        break;
-                    //    case "871004":
-                    //        fullDomain = "Path is: \\\\SE104427.saimaple.fg.rbc.com\\h$\\Calls\\";
-                    //        break;
-                    //    default: fullDomain = "Undefined Domain";
-                    //        break;
-                    //}
-                    #endregion
-
-                    #region access files LOCALLY... instead of remotely to avoid entering username/Password!!!
+                    #region REMOTELY access files. Asks for password/usrname!!!
                     switch (x)
                     {
                         case "871001":
-                            fullDomain = "H:\\Calls\\";
+                            fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
                             break;
                         case "871002":
-                            fullDomain = "H:\\Calls\\";
+                            fullDomain = @"\\SE104422.saimaple.fg.rbc.com\h$\Calls\";
                             break;
                         case "871003":
-                            fullDomain = "H:\\Calls\\";
+                            fullDomain = @"\\SE104426.saimaple.fg.rbc.com\h$\Calls\";
                             break;
                         case "871004":
-                            fullDomain = "H:\\Calls\\";
+                            fullDomain = @"\\SE104427.saimaple.fg.rbc.com\h$\Calls\";
                             break;
                         default:
-                            fullDomain = "H:\\Calls\\";
-                            break;
+                            continue;
                     }
+                    #endregion
+
+                    #region access files LOCALLY... instead of remotely to avoid entering username/Password!!!
+                    //switch (x)
+                    //{
+                    //    case "871001":
+                    //        fullDomain = "H:\\Calls\\";
+                    //        break;
+                    //    case "871002":
+                    //        fullDomain = "H:\\Calls\\";
+                    //        break;
+                    //    case "871003":
+                    //        fullDomain = "H:\\Calls\\";
+                    //        break;
+                    //    case "871004":
+                    //        fullDomain = "H:\\Calls\\";
+                    //        break;
+                    //    default:
+                    //        fullDomain = "H:\\Calls\\";
+                    //        break;
+                    //}
                     #endregion
 
                     #region path created here
