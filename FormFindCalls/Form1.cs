@@ -187,6 +187,9 @@ namespace FormFindCalls
 
                 while (reader.Read())
                 {
+                    #region Catenate audio_module_no and audio_ch_no and add zeros to make 15 digit, w is name of audio file and basis for nested folders too
+
+                  
                     howManyFilesFound++;
                     //To getValue(byColName) //http://stackoverflow.com/questions/8655965/how-to-get-data-by-sqldatareader-getvalue-by-column-name
                     string x = reader.GetValue(2).ToString(); //reader["audio_module_no"].ToString(); //reader.GetString(1);//audio_module_no//zero based index//getValue(1) same as Java's getObject().
@@ -202,31 +205,26 @@ namespace FormFindCalls
                     y = zeros + y;//insert zeros before channel#
 
                     //lbl_paths.Text += x + y + "\n";
+                    #endregion
 
-
-                    //Now write a text file
-                    //http://stackoverflow.com/questions/2695444/clearing-content-of-text-file-using-c-sharp
-                    //http://stackoverflow.com/questions/7569904/easiest-way-to-read-from-and-write-to-files
-                    //http://stackoverflow.com/questions/2837020/open-existing-file-append-a-single-line
-
-                    string fullDomain;
                     #region REMOTELY access files. Asks for password/usrname!!!
+                    string fullDomain;
                     switch (x)
                     {
                         case "871001":
-                            fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
+                            fullDomain = @"\\SE104421\h$\Calls\"; //older: fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
                             break;
                         case "871002":
-                            fullDomain = @"\\SE104422.saimaple.fg.rbc.com\h$\Calls\";
+                            fullDomain = @"\\SE104422\h$\Calls\";
                             break;
                         case "871003":
-                            fullDomain = @"\\SE104426.saimaple.fg.rbc.com\h$\Calls\";
+                            fullDomain = @"\\SE104426\h$\Calls\";
                             break;
                         case "871004":
-                            fullDomain = @"\\SE104427.saimaple.fg.rbc.com\h$\Calls\";
+                            fullDomain = @"\\SE104427\h$\Calls\";
                             break;
                         default:
-                            continue;
+                            continue;//passes control to next iterration of loop.
                     }
                     #endregion
 
@@ -246,8 +244,7 @@ namespace FormFindCalls
                     //        fullDomain = "H:\\Calls\\";
                     //        break;
                     //    default:
-                    //        fullDomain = "H:\\Calls\\";
-                    //        break;
+                    //        continue;
                     //}
                     #endregion
 
@@ -262,17 +259,22 @@ namespace FormFindCalls
                                                //+"\n\n";//this causes err sometimes when try to open file or copy: "Illegal characters in path". But if manually delete last few chars like .wav and reType then no-err bcoz that removes \n\n. Also have to hit back arrow few times before delete takes effect on last few chars again bcoz \n\n!!!
                     #endregion
 
-                    #region paths added to a List & log file created
-                    audioFilesList.Add(path);
+                    #region log file & display list
+                    //Now write a text file
+                    //http://stackoverflow.com/questions/2695444/clearing-content-of-text-file-using-c-sharp
+                    //http://stackoverflow.com/questions/7569904/easiest-way-to-read-from-and-write-to-files
+                    //http://stackoverflow.com/questions/2837020/open-existing-file-append-a-single-line
 
+                    audioFilesList.Add(path);
                     File.AppendAllText(@"C:\Users\SVYX0SRVOAT\Desktop\Test\paths.txt", path + Environment.NewLine);
                     #endregion
 
 
-                    lbl_paths.Text += "\n\n"+ path;
+                    lbl_paths.Text += "\n\n"+ path;//display paths on GUI label
+                    txtBxPaths.Text += "\n\n" + path;//display paths on GUI text box
                     //lbl_paths.Text += reader.GetDateTime(7).ToString();
 
-                }
+                }//while(reader.Read()) ends
             }
             finally
             {
