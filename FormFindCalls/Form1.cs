@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.IO;
 using System.Threading;
+using Microsoft.VisualBasic.FileIO;
 
 namespace FormFindCalls
 {
@@ -183,6 +184,13 @@ namespace FormFindCalls
 
                 File.Copy(file, moveTo);
             }
+
+            #region test Visual Basic's file/directory copy which shows Window's innate progressBar
+            //String aaa = @"C: \Users\Zoya\Google Drive\_Semester-3";
+            //String bbb = @"C:\Users\Zoya\Google Drive\TestFolder";
+            //FileSystem.CopyDirectory(aaa, bbb, UIOption.AllDialogs);//this is VisualBasic. So project>Add Ref>Assemblies>Framework>MS VB. Then Add "using Microsoft.VisualBasic.FileIO;"
+            #endregion
+
         }
 
         private void button3_Click(object sender, EventArgs e)
