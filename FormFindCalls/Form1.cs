@@ -115,17 +115,18 @@ namespace FormFindCalls
 
             howManyFilesFound = 0;
             lbl_paths.Text = "Paths will show here:";
+            txtBxPaths.Text = "";
 
             #region Query
            
             tblToSearchStr = tblToSearchDD.SelectedItem.ToString();//if NO item selected from DD then err.
             
 
-            query = "select * from " + tblToSearchStr + " where 1=1 and unit_num = 871001 "; //old: query = "select * from centralcontact.dbo.sessions where 1=1 and audio_module_no = 871001 ";
+            query = "select * from " + tblToSearchStr + " where 1=1 "; //old: query = "select * from centralcontact.dbo.sessions where 1=1 and audio_module_no = 871001 ";
 
             query += (!string.IsNullOrWhiteSpace(contactID.Text)) ? " and contact_key = " + contactID.Text : ""; //old: query += (!string.IsNullOrWhiteSpace(contactID.Text))? " and contact_id = " +contactID.Text : "";//without single quotes err=invalid column name
             query += (!string.IsNullOrWhiteSpace(kvp1.Text)) ? " and p7_value = '" + kvp1.Text + "'" : ""; //query += (!string.IsNullOrWhiteSpace(kvp1.Text)) ? " and pcd1_value = '" + kvp1.Text+"'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp2.Text)) ? " and pcd2_value = '" + kvp2.Text+"'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp2.Text)) ? " and p2_value = '" + kvp2.Text+"'" : "";
             query += " and local_start_time >= @startDate and local_end_time <= @endDate";
 
             //query += " and DatePart(yyyy, start_time) >= @yearStart and DatePart(yyyy, end_time) <= @yearEnd";//http://www.w3schools.com/sql/func_datepart.asp
@@ -280,7 +281,7 @@ namespace FormFindCalls
                     //http://stackoverflow.com/questions/2837020/open-existing-file-append-a-single-line
 
                     audioFilesList.Add(path);
-                    File.AppendAllText(@"C:\Users\SVYX0SRVOAT\Desktop\Test\paths.txt", path + Environment.NewLine);
+                    File.AppendAllText(@"C:\Users\SVYX0SRVOAT\Desktop\Test\paths.txt", path+" "+DateTime.Now.ToString() + Environment.NewLine);
                     #endregion
 
 
@@ -289,6 +290,7 @@ namespace FormFindCalls
                     //lbl_paths.Text += reader.GetDateTime(7).ToString();
 
                 }//while(reader.Read()) ends
+                File.AppendAllText(@"C:\Users\SVYX0SRVOAT\Desktop\Test\paths.txt", "=======================" + Environment.NewLine);
             }
             finally
             {
