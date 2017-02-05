@@ -183,6 +183,9 @@ namespace FormFindCalls
 
         private void button2_Click(object sender, EventArgs e)
         {
+            circularProgressBar1.Value = 0;
+            circularProgressBar1.Update();
+
             List<string> paths = new List<string>();
             paths.Add(@"C:\Users\Zoya\Google Drive\RBC\a\file1.txt");
             paths.Add(@"C:\Users\Zoya\Google Drive\RBC\a\file2.txt");
@@ -205,12 +208,22 @@ namespace FormFindCalls
             }//if cancel or close is pressed then "destinationPath" is NOT overriden
 
 
+            double step = 100 / paths.Count;
+            double counter = 0.0;
             foreach (string file in paths) //switch 'paths' e 'audioFilesList' for actual files
             {
+                counter += step;
+                circularProgressBar1.Visible = true;
+                circularProgressBar1.Value = (int)counter;
+                circularProgressBar1.Update();
+
                 string moveTo = destinationPath + file.Substring(file.LastIndexOf('\\') + 1);
 
                 File.Copy(file, moveTo, true);//true to overwrite existing files, else err
             }
+            circularProgressBar1.Value = 100;
+            circularProgressBar1.Update();
+            //circularProgressBar1.Visible = false;
         }
 
         private void button3_Click(object sender, EventArgs e)
