@@ -119,9 +119,10 @@ namespace FormFindCalls
             howManyFilesFound = 0;
             lbl_paths.Text = "Paths will show here:";
             txtBxPaths.Text = "";
+            circularProgressBar1.Visible = false;
 
             #region Query
-           
+
             tblToSearchStr = tblToSearchDD.SelectedItem.ToString();//if NO item selected from DD then err.
             
 
@@ -317,6 +318,7 @@ namespace FormFindCalls
             button2.Enabled = false;
             circularProgressBar1.Value = 0;
             circularProgressBar1.Update();
+            circularProgressBar1.Visible = true;
 
 
             //List<string> paths = new List<string>();
