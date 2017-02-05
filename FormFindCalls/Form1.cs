@@ -109,10 +109,13 @@ namespace FormFindCalls
 
         private void button1_Click(object sender, EventArgs e)
         {
+            button1.Enabled = false;
+            button2.Enabled = false;
+            
             //pictureBox1.Visible = true;
             //Thread.Sleep(3000);
             //pictureBox1.Visible = false;
-
+            audioFilesList.Clear();
             howManyFilesFound = 0;
             lbl_paths.Text = "Paths will show here:";
             txtBxPaths.Text = "";
@@ -298,7 +301,8 @@ namespace FormFindCalls
             }
             lbl_paths.Text = howManyFilesFound + " files found. \n\n" + lbl_paths.Text;//total files found appended at beginning of all results
 
-            
+            button1.Enabled = true;
+            button2.Enabled = true;
         }
 
         #endregion
@@ -309,6 +313,11 @@ namespace FormFindCalls
 
         private void button2_Click(object sender, EventArgs e)
         {
+            button1.Enabled = false;
+            button2.Enabled = false;
+            circularProgressBar1.Value = 0;
+
+
             //List<string> paths = new List<string>();
             //paths.Add(@"C:\Users\Zoya\Google Drive\RBC\a\file1.txt");
             //paths.Add(@"C:\Users\Zoya\Google Drive\RBC\a\file2.txt");
@@ -332,12 +341,28 @@ namespace FormFindCalls
             }//if cancel or close is pressed then "destinationPath" is NOT overriden
 
 
+            #region CircularProgressBar's progress defined
+            double step = 100/audioFilesList.Count;
+            double counter = 0;
+            #endregion
+
+
             foreach (string file in audioFilesList) //switch 'paths' e 'audioFilesList' for actual files
             {
+                //circularProgressBar1.Value += step;//accepts ONLY int. but then if >100 files we get fraction that rounds to 0--problem!!
+                counter += step;
+                circularProgressBar1.Value = (int)counter;
+                //circularProgressBar1.Text = (int)counter + "%";
+
+
                 string moveTo = destinationPath + file.Substring(file.LastIndexOf('\\') + 1); //\\SE104427.saimaple.fg.rbc.com\h$\Calls\871001\000\04\92\871001000049202.wav
 
                 File.Copy(file, moveTo, true);//true to overwrite existing files, else err
             }
+            circularProgressBar1.Value = 100;
+
+            button1.Enabled = true;
+            button2.Enabled = true;
         }
         #endregion
 

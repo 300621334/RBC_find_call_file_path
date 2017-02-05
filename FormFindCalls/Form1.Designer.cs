@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.contactID = new System.Windows.Forms.TextBox();
             this.kvp1 = new System.Windows.Forms.TextBox();
             this.lbl_contactID = new System.Windows.Forms.Label();
@@ -48,6 +49,7 @@
             this.txtBxKvp1 = new System.Windows.Forms.TextBox();
             this.tblToSearchDD = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.circularProgressBar1 = new CircularProgressBar.CircularProgressBar();
             this.SuspendLayout();
             // 
             // contactID
@@ -180,10 +182,11 @@
             // 
             // txtBxPaths
             // 
-            this.txtBxPaths.Location = new System.Drawing.Point(371, 229);
+            this.txtBxPaths.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBxPaths.Location = new System.Drawing.Point(311, 229);
             this.txtBxPaths.Multiline = true;
             this.txtBxPaths.Name = "txtBxPaths";
-            this.txtBxPaths.Size = new System.Drawing.Size(236, 219);
+            this.txtBxPaths.Size = new System.Drawing.Size(337, 219);
             this.txtBxPaths.TabIndex = 27;
             // 
             // dropDownKvp
@@ -219,11 +222,43 @@
             this.label1.TabIndex = 31;
             this.label1.Text = "Select a Table";
             // 
+            // circularProgressBar1
+            // 
+            this.circularProgressBar1.AnimationFunction = ((WinFormAnimation.AnimationFunctions.Function)(resources.GetObject("circularProgressBar1.AnimationFunction")));
+            this.circularProgressBar1.AnimationSpeed = 500;
+            this.circularProgressBar1.BackColor = System.Drawing.Color.Transparent;
+            this.circularProgressBar1.Font = new System.Drawing.Font("Microsoft Sans Serif", 72F, System.Drawing.FontStyle.Bold);
+            this.circularProgressBar1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.circularProgressBar1.InnerColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.circularProgressBar1.InnerMargin = 2;
+            this.circularProgressBar1.InnerWidth = -1;
+            this.circularProgressBar1.Location = new System.Drawing.Point(400, 107);
+            this.circularProgressBar1.MarqueeAnimationSpeed = 2000;
+            this.circularProgressBar1.Name = "circularProgressBar1";
+            this.circularProgressBar1.OuterColor = System.Drawing.Color.Gray;
+            this.circularProgressBar1.OuterMargin = -25;
+            this.circularProgressBar1.OuterWidth = 26;
+            this.circularProgressBar1.ProgressColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.circularProgressBar1.ProgressWidth = 25;
+            this.circularProgressBar1.SecondaryFont = new System.Drawing.Font("Microsoft Sans Serif", 36F);
+            this.circularProgressBar1.Size = new System.Drawing.Size(121, 116);
+            this.circularProgressBar1.StartAngle = 270;
+            this.circularProgressBar1.SubscriptColor = System.Drawing.Color.FromArgb(((int)(((byte)(166)))), ((int)(((byte)(166)))), ((int)(((byte)(166)))));
+            this.circularProgressBar1.SubscriptMargin = new System.Windows.Forms.Padding(10, -35, 0, 0);
+            this.circularProgressBar1.SubscriptText = ".23";
+            this.circularProgressBar1.SuperscriptColor = System.Drawing.Color.FromArgb(((int)(((byte)(166)))), ((int)(((byte)(166)))), ((int)(((byte)(166)))));
+            this.circularProgressBar1.SuperscriptMargin = new System.Windows.Forms.Padding(10, 35, 0, 0);
+            this.circularProgressBar1.SuperscriptText = "°C";
+            this.circularProgressBar1.TabIndex = 32;
+            this.circularProgressBar1.TextMargin = new System.Windows.Forms.Padding(8, 8, 0, 0);
+            this.circularProgressBar1.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(619, 499);
+            this.ClientSize = new System.Drawing.Size(660, 499);
+            this.Controls.Add(this.circularProgressBar1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tblToSearchDD);
             this.Controls.Add(this.txtBxKvp1);
@@ -273,6 +308,7 @@
         private System.Windows.Forms.TextBox txtBxKvp1;
         private System.Windows.Forms.ComboBox tblToSearchDD;
         private System.Windows.Forms.Label label1;
+        private CircularProgressBar.CircularProgressBar circularProgressBar1;
     }
 }
 
