@@ -316,6 +316,7 @@ namespace FormFindCalls
             button1.Enabled = false;
             button2.Enabled = false;
             circularProgressBar1.Value = 0;
+            circularProgressBar1.Update();
 
 
             //List<string> paths = new List<string>();
@@ -352,6 +353,7 @@ namespace FormFindCalls
                 //circularProgressBar1.Value += step;//accepts ONLY int. but then if >100 files we get fraction that rounds to 0--problem!!
                 counter += step;
                 circularProgressBar1.Value = (int)counter;
+                circularProgressBar1.Update();
                 //circularProgressBar1.Text = (int)counter + "%";
 
 
@@ -360,6 +362,7 @@ namespace FormFindCalls
                 File.Copy(file, moveTo, true);//true to overwrite existing files, else err
             }
             circularProgressBar1.Value = 100;
+            circularProgressBar1.Update();
 
             button1.Enabled = true;
             button2.Enabled = true;
