@@ -118,7 +118,7 @@ namespace FormFindCalls
             audioFilesList.Clear();
             howManyFilesFound = 0;
             lbl_paths.Text = "Paths will show here:";
-            txtBxPaths.Text = "";
+            txtBxPaths.Clear();//txtBxPaths.Text = "";
             //circularProgressBar1.Visible = false;
 
             #region Query
@@ -129,8 +129,34 @@ namespace FormFindCalls
             query = "select * from " + tblToSearchStr + " where 1=1 "; //old: query = "select * from centralcontact.dbo.sessions where 1=1 and audio_module_no = 871001 ";
 
             query += (!string.IsNullOrWhiteSpace(contactID.Text)) ? " and contact_key = " + contactID.Text : ""; //old: query += (!string.IsNullOrWhiteSpace(contactID.Text))? " and contact_id = " +contactID.Text : "";//without single quotes err=invalid column name
-            query += (!string.IsNullOrWhiteSpace(kvp1.Text)) ? " and p7_value = '" + kvp1.Text + "'" : ""; //query += (!string.IsNullOrWhiteSpace(kvp1.Text)) ? " and pcd1_value = '" + kvp1.Text+"'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp2.Text)) ? " and p2_value = '" + kvp2.Text+"'" : "";
+            query += (!string.IsNullOrWhiteSpace(sessionID.Text)) ? " and sid_key = " + sessionID.Text : ""; 
+            //query += (!string.IsNullOrWhiteSpace(kvp1.Text)) ? " and pcd1_value = '" + kvp1.Text+"'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp1.Text)) ? " and p1_value = '" + kvp1.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp2.Text)) ? " and p2_value = '" + kvp2.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp3.Text)) ? " and p3_value = '" + kvp3.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp4.Text)) ? " and p4_value = '" + kvp4.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp5.Text)) ? " and p5_value = '" + kvp5.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp6.Text)) ? " and p6_value = '" + kvp6.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp7.Text)) ? " and p7_value = '" + kvp7.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp8.Text)) ? " and p8_value = '" + kvp8.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp9.Text)) ? " and p9_value = '" + kvp9.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp10.Text)) ? " and p10_value = '" + kvp10.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp11.Text)) ? " and p11_value = '" + kvp11.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp12.Text)) ? " and p12_value = '" + kvp12.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp13.Text)) ? " and p13_value = '" + kvp13.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp14.Text)) ? " and p14_value = '" + kvp14.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp15.Text)) ? " and p15_value = '" + kvp15.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp16.Text)) ? " and p16_value = '" + kvp16.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp17.Text)) ? " and p17_value = '" + kvp17.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp18.Text)) ? " and p18_value = '" + kvp18.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp19.Text)) ? " and p19_value = '" + kvp19.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp20.Text)) ? " and p20_value = '" + kvp20.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp21.Text)) ? " and p21_value = '" + kvp21.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp22.Text)) ? " and p22_value = '" + kvp22.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp23.Text)) ? " and p23_value = '" + kvp23.Text + "'" : "";
+           //removing 43 & 48 bcoz DB Sessions_month_1/12 do not have p43_value etc & would cause error  
+            //query += (!string.IsNullOrWhiteSpace(kvp43.Text)) ? " and p43_value = '" + kvp43.Text + "'" : "";
+            //query += (!string.IsNullOrWhiteSpace(kvp48.Text)) ? " and p48_value = '" + kvp48.Text + "'" : "";
             query += " and local_start_time >= @startDate and local_end_time <= @endDate";
 
             //query += " and DatePart(yyyy, start_time) >= @yearStart and DatePart(yyyy, end_time) <= @yearEnd";//http://www.w3schools.com/sql/func_datepart.asp
@@ -200,7 +226,7 @@ namespace FormFindCalls
                 con.Open();
                 reader = cmd.ExecuteReader();
 
-                lbl_paths.Text += "\n";
+                //lbl_paths.Text += "\n";
 
                 //File.WriteAllText(@"C:\Users\Zoya\Google Drive\RBC\Form_find_contacts\paths.txt", string.Empty);//clear content of file if any
 
@@ -289,8 +315,8 @@ namespace FormFindCalls
                     #endregion
 
 
-                    lbl_paths.Text += "\n\n"+ path;//display paths on GUI label
-                    txtBxPaths.Text += "\n\n" + path;//display paths on GUI text box
+                    //lbl_paths.Text += "\n\n"+ path;//display paths on GUI label
+                    txtBxPaths.Text += "\r\n" + path;//display paths on GUI text box//http://stackoverflow.com/questions/8536958/how-to-add-a-line-to-a-multiline-textbox
                     //lbl_paths.Text += reader.GetDateTime(7).ToString();
 
                 }//while(reader.Read()) ends
@@ -347,6 +373,7 @@ namespace FormFindCalls
             #region CircularProgressBar's progress defined
             double step = 100/audioFilesList.Count;
             double counter = 0;
+            int missingFiles = 0;
             #endregion
 
 
@@ -360,9 +387,18 @@ namespace FormFindCalls
 
 
                 string moveTo = destinationPath + file.Substring(file.LastIndexOf('\\') + 1); //\\SE104427.saimaple.fg.rbc.com\h$\Calls\871001\000\04\92\871001000049202.wav
-
-                File.Copy(file, moveTo, true);//true to overwrite existing files, else err
+                try
+                {
+                    File.Copy(file, moveTo, true);//true to overwrite existing files, else err
+                }
+                catch (System.IO.FileNotFoundException excep)
+                {
+                    missingFiles++;
+                    continue;
+                }
+                
             }
+            lbl_paths.Text = " Files NOT found: " + missingFiles;
             //circularProgressBar1.Value = 100;
             //circularProgressBar1.Update();
 
@@ -450,6 +486,9 @@ namespace FormFindCalls
             
         }
         #endregion
+
+
+
 
 
 
