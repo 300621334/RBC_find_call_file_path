@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.contactID = new System.Windows.Forms.TextBox();
             this.kvp1 = new System.Windows.Forms.TextBox();
             this.lbl_contactID = new System.Windows.Forms.Label();
@@ -49,62 +48,68 @@
             this.txtBxKvp1 = new System.Windows.Forms.TextBox();
             this.tblToSearchDD = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.circularProgressBar1 = new CircularProgressBar.CircularProgressBar();
             this.SuspendLayout();
             // 
             // contactID
             // 
-            this.contactID.Location = new System.Drawing.Point(177, 11);
+            this.contactID.Location = new System.Drawing.Point(236, 14);
+            this.contactID.Margin = new System.Windows.Forms.Padding(4);
             this.contactID.Name = "contactID";
-            this.contactID.Size = new System.Drawing.Size(100, 20);
+            this.contactID.Size = new System.Drawing.Size(132, 22);
             this.contactID.TabIndex = 0;
             // 
             // kvp1
             // 
-            this.kvp1.Location = new System.Drawing.Point(177, 40);
+            this.kvp1.Location = new System.Drawing.Point(236, 49);
+            this.kvp1.Margin = new System.Windows.Forms.Padding(4);
             this.kvp1.Name = "kvp1";
-            this.kvp1.Size = new System.Drawing.Size(100, 20);
+            this.kvp1.Size = new System.Drawing.Size(132, 22);
             this.kvp1.TabIndex = 1;
             // 
             // lbl_contactID
             // 
             this.lbl_contactID.AutoSize = true;
-            this.lbl_contactID.Location = new System.Drawing.Point(110, 14);
+            this.lbl_contactID.Location = new System.Drawing.Point(147, 17);
+            this.lbl_contactID.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbl_contactID.Name = "lbl_contactID";
-            this.lbl_contactID.Size = new System.Drawing.Size(61, 13);
+            this.lbl_contactID.Size = new System.Drawing.Size(77, 17);
             this.lbl_contactID.TabIndex = 2;
             this.lbl_contactID.Text = "Contact_ID";
             // 
             // lbl_kvp1
             // 
             this.lbl_kvp1.AutoSize = true;
-            this.lbl_kvp1.Location = new System.Drawing.Point(91, 43);
+            this.lbl_kvp1.Location = new System.Drawing.Point(121, 53);
+            this.lbl_kvp1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbl_kvp1.Name = "lbl_kvp1";
-            this.lbl_kvp1.Size = new System.Drawing.Size(76, 13);
+            this.lbl_kvp1.Size = new System.Drawing.Size(100, 17);
             this.lbl_kvp1.TabIndex = 3;
             this.lbl_kvp1.Text = "RG - p7_value";
             // 
             // lbl_kvp2
             // 
             this.lbl_kvp2.AutoSize = true;
-            this.lbl_kvp2.Location = new System.Drawing.Point(44, 69);
+            this.lbl_kvp2.Location = new System.Drawing.Point(59, 85);
+            this.lbl_kvp2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbl_kvp2.Name = "lbl_kvp2";
-            this.lbl_kvp2.Size = new System.Drawing.Size(128, 13);
+            this.lbl_kvp2.Size = new System.Drawing.Size(168, 17);
             this.lbl_kvp2.TabIndex = 4;
             this.lbl_kvp2.Text = "pcd2_ID (KVP) e.g. credit";
             // 
             // kvp2
             // 
-            this.kvp2.Location = new System.Drawing.Point(177, 66);
+            this.kvp2.Location = new System.Drawing.Point(236, 81);
+            this.kvp2.Margin = new System.Windows.Forms.Padding(4);
             this.kvp2.Name = "kvp2";
-            this.kvp2.Size = new System.Drawing.Size(100, 20);
+            this.kvp2.Size = new System.Drawing.Size(132, 22);
             this.kvp2.TabIndex = 5;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(9, 192);
+            this.button1.Location = new System.Drawing.Point(12, 236);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(227, 23);
+            this.button1.Size = new System.Drawing.Size(303, 28);
             this.button1.TabIndex = 6;
             this.button1.Text = "Create File with path to call files";
             this.button1.UseVisualStyleBackColor = true;
@@ -113,31 +118,35 @@
             // lbl_paths
             // 
             this.lbl_paths.AutoSize = true;
-            this.lbl_paths.Location = new System.Drawing.Point(15, 229);
+            this.lbl_paths.Location = new System.Drawing.Point(20, 282);
+            this.lbl_paths.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbl_paths.Name = "lbl_paths";
-            this.lbl_paths.Size = new System.Drawing.Size(106, 13);
+            this.lbl_paths.Size = new System.Drawing.Size(139, 17);
             this.lbl_paths.TabIndex = 7;
             this.lbl_paths.Text = "Paths will show here:";
             // 
             // dateFrom
             // 
-            this.dateFrom.Location = new System.Drawing.Point(371, 37);
+            this.dateFrom.Location = new System.Drawing.Point(495, 46);
+            this.dateFrom.Margin = new System.Windows.Forms.Padding(4);
             this.dateFrom.Name = "dateFrom";
-            this.dateFrom.Size = new System.Drawing.Size(200, 20);
+            this.dateFrom.Size = new System.Drawing.Size(265, 22);
             this.dateFrom.TabIndex = 9;
             // 
             // dateTo
             // 
-            this.dateTo.Location = new System.Drawing.Point(371, 81);
+            this.dateTo.Location = new System.Drawing.Point(495, 100);
+            this.dateTo.Margin = new System.Windows.Forms.Padding(4);
             this.dateTo.Name = "dateTo";
-            this.dateTo.Size = new System.Drawing.Size(200, 20);
+            this.dateTo.Size = new System.Drawing.Size(265, 22);
             this.dateTo.TabIndex = 18;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(270, 192);
+            this.button2.Location = new System.Drawing.Point(360, 236);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.Size = new System.Drawing.Size(100, 28);
             this.button2.TabIndex = 22;
             this.button2.Text = "Copy Files";
             this.button2.UseVisualStyleBackColor = true;
@@ -146,26 +155,29 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(371, 18);
+            this.label3.Location = new System.Drawing.Point(495, 22);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(150, 13);
+            this.label3.Size = new System.Drawing.Size(197, 17);
             this.label3.TabIndex = 23;
             this.label3.Text = "From This Date/On This Date:";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(374, 64);
+            this.label4.Location = new System.Drawing.Point(499, 79);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(72, 13);
+            this.label4.Size = new System.Drawing.Size(94, 17);
             this.label4.TabIndex = 24;
             this.label4.Text = "To This Date:";
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(532, 464);
+            this.button3.Location = new System.Drawing.Point(709, 571);
+            this.button3.Margin = new System.Windows.Forms.Padding(4);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.Size = new System.Drawing.Size(100, 28);
             this.button3.TabIndex = 25;
             this.button3.Text = "Test";
             this.button3.UseVisualStyleBackColor = true;
@@ -174,91 +186,65 @@
             // test
             // 
             this.test.AutoSize = true;
-            this.test.Location = new System.Drawing.Point(30, 464);
+            this.test.Location = new System.Drawing.Point(40, 571);
+            this.test.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.test.Name = "test";
-            this.test.Size = new System.Drawing.Size(57, 13);
+            this.test.Size = new System.Drawing.Size(75, 17);
             this.test.TabIndex = 26;
             this.test.Text = "Test Label";
             // 
             // txtBxPaths
             // 
             this.txtBxPaths.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBxPaths.Location = new System.Drawing.Point(311, 229);
+            this.txtBxPaths.Location = new System.Drawing.Point(415, 282);
+            this.txtBxPaths.Margin = new System.Windows.Forms.Padding(4);
             this.txtBxPaths.Multiline = true;
             this.txtBxPaths.Name = "txtBxPaths";
-            this.txtBxPaths.Size = new System.Drawing.Size(337, 219);
+            this.txtBxPaths.Size = new System.Drawing.Size(448, 269);
             this.txtBxPaths.TabIndex = 27;
             // 
             // dropDownKvp
             // 
             this.dropDownKvp.FormattingEnabled = true;
-            this.dropDownKvp.Location = new System.Drawing.Point(9, 151);
+            this.dropDownKvp.Location = new System.Drawing.Point(12, 186);
+            this.dropDownKvp.Margin = new System.Windows.Forms.Padding(4);
             this.dropDownKvp.Name = "dropDownKvp";
-            this.dropDownKvp.Size = new System.Drawing.Size(121, 21);
+            this.dropDownKvp.Size = new System.Drawing.Size(160, 24);
             this.dropDownKvp.Sorted = true;
             this.dropDownKvp.TabIndex = 28;
             // 
             // txtBxKvp1
             // 
-            this.txtBxKvp1.Location = new System.Drawing.Point(143, 152);
+            this.txtBxKvp1.Location = new System.Drawing.Point(191, 187);
+            this.txtBxKvp1.Margin = new System.Windows.Forms.Padding(4);
             this.txtBxKvp1.Name = "txtBxKvp1";
-            this.txtBxKvp1.Size = new System.Drawing.Size(100, 20);
+            this.txtBxKvp1.Size = new System.Drawing.Size(132, 22);
             this.txtBxKvp1.TabIndex = 29;
             // 
             // tblToSearchDD
             // 
             this.tblToSearchDD.FormattingEnabled = true;
-            this.tblToSearchDD.Location = new System.Drawing.Point(96, 106);
+            this.tblToSearchDD.Location = new System.Drawing.Point(128, 130);
+            this.tblToSearchDD.Margin = new System.Windows.Forms.Padding(4);
             this.tblToSearchDD.Name = "tblToSearchDD";
-            this.tblToSearchDD.Size = new System.Drawing.Size(121, 21);
+            this.tblToSearchDD.Size = new System.Drawing.Size(160, 24);
             this.tblToSearchDD.TabIndex = 30;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(17, 109);
+            this.label1.Location = new System.Drawing.Point(23, 134);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(76, 13);
+            this.label1.Size = new System.Drawing.Size(99, 17);
             this.label1.TabIndex = 31;
             this.label1.Text = "Select a Table";
             // 
-            // circularProgressBar1
-            // 
-            this.circularProgressBar1.AnimationFunction = ((WinFormAnimation.AnimationFunctions.Function)(resources.GetObject("circularProgressBar1.AnimationFunction")));
-            this.circularProgressBar1.AnimationSpeed = 500;
-            this.circularProgressBar1.BackColor = System.Drawing.Color.Transparent;
-            this.circularProgressBar1.Font = new System.Drawing.Font("Microsoft Sans Serif", 72F, System.Drawing.FontStyle.Bold);
-            this.circularProgressBar1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.circularProgressBar1.InnerColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.circularProgressBar1.InnerMargin = 2;
-            this.circularProgressBar1.InnerWidth = -1;
-            this.circularProgressBar1.Location = new System.Drawing.Point(400, 107);
-            this.circularProgressBar1.MarqueeAnimationSpeed = 2000;
-            this.circularProgressBar1.Name = "circularProgressBar1";
-            this.circularProgressBar1.OuterColor = System.Drawing.Color.Gray;
-            this.circularProgressBar1.OuterMargin = -25;
-            this.circularProgressBar1.OuterWidth = 26;
-            this.circularProgressBar1.ProgressColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.circularProgressBar1.ProgressWidth = 25;
-            this.circularProgressBar1.SecondaryFont = new System.Drawing.Font("Microsoft Sans Serif", 36F);
-            this.circularProgressBar1.Size = new System.Drawing.Size(121, 116);
-            this.circularProgressBar1.StartAngle = 270;
-            this.circularProgressBar1.SubscriptColor = System.Drawing.Color.FromArgb(((int)(((byte)(166)))), ((int)(((byte)(166)))), ((int)(((byte)(166)))));
-            this.circularProgressBar1.SubscriptMargin = new System.Windows.Forms.Padding(10, -35, 0, 0);
-            this.circularProgressBar1.SubscriptText = ".23";
-            this.circularProgressBar1.SuperscriptColor = System.Drawing.Color.FromArgb(((int)(((byte)(166)))), ((int)(((byte)(166)))), ((int)(((byte)(166)))));
-            this.circularProgressBar1.SuperscriptMargin = new System.Windows.Forms.Padding(10, 35, 0, 0);
-            this.circularProgressBar1.SuperscriptText = "°C";
-            this.circularProgressBar1.TabIndex = 32;
-            this.circularProgressBar1.TextMargin = new System.Windows.Forms.Padding(8, 8, 0, 0);
-            this.circularProgressBar1.Visible = false;
-            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(660, 499);
-            this.Controls.Add(this.circularProgressBar1);
+            this.ClientSize = new System.Drawing.Size(1260, 764);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tblToSearchDD);
             this.Controls.Add(this.txtBxKvp1);
@@ -279,6 +265,7 @@
             this.Controls.Add(this.lbl_contactID);
             this.Controls.Add(this.kvp1);
             this.Controls.Add(this.contactID);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
@@ -308,7 +295,6 @@
         private System.Windows.Forms.TextBox txtBxKvp1;
         private System.Windows.Forms.ComboBox tblToSearchDD;
         private System.Windows.Forms.Label label1;
-        private CircularProgressBar.CircularProgressBar circularProgressBar1;
     }
 }
 
