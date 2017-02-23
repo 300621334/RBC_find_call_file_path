@@ -136,12 +136,12 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(388, 360);
+            this.button1.Location = new System.Drawing.Point(457, 360);
             this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(303, 28);
+            this.button1.Size = new System.Drawing.Size(208, 28);
             this.button1.TabIndex = 6;
-            this.button1.Text = "Create File with path to call files";
+            this.button1.Text = "Create Path to Audio Files";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -535,6 +535,7 @@
             this.label23.Size = new System.Drawing.Size(60, 17);
             this.label23.TabIndex = 79;
             this.label23.Text = "IPG-p48";
+            this.label23.Visible = false;
             // 
             // kvp48
             // 
@@ -543,6 +544,7 @@
             this.kvp48.Name = "kvp48";
             this.kvp48.Size = new System.Drawing.Size(101, 22);
             this.kvp48.TabIndex = 78;
+            this.kvp48.Visible = false;
             // 
             // label24
             // 
@@ -553,6 +555,7 @@
             this.label24.Size = new System.Drawing.Size(127, 17);
             this.label24.TabIndex = 77;
             this.label24.Text = "GSW_PHONE-p43";
+            this.label24.Visible = false;
             // 
             // kvp43
             // 
@@ -561,6 +564,7 @@
             this.kvp43.Name = "kvp43";
             this.kvp43.Size = new System.Drawing.Size(101, 22);
             this.kvp43.TabIndex = 76;
+            this.kvp43.Visible = false;
             // 
             // label25
             // 
