@@ -311,16 +311,28 @@ namespace FormFindCalls
                     //http://stackoverflow.com/questions/2837020/open-existing-file-append-a-single-line
 
                     audioFilesList.Add(path);
-                    File.AppendAllText(@"C:\Users\SVYX0SRVOAT\Desktop\Test\paths.txt", path+" "+DateTime.Now.ToString() + Environment.NewLine);
+                    //File.AppendAllText(@"C:\Users\SVYX0SRVOAT\Desktop\Test\paths.txt", path+" "+DateTime.Now.ToString() + Environment.NewLine);
                     #endregion
 
 
                     //lbl_paths.Text += "\n\n"+ path;//display paths on GUI label
-                    txtBxPaths.Text += "\r\n" + path;//display paths on GUI text box//http://stackoverflow.com/questions/8536958/how-to-add-a-line-to-a-multiline-textbox
+                    //txtBxPaths.Text += "\r\n" + path;//display paths on GUI text box//http://stackoverflow.com/questions/8536958/how-to-add-a-line-to-a-multiline-textbox
                     //lbl_paths.Text += reader.GetDateTime(7).ToString();
 
                 }//while(reader.Read()) ends
-                File.AppendAllText(@"C:\Users\SVYX0SRVOAT\Desktop\Test\paths.txt", "=======================" + Environment.NewLine);
+
+                #region Write whole collection to log file
+                string txtForLogFile = "";
+                foreach (string x in audioFilesList)
+                {
+                    txtForLogFile += (x + Environment.NewLine);
+                }
+                File.AppendAllText(@"C:\temp\paths.txt", DateTime.Now.ToString() /*+ Environment.NewLine*/ +"\n"+ txtForLogFile);
+                txtBxPaths.Text = txtForLogFile;
+                //File.AppendAllText(@"C:\temp\paths.txt", "=======================" + Environment.NewLine);
+                //File.AppendAllText(@"C:\Users\SVYX0SRVOAT\Desktop\Test\paths.txt", "=======================" + Environment.NewLine);
+
+                #endregion
             }
             finally
             {
