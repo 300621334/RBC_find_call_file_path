@@ -100,6 +100,7 @@ namespace FormFindCalls
             tblToSearchStr = tblToSearchDD.SelectedItem.ToString();//if NO item selected from DD then err.
 
             query = "select * from " + tblToSearchStr + " where 1=1 "; //old: query = "select * from centralcontact.dbo.sessions where 1=1 and audio_module_no = 871001 ";
+            query += " and local_start_time >= @startDate and local_end_time <= @endDate";
             query += (!string.IsNullOrWhiteSpace(contactID.Text)) ? " and contact_key = " + contactID.Text : ""; //old: query += (!string.IsNullOrWhiteSpace(contactID.Text))? " and contact_id = " +contactID.Text : "";//without single quotes err=invalid column name
             query += (!string.IsNullOrWhiteSpace(sessionID.Text)) ? " and sid_key = " + sessionID.Text : "";
             query += (!string.IsNullOrWhiteSpace(kvp1.Text)) ? " and p1_value = '" + kvp1.Text + "'" : "";
@@ -128,7 +129,6 @@ namespace FormFindCalls
             //removing 43 & 48 bcoz DB Sessions_month_1/12 do not have p43_value etc & would cause error  
             //query += (!string.IsNullOrWhiteSpace(kvp43.Text)) ? " and p43_value = '" + kvp43.Text + "'" : "";
             //query += (!string.IsNullOrWhiteSpace(kvp48.Text)) ? " and p48_value = '" + kvp48.Text + "'" : "";
-            query += " and local_start_time >= @startDate and local_end_time <= @endDate";
             #endregion
 
 
@@ -148,7 +148,7 @@ namespace FormFindCalls
 
             //SqlCommand cmd = new SqlCommand("select * from rbc_contacts", con);
             cmd = new SqlCommand(query, con);
-
+            cmd.CommandTimeout = 100;
             cmd.Parameters.AddWithValue("startDate", dateFrom.Value);
             cmd.Parameters.AddWithValue("endDate", dateTo.Value);
             #endregion
@@ -304,6 +304,10 @@ namespace FormFindCalls
                 //File.AppendAllText(@"C:\Users\SVYX0SRVOAT\Desktop\Test\paths.txt", "=======================" + Environment.NewLine);
                 #endregion
             }
+                catch(SqlException sqlexp)
+            {
+                MessageBox.Show("SQL server took longer than 100 sec. Please try again.");
+                }
             finally
             {
                 con.Close();
