@@ -294,15 +294,15 @@ namespace FormFindCalls
 
                 #region Write whole collection to log file
                 string txtForLogFile = "";
-                foreach(var x in audioFilesList)
+                foreach (string x in audioFilesList)
                 {
-                    txtForLogFile += x.ToString() + "\n\r";
+                    txtForLogFile += (x + Environment.NewLine);
                 }
-                File.WriteAllText(@"C:\temp\paths.txt", DateTime.Now.ToString() + Environment.NewLine + txtForLogFile);
-                txtBxPaths.Text += txtForLogFile;
+                File.AppendAllText(@"C:\temp\paths.txt", DateTime.Now.ToString() /*+ Environment.NewLine*/ + "\n" + txtForLogFile);
+                txtBxPaths.Text = txtForLogFile;
                 //File.AppendAllText(@"C:\temp\paths.txt", "=======================" + Environment.NewLine);
+                //File.AppendAllText(@"C:\Users\SVYX0SRVOAT\Desktop\Test\paths.txt", "=======================" + Environment.NewLine);
                 #endregion
-               
             }
             finally
             {
