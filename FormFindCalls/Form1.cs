@@ -334,6 +334,10 @@ namespace FormFindCalls
 
                 #endregion
             }
+            catch (SqlException sqlEx)
+            {
+                MessageBox.Show("Connection Timed Out. Please try again.");
+            }
             finally
             {
                 con.Close();
