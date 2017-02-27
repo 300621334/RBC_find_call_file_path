@@ -11,11 +11,15 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.IO;
 using System.Threading;
+using System.Text.RegularExpressions;//needed for RegEx
 
 namespace FormFindCalls
 {
     public partial class Form1 : Form
     {
+        #region Global variables
+        //int connTimeOut = 30;
+        #endregion
         #region GUI form initializer
 
         public Form1()
@@ -78,6 +82,21 @@ namespace FormFindCalls
                 tblToSearchDD.Items.Add(x);
             }
             tblToSearchDD.SelectedIndex = 0;
+            #endregion
+
+            #region Read init.txt file
+
+            //string[] iniTxt = File.ReadAllLines(Path.GetFullPath(@"..\..\ini.txt"), Encoding.UTF8);//http://www.csharp-examples.net/read-text-file/
+            //foreach (string line in File.ReadLines(Path.GetFullPath(@"..\..")+"\\ini.txt", Encoding.UTF8))
+            //{
+
+            //    if (Regex.Match(line, "ConnectionTimeout").Success)
+            //    {
+            //        var match = Regex.Match(line, ":");
+            //        connTimeOut = Convert.ToInt32(line.Substring(match.Index + 1).Trim());//assign this to sqlCommand
+            //    }
+            //}
+
             #endregion
         }
         #endregion
@@ -191,7 +210,17 @@ namespace FormFindCalls
             ////conStrBuilder.UserID = "svyx0srvoat"; //OAT is Lab2
             ////conStrBuilder.Password = "Password1";
             //string conStr = conStrBuilder.ConnectionString;
-            string conStr = "Persist Security Info=False;Integrated Security=true;Initial Catalog=CentralDWH;server=(local)";
+            //==================================================
+            SqlConnectionStringBuilder conStrBuilder = new SqlConnectionStringBuilder();
+            //conStrBuilder.DataSource = @"SE104499.saimaple.saifg.rbc.com\MSSQLSERVER"; //Lab2 server -- add fully qualified server name backslash instance name
+            conStrBuilder.DataSource = @"SE104499.saimaple.saifg.rbc.com\MSSQLSERVER";
+            conStrBuilder.InitialCatalog = "CentralDWH";
+            conStrBuilder.IntegratedSecurity = true;//if false then put username & password
+            //conStrBuilder.UserID = "svyx0srvoat"; //OAT is Lab2
+            //conStrBuilder.Password = "Password1";
+            string conStr = conStrBuilder.ConnectionString;
+            //==================================================
+            //string conStr = "Persist Security Info=False;Integrated Security=true;Initial Catalog=CentralDWH;server=(local)";
 
             //string conStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RBC_call_path;Integrated Security=True";
 
@@ -201,7 +230,7 @@ namespace FormFindCalls
 
             //SqlCommand cmd = new SqlCommand("select * from rbc_contacts", con);
             cmd = new SqlCommand(query, con);
-
+            //cmd.CommandTimeout = connTimeOut;
             cmd.Parameters.AddWithValue("startDate", dateFrom.Value);
             cmd.Parameters.AddWithValue("endDate", dateTo.Value);
 
@@ -427,7 +456,8 @@ namespace FormFindCalls
 
         private void button3_Click(object sender, EventArgs e)
         {
-
+            //if I don't catenate & hard code ini.txt then it ends up creating a new file!!! or not not sure
+            //test.Text = Path.GetFullPath(@"..\..")+"\\ini.txt";//find full path of a file. Using (@"ini.txt") gives wrong path to a non-existing ini.txt in bin\Debug\ini.txt
 
 
 
