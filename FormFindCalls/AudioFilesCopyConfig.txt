@@ -1,5 +1,4 @@
 Server Name:			SE104499
 Database Name:			CentralDWH
-Windows Authentication: true
 User Name:				test
 Password:				Password.12345

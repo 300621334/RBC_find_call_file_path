@@ -97,6 +97,7 @@
             this.lbl_sessionID = new System.Windows.Forms.Label();
             this.sessionID = new System.Windows.Forms.TextBox();
             this.btnConfig = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // contactID
@@ -137,7 +138,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(388, 360);
+            this.button1.Location = new System.Drawing.Point(388, 391);
             this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(303, 28);
@@ -212,7 +213,6 @@
             this.button3.TabIndex = 25;
             this.button3.Text = "Test";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Visible = false;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // test
@@ -727,19 +727,30 @@
             // 
             // btnConfig
             // 
-            this.btnConfig.Location = new System.Drawing.Point(1256, 9);
+            this.btnConfig.Location = new System.Drawing.Point(1214, 9);
             this.btnConfig.Name = "btnConfig";
-            this.btnConfig.Size = new System.Drawing.Size(75, 50);
+            this.btnConfig.Size = new System.Drawing.Size(117, 50);
             this.btnConfig.TabIndex = 82;
-            this.btnConfig.Text = "Config";
+            this.btnConfig.Text = "Create  Sample Config File";
             this.btnConfig.UseVisualStyleBackColor = true;
             this.btnConfig.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(438, 366);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(188, 21);
+            this.checkBox1.TabIndex = 84;
+            this.checkBox1.Text = "Use Login And Password";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1343, 764);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.btnConfig);
             this.Controls.Add(this.lbl_sessionID);
             this.Controls.Add(this.sessionID);
@@ -888,6 +899,7 @@
         private System.Windows.Forms.Label lbl_sessionID;
         private System.Windows.Forms.TextBox sessionID;
         private System.Windows.Forms.Button btnConfig;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

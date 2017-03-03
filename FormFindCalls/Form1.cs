@@ -32,14 +32,19 @@ namespace FormFindCalls
         #region Global variables
         //int connTimeOut = 30;
         #endregion
-        #region GUI form initializer
 
-        public Form1()
+                public Form1()
         {
             InitializeComponent();
+            #region BackGround Worker
+            //BackgroundWorker bw = new BackgroundWorker();
+            //bw.WorkerReportsProgress = true;
+            //bw.WorkerSupportsCancellation = true;
+            //        bw.DoWork +=;
+            #endregion
             #region DateTime Box's format
 
-           
+
             dateFrom.Format = DateTimePickerFormat.Custom;
             dateFrom.CustomFormat = "MMM/dd/yyyy --- HH:mm:ss";
             dateTo.Format = DateTimePickerFormat.Custom;
@@ -97,22 +102,25 @@ namespace FormFindCalls
             #endregion
 
             #region Read init.txt file
-
-            //string[] iniTxt = File.ReadAllLines(Path.GetFullPath(@"..\..\ini.txt"), Encoding.UTF8);//http://www.csharp-examples.net/read-text-file/
-            //foreach (string line in File.ReadLines(Path.GetFullPath(@"..\..")+"\\ini.txt", Encoding.UTF8))
-            //{
-
-            //    if (Regex.Match(line, "ConnectionTimeout").Success)
-            //    {
-            //        var match = Regex.Match(line, ":");
-            //        connTimeOut = Convert.ToInt32(line.Substring(match.Index + 1).Trim());//assign this to sqlCommand
-            //    }
-            //}
-
+            //AudioFilesCopyConfig.txtstring[] iniTxt = File.ReadAllLines(Path.GetFullPath(@"..\..\ini.txt"), Encoding.UTF8);//http://www.csharp-examples.net/read-text-file/
+            if (!File.Exists("AudioFilesCopyConfig.txt")) createConfigFile();
+            string[] iniTxt = File.ReadAllLines(Path.GetFullPath(@"AudioFilesCopyConfig.txt"), Encoding.UTF8);
+            foreach (string line in iniTxt)
+            {
+                if (Regex.Match(line, "Server Name:").Success)
+                {
+                    var match = Regex.Match(line, ":");
+                    serverName = line.Substring(match.Index + 1).Trim();//assign this to sqlCommand
+                }
+                if (Regex.Match(line, "Database Name:").Success)
+                {
+                    var match = Regex.Match(line, ":");
+                    dbName = line.Substring(match.Index + 1).Trim();
+                }
+            }
             #endregion
         }
-        #endregion
-
+      
         #region helpful web sites
 
         /*single Query Approach.
@@ -123,7 +131,8 @@ namespace FormFindCalls
         #endregion
 
         #region declare global vars
-
+        bool winAuth = true;
+        string serverName, dbName;
         SqlConnection con;
         SqlCommand cmd;
         SqlDataReader reader;
@@ -138,12 +147,31 @@ namespace FormFindCalls
         #endregion
 
         #region btn to connect DB and generate PATHs
-
         private void button1_Click(object sender, EventArgs e)
         {
-            button1.Enabled = false;
-            button2.Enabled = false;
-            
+           
+
+            winAuth = true;
+            if (checkBox1.Checked)
+            {
+                winAuth = false;
+                askPassword();
+                //makeQueryString();
+                //makeConnection();
+            }
+            else 
+            {
+                button1.Enabled = false;
+                button2.Enabled = false;
+                makeQueryString();
+                pepareConnection();
+            }
+
+           
+        }
+
+        private void pepareConnection()
+        {
             //pictureBox1.Visible = true;
             //Thread.Sleep(3000);
             //pictureBox1.Visible = false;
@@ -153,104 +181,18 @@ namespace FormFindCalls
             txtBxPaths.Clear();//txtBxPaths.Text = "";
             //circularProgressBar1.Visible = false;
 
-            #region Query
+            string conStr = makeConnectionString();
+            openConnection(conStr);
 
-            tblToSearchStr = tblToSearchDD.SelectedItem.ToString();//if NO item selected from DD then err.
             
 
-            query = "select * from " + tblToSearchStr + " where 1=1 "; //old: query = "select * from centralcontact.dbo.sessions where 1=1 and audio_module_no = 871001 ";
+            button1.Enabled = true;
+            button2.Enabled = true;
+        }
 
-            query += (!string.IsNullOrWhiteSpace(contactID.Text)) ? " and contact_key = " + contactID.Text : ""; //old: query += (!string.IsNullOrWhiteSpace(contactID.Text))? " and contact_id = " +contactID.Text : "";//without single quotes err=invalid column name
-            query += (!string.IsNullOrWhiteSpace(sessionID.Text)) ? " and sid_key = " + sessionID.Text : ""; 
-            //query += (!string.IsNullOrWhiteSpace(kvp1.Text)) ? " and pcd1_value = '" + kvp1.Text+"'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp1.Text)) ? " and p1_value = '" + kvp1.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp2.Text)) ? " and p2_value = '" + kvp2.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp3.Text)) ? " and p3_value = '" + kvp3.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp4.Text)) ? " and p4_value = '" + kvp4.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp5.Text)) ? " and p5_value = '" + kvp5.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp6.Text)) ? " and p6_value = '" + kvp6.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp7.Text)) ? " and p7_value = '" + kvp7.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp8.Text)) ? " and p8_value = '" + kvp8.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp9.Text)) ? " and p9_value = '" + kvp9.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp10.Text)) ? " and p10_value = '" + kvp10.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp11.Text)) ? " and p11_value = '" + kvp11.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp12.Text)) ? " and p12_value = '" + kvp12.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp13.Text)) ? " and p13_value = '" + kvp13.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp14.Text)) ? " and p14_value = '" + kvp14.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp15.Text)) ? " and p15_value = '" + kvp15.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp16.Text)) ? " and p16_value = '" + kvp16.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp17.Text)) ? " and p17_value = '" + kvp17.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp18.Text)) ? " and p18_value = '" + kvp18.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp19.Text)) ? " and p19_value = '" + kvp19.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp20.Text)) ? " and p20_value = '" + kvp20.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp21.Text)) ? " and p21_value = '" + kvp21.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp22.Text)) ? " and p22_value = '" + kvp22.Text + "'" : "";
-            query += (!string.IsNullOrWhiteSpace(kvp23.Text)) ? " and p23_value = '" + kvp23.Text + "'" : "";
-           //removing 43 & 48 bcoz DB Sessions_month_1/12 do not have p43_value etc & would cause error  
-            //query += (!string.IsNullOrWhiteSpace(kvp43.Text)) ? " and p43_value = '" + kvp43.Text + "'" : "";
-            //query += (!string.IsNullOrWhiteSpace(kvp48.Text)) ? " and p48_value = '" + kvp48.Text + "'" : "";
-            query += " and local_start_time >= @startDate and local_end_time <= @endDate";
-
-            //query += " and DatePart(yyyy, start_time) >= @yearStart and DatePart(yyyy, end_time) <= @yearEnd";//http://www.w3schools.com/sql/func_datepart.asp
-            //query += " and DatePart(mm, start_time) >= @monthStart and DatePart(mm, end_time) <= @monthEnd";
-            //query += " and DatePart(dd, start_time) >= @dayStart and DatePart(dd, end_time) <= @dayEnd";
-            //query += " and DatePart(hh, start_time) >= @hourStart and DatePart(hh, end_time) <= @hourEnd";
-            //query += " and DatePart(mi, start_time) >= @minStart and DatePart(mi, end_time) <= @minEnd";
-            //query += " and DatePart(ss, start_time) >= @secStart and DatePart(ss, end_time) <= @secEnd";
-
-
-            //Format(cast('2016-03-03 23:59:59' as datetime),'dd-MMM-yyyy HH:mm:ss','en-us')//http://stackoverflow.com/questions/19563261/convert-a-12-hour-format-to-24-hour-format-in-sql-2000
-            //https://msdn.microsoft.com/en-CA/library/hh213505.aspx
-            //Password1
-
-            //if (timeRange.Checked)
-            //{
-            //    query += " and cast(substring(convert(varchar, start_time, 113),13,8) as datetime) >= @startTime and cast(substring(convert(varchar, end_time, 113),13,8) as datetime) <= @endTime";//'time' instead of 'datetime' gave err= data type time not compatible with datetime
-            //    //    query += " and convert(time, start_time) >= @startTime and convert(time, end_time) <= @endTime";
-            //}
-            #endregion
-
-
-            #region connection String
-
-           
-            //SqlConnectionStringBuilder conStrBuilder = new SqlConnectionStringBuilder();
-            ////conStrBuilder.DataSource = @"SE104499.saimaple.saifg.rbc.com\MSSQLSERVER"; //Lab2 server -- add fully qualified server name backslash instance name
-            //conStrBuilder.DataSource = @"(local)\MSSQLSERVER";
-
-            //conStrBuilder.InitialCatalog = "CentralContact";
-            //conStrBuilder.IntegratedSecurity = true;//if false then put username & password
-            ////conStrBuilder.UserID = "svyx0srvoat"; //OAT is Lab2
-            ////conStrBuilder.Password = "Password1";
-            //string conStr = conStrBuilder.ConnectionString;
-            //==================================================
-            //SqlConnectionStringBuilder conStrBuilder = new SqlConnectionStringBuilder();
-            //conStrBuilder.DataSource = @"SE104499.saimaple.saifg.rbc.com\MSSQLSERVER"; //Lab2 server -- add fully qualified server name backslash instance name
-            //conStrBuilder.DataSource = @"SE104499.saimaple.saifg.rbc.com\MSSQLSERVER";/IP: 10.241.205.88
-            //conStrBuilder.InitialCatalog = "CentralDWH";
-            //conStrBuilder.IntegratedSecurity = true;//if false then put username & password
-            //conStrBuilder.UserID = "svyx0srvoat"; //OAT is Lab2
-            //conStrBuilder.Password = "Password1";
-            //string conStr = conStrBuilder.ConnectionString;
-            //==================================================
-            //string conStr = "Persist Security Info=False;Integrated Security=true;Initial Catalog=CentralDWH;server=(local)";
-
-            //string conStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RBC_call_path;Integrated Security=True";
-            string conStr = @"Data Source=SE104499;Initial Catalog=CentralDWH;Integrated Security=False;User ID=test;Password=Password.12345;Connect Timeout=30;";//@"Data Source=SE104499;Initial Catalog=CentralDWH;Integrated Security=False;User ID=SAIMAPLR\SVYX0SRVOAT;Password=password1;Connect Timeout=30";
-            //string conStr = @"Data Source=SE104499;Initial Catalog=CentralDWH;Integrated Security=True;Connect Timeout=30";
-            //==================================================
-            //SqlConnectionStringBuilder conStrBuilder = new SqlConnectionStringBuilder();
-            //conStrBuilder.DataSource = @"SE104499";//IP: 10.241.205.88
-            //conStrBuilder.InitialCatalog = "CentralDWH";
-            //conStrBuilder.IntegratedSecurity = true;//if false then put username & password
-            //conStrBuilder.UserID = "svyx0srvoat"; //OAT is Lab2
-            //conStrBuilder.Password = "Password1";
-            //string conStr = conStrBuilder.ConnectionString;
-            //==================================================
-
-
-
-            con = new SqlConnection(conStr);
+        private void openConnection(string conStr)
+        {
+con = new SqlConnection(conStr);
 
             //SqlCommand cmd = new SqlCommand("select * from rbc_contacts", con);
             cmd = new SqlCommand(query, con);
@@ -271,9 +213,9 @@ namespace FormFindCalls
             //cmd.Parameters.AddWithValue("startTime", modifiedTimeFrom);
             //cmd.Parameters.AddWithValue("endTime", modifiedTimeTo);
             //}
-            #endregion
+           
 
-          
+
             try
             {
                 con.Open();
@@ -287,7 +229,7 @@ namespace FormFindCalls
                 {
                     #region Catenate audio_module_no and audio_ch_no and add zeros to make 15 digit, w is name of audio file and basis for nested folders too
 
-                  
+
                     howManyFilesFound++;
                     //To getValue(byColName) //http://stackoverflow.com/questions/8655965/how-to-get-data-by-sqldatareader-getvalue-by-column-name
                     string x = reader.GetValue(12).ToString();//old: GetValue(2) //reader["audio_module_no"].ToString(); //reader.GetString(1);//audio_module_no//zero based index//getValue(1) same as Java's getObject().
@@ -304,6 +246,7 @@ namespace FormFindCalls
 
                     //lbl_paths.Text += x + y + "\n";
                     #endregion
+
 
                     #region REMOTELY access files. Asks for password/usrname!!!
                     string fullDomain;
@@ -326,35 +269,14 @@ namespace FormFindCalls
                     }
                     #endregion
 
-                    #region access files LOCALLY... instead of remotely to avoid entering username/Password!!!
-                    //switch (x)
-                    //{
-                    //    case "871001":
-                    //        fullDomain = "H:\\Calls\\";
-                    //        break;
-                    //    case "871002":
-                    //        fullDomain = "H:\\Calls\\";
-                    //        break;
-                    //    case "871003":
-                    //        fullDomain = "H:\\Calls\\";
-                    //        break;
-                    //    case "871004":
-                    //        fullDomain = "H:\\Calls\\";
-                    //        break;
-                    //    default:
-                    //        continue;
-                    //}
-                    #endregion
-
                     #region path created here
-
                     string path = fullDomain + //e.g. \\SE104427.saimaple.fg.rbc.com\h$\Calls\871001\000\04\92\871001000049202.wav
                         x +
                         "\\" + y.Substring(0, 3) + //871001-000-049202
                         "\\" + y.Substring(3, 2) + //871001-000-04-9202
                         "\\" + y.Substring(5, 2) + //871001-000-04-92-02
                         "\\" + x + y + ".wav"; //871001000049202.wav
-                                               //+"\n\n";//this causes err sometimes when try to open file or copy: "Illegal characters in path". But if manually delete last few chars like .wav and reType then no-err bcoz that removes \n\n. Also have to hit back arrow few times before delete takes effect on last few chars again bcoz \n\n!!!
+                    //+"\n\n";//this causes err sometimes when try to open file or copy: "Illegal characters in path". But if manually delete last few chars like .wav and reType then no-err bcoz that removes \n\n. Also have to hit back arrow few times before delete takes effect on last few chars again bcoz \n\n!!!
                     #endregion
 
                     #region log file & display list
@@ -380,7 +302,7 @@ namespace FormFindCalls
                 {
                     txtForLogFile += (x + Environment.NewLine);
                 }
-                File.AppendAllText(@"C:\temp\paths.txt", DateTime.Now.ToString() /*+ Environment.NewLine*/ +"\n"+ txtForLogFile);
+                File.AppendAllText(@"C:\temp\paths.txt", DateTime.Now.ToString() + Environment.NewLine + txtForLogFile);
                 txtBxPaths.Text = txtForLogFile;
                 //File.AppendAllText(@"C:\temp\paths.txt", "=======================" + Environment.NewLine);
                 //File.AppendAllText(@"C:\Users\SVYX0SRVOAT\Desktop\Test\paths.txt", "=======================" + Environment.NewLine);
@@ -390,16 +312,116 @@ namespace FormFindCalls
             catch (SqlException sqlEx)
             {
                 //MessageBox.Show("Connection Timed Out. Please try again.");
-                MessageBox.Show(sqlEx.Message);
+                int errNum = sqlEx.Number;
+                MessageBox.Show(sqlEx.Message, //msg & caption
+                    (errNum==53?"Server Not Found!":"")+
+                    (errNum == 18456? "Wrong UserName/Password!" : "") +
+                    (errNum == 18452? "Instead of Windows Auth, use a userName & Password" : "")
+                    );
             }
             finally
             {
                 con.Close();
             }
-            lbl_paths.Text = howManyFilesFound + " files found. \n\n" + lbl_paths.Text;//total files found appended at beginning of all results
+            lbl_paths.Text = howManyFilesFound + " files found. \n\n" + lbl_paths.Text;//total files found appended at beginning of all results        
+        }
 
-            button1.Enabled = true;
-            button2.Enabled = true;
+        private string makeConnectionString()
+        {
+
+            //SqlConnectionStringBuilder conStrBuilder = new SqlConnectionStringBuilder();
+            ////conStrBuilder.DataSource = @"SE104499.saimaple.saifg.rbc.com\MSSQLSERVER"; //Lab2 server -- add fully qualified server name backslash instance name
+            //conStrBuilder.DataSource = @"(local)\MSSQLSERVER";
+
+            //conStrBuilder.InitialCatalog = "CentralContact";
+            //conStrBuilder.IntegratedSecurity = true;//if false then put username & password
+            ////conStrBuilder.UserID = "svyx0srvoat"; //OAT is Lab2
+            ////conStrBuilder.Password = "Password1";
+            //string conStr = conStrBuilder.ConnectionString;
+            //==================================================
+            //SqlConnectionStringBuilder conStrBuilder = new SqlConnectionStringBuilder();
+            //conStrBuilder.DataSource = @"SE104499.saimaple.saifg.rbc.com\MSSQLSERVER"; //Lab2 server -- add fully qualified server name backslash instance name
+            //conStrBuilder.DataSource = @"SE104499.saimaple.saifg.rbc.com\MSSQLSERVER";/IP: 10.241.205.88
+            //conStrBuilder.InitialCatalog = "CentralDWH";
+            //conStrBuilder.IntegratedSecurity = true;//if false then put username & password
+            //conStrBuilder.UserID = "svyx0srvoat"; //OAT is Lab2
+            //conStrBuilder.Password = "Password1";
+            //string conStr = conStrBuilder.ConnectionString;
+            //==================================================
+            //string conStr = "Persist Security Info=False;Integrated Security=true;Initial Catalog=CentralDWH;server=(local)";
+
+            //string conStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RBC_call_path;Integrated Security=True";
+            //string conStr = @"Data Source=SE104499;Initial Catalog=CentralDWH;Integrated Security=False;User ID=test;Password=Password.12345;Connect Timeout=30;";//@"Data Source=SE104499;Initial Catalog=CentralDWH;Integrated Security=False;User ID=SAIMAPLR\SVYX0SRVOAT;Password=password1;Connect Timeout=30";
+            //string conStr = @"Data Source=SE104499;Initial Catalog=CentralDWH;Integrated Security=True;Connect Timeout=30";
+            //==================================================
+            SqlConnectionStringBuilder conStrBuilder = new SqlConnectionStringBuilder();
+            conStrBuilder.DataSource = serverName;//IP: 10.241.205.88
+            conStrBuilder.InitialCatalog = dbName;
+            conStrBuilder.IntegratedSecurity = winAuth;//if false then put username & password
+            conStrBuilder.UserID = string.IsNullOrWhiteSpace(popUsrName) ? "test" : popUsrName; //cannot use .IsNullOrWhiteSpace(txtUser.Text) bcoz once popUp form is closed it becomes empty str ""
+            conStrBuilder.Password = string.IsNullOrWhiteSpace(popPass)? "Password.12345":popPass;
+            return conStrBuilder.ConnectionString;
+            //==================================================        
+        }
+
+        private void makeQueryString()
+        {
+           
+
+            tblToSearchStr = tblToSearchDD.SelectedItem.ToString();//if NO item selected from DD then err.
+
+
+            query = "select * from " + tblToSearchStr + " where 1=1 "; //old: query = "select * from centralcontact.dbo.sessions where 1=1 and audio_module_no = 871001 ";
+
+            query += (!string.IsNullOrWhiteSpace(contactID.Text)) ? " and contact_key = " + contactID.Text : ""; //old: query += (!string.IsNullOrWhiteSpace(contactID.Text))? " and contact_id = " +contactID.Text : "";//without single quotes err=invalid column name
+            query += (!string.IsNullOrWhiteSpace(sessionID.Text)) ? " and sid_key = " + sessionID.Text : "";
+            //query += (!string.IsNullOrWhiteSpace(kvp1.Text)) ? " and pcd1_value = '" + kvp1.Text+"'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp1.Text)) ? " and p1_value = '" + kvp1.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp2.Text)) ? " and p2_value = '" + kvp2.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp3.Text)) ? " and p3_value = '" + kvp3.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp4.Text)) ? " and p4_value = '" + kvp4.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp5.Text)) ? " and p5_value = '" + kvp5.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp6.Text)) ? " and p6_value = '" + kvp6.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp7.Text)) ? " and p7_value = '" + kvp7.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp8.Text)) ? " and p8_value = '" + kvp8.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp9.Text)) ? " and p9_value = '" + kvp9.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp10.Text)) ? " and p10_value = '" + kvp10.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp11.Text)) ? " and p11_value = '" + kvp11.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp12.Text)) ? " and p12_value = '" + kvp12.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp13.Text)) ? " and p13_value = '" + kvp13.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp14.Text)) ? " and p14_value = '" + kvp14.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp15.Text)) ? " and p15_value = '" + kvp15.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp16.Text)) ? " and p16_value = '" + kvp16.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp17.Text)) ? " and p17_value = '" + kvp17.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp18.Text)) ? " and p18_value = '" + kvp18.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp19.Text)) ? " and p19_value = '" + kvp19.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp20.Text)) ? " and p20_value = '" + kvp20.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp21.Text)) ? " and p21_value = '" + kvp21.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp22.Text)) ? " and p22_value = '" + kvp22.Text + "'" : "";
+            query += (!string.IsNullOrWhiteSpace(kvp23.Text)) ? " and p23_value = '" + kvp23.Text + "'" : "";
+            //removing 43 & 48 bcoz DB Sessions_month_1/12 do not have p43_value etc & would cause error  
+            //query += (!string.IsNullOrWhiteSpace(kvp43.Text)) ? " and p43_value = '" + kvp43.Text + "'" : "";
+            //query += (!string.IsNullOrWhiteSpace(kvp48.Text)) ? " and p48_value = '" + kvp48.Text + "'" : "";
+            query += " and local_start_time >= @startDate and local_end_time <= @endDate";
+
+            //query += " and DatePart(yyyy, start_time) >= @yearStart and DatePart(yyyy, end_time) <= @yearEnd";//http://www.w3schools.com/sql/func_datepart.asp
+            //query += " and DatePart(mm, start_time) >= @monthStart and DatePart(mm, end_time) <= @monthEnd";
+            //query += " and DatePart(dd, start_time) >= @dayStart and DatePart(dd, end_time) <= @dayEnd";
+            //query += " and DatePart(hh, start_time) >= @hourStart and DatePart(hh, end_time) <= @hourEnd";
+            //query += " and DatePart(mi, start_time) >= @minStart and DatePart(mi, end_time) <= @minEnd";
+            //query += " and DatePart(ss, start_time) >= @secStart and DatePart(ss, end_time) <= @secEnd";
+
+
+            //Format(cast('2016-03-03 23:59:59' as datetime),'dd-MMM-yyyy HH:mm:ss','en-us')//http://stackoverflow.com/questions/19563261/convert-a-12-hour-format-to-24-hour-format-in-sql-2000
+            //https://msdn.microsoft.com/en-CA/library/hh213505.aspx
+            //Password1
+
+            //if (timeRange.Checked)
+            //{
+            //    query += " and cast(substring(convert(varchar, start_time, 113),13,8) as datetime) >= @startTime and cast(substring(convert(varchar, end_time, 113),13,8) as datetime) <= @endTime";//'time' instead of 'datetime' gave err= data type time not compatible with datetime
+            //    //    query += " and convert(time, start_time) >= @startTime and convert(time, end_time) <= @endTime";
+            //}
+           
         }
 
         #endregion
@@ -478,9 +500,10 @@ namespace FormFindCalls
         #endregion
 
         #region btn for Testing 
-
         private void button3_Click(object sender, EventArgs e)
         {
+            
+
             //if I don't catenate & hard code ini.txt then it ends up creating a new file!!! or not not sure
             //test.Text = Path.GetFullPath(@"..\..")+"\\ini.txt";//find full path of a file. Using (@"ini.txt") gives wrong path to a non-existing ini.txt in bin\Debug\ini.txt
 
@@ -512,82 +535,127 @@ namespace FormFindCalls
         }
         #endregion
 
-        
 
+        #region Create a config txt file
         private void button4_Click(object sender, EventArgs e)
         {
-            #region Pop-up Login Window
-            popUp = new Form();
-            popUp.Size = new Size(500, 700);
 
-            Label userName, pass, server, db, auth;
+            createConfigFile();
+            
 
-            userName = new Label();
-            userName.Text = "User Name: ";
-            userName.Location = new Point(10, 560);
-            txtUser = new TextBox();
-            txtUser.Location = new Point(120, 560);
-
-            pass = new Label();
-            pass.Text = "Password: ";
-            pass.Location = new Point(10, 600);
-            txtPass = new TextBox();
-            txtPass.Location = new Point(120, 600);
-            txtPass.UseSystemPasswordChar = true;//shows default black circles 
-            //txtPass.PasswordChar = '*';//Notice it's a char so single quotes.//Shows * instead of circles
-
-            server = new Label() { Text = "Server Name", Location = new Point(10, 20) };
-            txtServer = new TextBox() { Text = "SE104499", Location = new Point(120, 20), Size = new Size(200, 20) };
-
-            db = new Label() { Text = "Database Name: ", Location = new Point(10, 60)};
-            txtDb = new TextBox() { Text = "CentralDWH", Location = new Point(120, 60), Size = new Size(200, 20) };
-
-            auth = new Label() {Text="Use Windows Authorization? ", Location=new Point(10, 100), Size=new Size(200, 20) };
-            chkAuth = new CheckBox() { Location = new Point(215, 100) };
-
-
-            Button btnLogin = new Button();
-            btnLogin.Text = " OK ";
-            btnLogin.Location = new Point(300, 600);
-            btnLogin.Click += new System.EventHandler(btnLogin_Click);//notice can also do += btnLogin_Click;
-
-            //add all ctrls to popup window
-            popUp.Controls.Add(userName);
-            popUp.Controls.Add(pass);
-            popUp.Controls.Add(txtUser);
-            popUp.Controls.Add(txtPass);
-            popUp.Controls.Add(server);
-            popUp.Controls.Add(db);
-            popUp.Controls.Add(auth);
-            popUp.Controls.Add(txtServer);
-            popUp.Controls.Add(txtDb);
-            popUp.Controls.Add(chkAuth);
-            //popUp.Controls.Add();
-
-
-
-
-
-
-            popUp.Controls.Add(btnLogin);
-            popUp.Show();//display pop up window asking for userName and Password
-            #endregion
+            
         }
+        void createConfigFile()
+        {
+                string configFileTxt =
+                "Server Name: SE104499" + System.Environment.NewLine +
+                "Database Name:	CentralDWH" + System.Environment.NewLine;
+
+            File.WriteAllText("AudioFilesCopyConfig.txt", configFileTxt, Encoding.UTF8);
+        }
+        #endregion
 
         #region button click on pop-up window
         private void btnLogin_Click(object sender, EventArgs e)
         {
+            button1.Enabled = false;
+            button2.Enabled = false;
+
             popUsrName = txtUser.Text;
             popPass = txtPass.Text;
-            popUp.Close();
+            popUp.Close();//as soon as close() above 2 texts become "". Causing wrong reading in IsNullOrWhiteSpaces
             test.Text = popUsrName + popPass;
+            makeQueryString();
+            pepareConnection();
+        //=================================================
 
+        //#region Pop-up Login Window
+        //popUp = new Form();
+        //popUp.Size = new Size(500, 700);
+
+        //Label userName, pass, server, db, auth;
+
+        //userName = new Label();
+        //userName.Text = "User Name: ";
+        //userName.Location = new Point(10, 560);
+        //txtUser = new TextBox();
+        //txtUser.Location = new Point(120, 560);
+
+        //pass = new Label();
+        //pass.Text = "Password: ";
+        //pass.Location = new Point(10, 600);
+        //txtPass = new TextBox();
+        //txtPass.Location = new Point(120, 600);
+        //txtPass.UseSystemPasswordChar = true;//shows default black circles 
+        ////txtPass.PasswordChar = '*';//Notice it's a char so single quotes.//Shows * instead of circles
+
+        //server = new Label() { Text = "Server Name", Location = new Point(10, 20) };
+        //txtServer = new TextBox() { Text = "SE104499", Location = new Point(120, 20), Size = new Size(200, 20) };
+
+        //db = new Label() { Text = "Database Name: ", Location = new Point(10, 60)};
+        //txtDb = new TextBox() { Text = "CentralDWH", Location = new Point(120, 60), Size = new Size(200, 20) };
+
+        //auth = new Label() {Text="Use Windows Authorization? ", Location=new Point(10, 100), Size=new Size(200, 20) };
+        //chkAuth = new CheckBox() { Location = new Point(215, 100) };
+
+
+        //Button btnLogin = new Button();
+        //btnLogin.Text = " OK ";
+        //btnLogin.Location = new Point(300, 600);
+        //btnLogin.Click += new System.EventHandler(btnLogin_Click);//notice can also do += btnLogin_Click;
+
+        ////add all ctrls to popup window
+        //popUp.Controls.Add(userName);
+        //popUp.Controls.Add(pass);
+        //popUp.Controls.Add(txtUser);
+        //popUp.Controls.Add(txtPass);
+        //popUp.Controls.Add(server);
+        //popUp.Controls.Add(db);
+        //popUp.Controls.Add(auth);
+        //popUp.Controls.Add(txtServer);
+        //popUp.Controls.Add(txtDb);
+        //popUp.Controls.Add(chkAuth);
+        ////popUp.Controls.Add();
+
+
+
+
+
+
+        //popUp.Controls.Add(btnLogin);
+        //popUp.Show();//display pop up window asking for userName and Password
+        //#endregion
         }
         #endregion
 
+        void askPassword()
+        {
+            popUp = new Form();
+            popUp.Size = new Size(400, 400);
+            Label userName, pass;
+            userName = new Label();
+            userName.Text = "User Name: ";
+            userName.Location = new Point(10, 20);
+            txtUser = new TextBox();
+            txtUser.Location = new Point(120, 20);
 
-
-
-
+            pass = new Label();
+            pass.Text = "Password: ";
+            pass.Location = new Point(10, 60);
+            txtPass = new TextBox();
+            txtPass.Location = new Point(120, 60);
+            txtPass.UseSystemPasswordChar = true;//shows default black circles 
+            txtPass.PasswordChar = '*';//Notice it's a char so single quotes.//Shows * instead of circles
+            Button btnLogin = new Button();
+            btnLogin.Text = " OK ";
+            btnLogin.Location = new Point(10, 100);
+            btnLogin.Click += new System.EventHandler(btnLogin_Click);
+            popUp.Controls.Add(userName);
+            popUp.Controls.Add(pass);
+            popUp.Controls.Add(txtUser);
+            popUp.Controls.Add(txtPass);
+            popUp.Controls.Add(btnLogin);
+            popUp.Show();
+        }
     }
 }
