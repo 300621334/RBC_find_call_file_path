@@ -31,7 +31,7 @@ namespace FormFindCalls
     {
         #region Global variables
         //int connTimeOut = 30;
-        BackgroundWorker bw;
+        BackgroundWorker bw, bwCopy;
         #endregion
 
                 public Form1()
@@ -41,8 +41,16 @@ namespace FormFindCalls
             bw = new BackgroundWorker();
             bw.WorkerReportsProgress = true;
             bw.WorkerSupportsCancellation = true;
-            bw.DoWork += openConnection;
+            bw.DoWork += openConnection; //implicitly converts to += new DoWorkEventHandler(openConnection);//same as casting +=(DoWorkEventHandler)openConnection;
             bw.RunWorkerCompleted += bwCompleted;
+            
+            //a 2nd bw for copying process
+            bwCopy = new BackgroundWorker();
+            bwCopy.WorkerReportsProgress = true;
+            bwCopy.WorkerSupportsCancellation = true;
+            //bwCopy.DoWork+=;
+            //bwCopy.RunWorkerCompleted +=;
+
             #endregion
            
             #region DateTime Box's format
@@ -192,7 +200,7 @@ namespace FormFindCalls
             //circularProgressBar1.Visible = false;
 
             string conStr = makeConnectionString();
-            bw.RunWorkerAsync(conStr); //openConnection(conStr); converted this method to an EventHandler so that can run in b thread
+            bw.RunWorkerAsync(conStr); //openConnection(conStr); converted this method to an EventHandler so that can run in b thread//To pass multiple args, create a List: https://social.msdn.microsoft.com/Forums/vstudio/en-US/d7c0ba24-29b7-4fc9-86ef-92fb8cd5e17a/sending-multiple-arguments-to-background-worker?forum=csharpgeneral
 
             
 
