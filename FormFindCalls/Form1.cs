@@ -12,7 +12,17 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Threading;
 using System.Text.RegularExpressions;//needed for RegEx
-
+/*Important:
+ * user=test; pass=Password.12345;
+ * I tried logging in e "saimaple\svyx0srvoat" & "Password1" e SSMS, but failed, so probably this pwd is wrong!
+ If try to conn to server on SaiMaple from a computer on Maple: err=cannot connect bcoz trying to connect froman untrusted domain. 
+ * Possible Solution=add to trusted domains -or- change user's auth type to SQL auth (only sb e privilages to that that can do!).
+ * =====
+ * Last resort, create another user: rClick security node>>New>>Login>>any userName>>select SQL auth>>pwd at least 12char!>>
+ * >>User Mapping Tab>>select DBs that this user can access>>
+ * >>User Mapping Tab>>Highlight each DB one-by-one and then in bottom box select "db_reader" to allow SELECT or "db_owner" etc. In Server-RolesTab(server wide roles) chk serverAdmin also gives read/write permissions.. on all tbls in that DB>>OK
+ * (To set permissions on individul tbls, rClk a tbl>>"search" user>>chk the boxes as needed)
+ */
 namespace FormFindCalls
 {
     public partial class Form1 : Form
@@ -213,17 +223,18 @@ namespace FormFindCalls
             //==================================================
             SqlConnectionStringBuilder conStrBuilder = new SqlConnectionStringBuilder();
             //conStrBuilder.DataSource = @"SE104499.saimaple.saifg.rbc.com\MSSQLSERVER"; //Lab2 server -- add fully qualified server name backslash instance name
-            conStrBuilder.DataSource = @"SE104499.saimaple.saifg.rbc.com\MSSQLSERVER";
-            conStrBuilder.InitialCatalog = "CentralDWH";
-            conStrBuilder.IntegratedSecurity = true;//if false then put username & password
+            //conStrBuilder.DataSource = @"SE104499.saimaple.saifg.rbc.com\MSSQLSERVER";/IP: 10.241.205.88
+            //conStrBuilder.InitialCatalog = "CentralDWH";
+            //conStrBuilder.IntegratedSecurity = true;//if false then put username & password
             //conStrBuilder.UserID = "svyx0srvoat"; //OAT is Lab2
             //conStrBuilder.Password = "Password1";
-            string conStr = conStrBuilder.ConnectionString;
+            //string conStr = conStrBuilder.ConnectionString;
             //==================================================
             //string conStr = "Persist Security Info=False;Integrated Security=true;Initial Catalog=CentralDWH;server=(local)";
 
             //string conStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RBC_call_path;Integrated Security=True";
-
+            string conStr = @"Data Source=SE104499;Initial Catalog=CentralDWH;Integrated Security=False;User ID=test;Password=Password.12345;Connect Timeout=30;";//@"Data Source=SE104499;Initial Catalog=CentralDWH;Integrated Security=False;User ID=SAIMAPLR\SVYX0SRVOAT;Password=password1;Connect Timeout=30";
+            //string conStr = @"Data Source=SE104499;Initial Catalog=CentralDWH;Integrated Security=True;Connect Timeout=30";
 
 
             con = new SqlConnection(conStr);
@@ -365,7 +376,8 @@ namespace FormFindCalls
             }
             catch (SqlException sqlEx)
             {
-                MessageBox.Show("Connection Timed Out. Please try again.");
+                //MessageBox.Show("Connection Timed Out. Please try again.");
+                MessageBox.Show(sqlEx.Message);
             }
             finally
             {
