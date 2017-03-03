@@ -12,6 +12,8 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Threading;
 using System.Text.RegularExpressions;//needed for RegEx
+
+
 /*Important:
  * user=test; pass=Password.12345;
  * I tried logging in e "saimaple\svyx0srvoat" & "Password1" e SSMS, but failed, so probably this pwd is wrong!
@@ -129,7 +131,8 @@ namespace FormFindCalls
         List<string> audioFilesList = new List<string>();
         int howManyFilesFound = 0;
         Form popUp;
-        TextBox txtPass, txtUser;
+        TextBox txtPass, txtUser, txtServer, txtDb, txtAuth;
+        CheckBox chkAuth;
         string popUsrName, popPass;
         string tblToSearchStr;
         #endregion
@@ -221,7 +224,7 @@ namespace FormFindCalls
             ////conStrBuilder.Password = "Password1";
             //string conStr = conStrBuilder.ConnectionString;
             //==================================================
-            SqlConnectionStringBuilder conStrBuilder = new SqlConnectionStringBuilder();
+            //SqlConnectionStringBuilder conStrBuilder = new SqlConnectionStringBuilder();
             //conStrBuilder.DataSource = @"SE104499.saimaple.saifg.rbc.com\MSSQLSERVER"; //Lab2 server -- add fully qualified server name backslash instance name
             //conStrBuilder.DataSource = @"SE104499.saimaple.saifg.rbc.com\MSSQLSERVER";/IP: 10.241.205.88
             //conStrBuilder.InitialCatalog = "CentralDWH";
@@ -235,6 +238,16 @@ namespace FormFindCalls
             //string conStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RBC_call_path;Integrated Security=True";
             string conStr = @"Data Source=SE104499;Initial Catalog=CentralDWH;Integrated Security=False;User ID=test;Password=Password.12345;Connect Timeout=30;";//@"Data Source=SE104499;Initial Catalog=CentralDWH;Integrated Security=False;User ID=SAIMAPLR\SVYX0SRVOAT;Password=password1;Connect Timeout=30";
             //string conStr = @"Data Source=SE104499;Initial Catalog=CentralDWH;Integrated Security=True;Connect Timeout=30";
+            //==================================================
+            //SqlConnectionStringBuilder conStrBuilder = new SqlConnectionStringBuilder();
+            //conStrBuilder.DataSource = @"SE104499";//IP: 10.241.205.88
+            //conStrBuilder.InitialCatalog = "CentralDWH";
+            //conStrBuilder.IntegratedSecurity = true;//if false then put username & password
+            //conStrBuilder.UserID = "svyx0srvoat"; //OAT is Lab2
+            //conStrBuilder.Password = "Password1";
+            //string conStr = conStrBuilder.ConnectionString;
+            //==================================================
+
 
 
             con = new SqlConnection(conStr);
@@ -474,41 +487,7 @@ namespace FormFindCalls
 
 
             //=================================================================================================
-            #region Pop-up Login Window
-
-
-            //popUp = new Form();
-            //Label userName = new Label();
-            //userName.Text = "User Name: ";
-            //userName.Location = new Point(10, 20);
-            //txtUser = new TextBox();
-            //txtUser.Location = new Point(120, 20);
-
-
-            //Label pass = new Label();
-            //pass.Text = "Password: ";
-            //pass.Location = new Point(10, 60);
-            //txtPass = new TextBox();
-            //txtPass.Location = new Point(120, 60);
-            //txtPass.UseSystemPasswordChar = true;//shows default black circles 
-            ////txtPass.PasswordChar = '*';//Notice it's a char so single quotes.//Shows * instead of circles
-
-
-            //Button btnLogin = new Button();
-            //btnLogin.Text = "Login";
-            //btnLogin.Location = new Point(30, 90);
-            //btnLogin.Click += new System.EventHandler(btnLogin_Click);//notice +=
-
-            //popUp.Controls.Add(userName);
-            //popUp.Controls.Add(pass);
-            //popUp.Controls.Add(txtUser);
-            //popUp.Controls.Add(txtPass);
-
-
-
-            //popUp.Controls.Add(btnLogin);
-            //popUp.Show();//display pop up window asking for userName and Password
-            #endregion
+            
 
             #region  Experimenting DateTime
 
@@ -533,18 +512,78 @@ namespace FormFindCalls
         }
         #endregion
 
-        #region button click on pop-up window
+        
 
+        private void button4_Click(object sender, EventArgs e)
+        {
+            #region Pop-up Login Window
+            popUp = new Form();
+            popUp.Size = new Size(500, 700);
+
+            Label userName, pass, server, db, auth;
+
+            userName = new Label();
+            userName.Text = "User Name: ";
+            userName.Location = new Point(10, 560);
+            txtUser = new TextBox();
+            txtUser.Location = new Point(120, 560);
+
+            pass = new Label();
+            pass.Text = "Password: ";
+            pass.Location = new Point(10, 600);
+            txtPass = new TextBox();
+            txtPass.Location = new Point(120, 600);
+            txtPass.UseSystemPasswordChar = true;//shows default black circles 
+            //txtPass.PasswordChar = '*';//Notice it's a char so single quotes.//Shows * instead of circles
+
+            server = new Label() { Text = "Server Name", Location = new Point(10, 20) };
+            txtServer = new TextBox() { Text = "SE104499", Location = new Point(120, 20), Size = new Size(200, 20) };
+
+            db = new Label() { Text = "Database Name: ", Location = new Point(10, 60)};
+            txtDb = new TextBox() { Text = "CentralDWH", Location = new Point(120, 60), Size = new Size(200, 20) };
+
+            auth = new Label() {Text="Use Windows Authorization? ", Location=new Point(10, 100), Size=new Size(200, 20) };
+            chkAuth = new CheckBox() { Location = new Point(215, 100) };
+
+
+            Button btnLogin = new Button();
+            btnLogin.Text = " OK ";
+            btnLogin.Location = new Point(300, 600);
+            btnLogin.Click += new System.EventHandler(btnLogin_Click);//notice can also do += btnLogin_Click;
+
+            //add all ctrls to popup window
+            popUp.Controls.Add(userName);
+            popUp.Controls.Add(pass);
+            popUp.Controls.Add(txtUser);
+            popUp.Controls.Add(txtPass);
+            popUp.Controls.Add(server);
+            popUp.Controls.Add(db);
+            popUp.Controls.Add(auth);
+            popUp.Controls.Add(txtServer);
+            popUp.Controls.Add(txtDb);
+            popUp.Controls.Add(chkAuth);
+            //popUp.Controls.Add();
+
+
+
+
+
+
+            popUp.Controls.Add(btnLogin);
+            popUp.Show();//display pop up window asking for userName and Password
+            #endregion
+        }
+
+        #region button click on pop-up window
         private void btnLogin_Click(object sender, EventArgs e)
         {
             popUsrName = txtUser.Text;
             popPass = txtPass.Text;
             popUp.Close();
             test.Text = popUsrName + popPass;
-            
+
         }
         #endregion
-
 
 
 

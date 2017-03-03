@@ -96,6 +96,7 @@
             this.kvp16 = new System.Windows.Forms.TextBox();
             this.lbl_sessionID = new System.Windows.Forms.Label();
             this.sessionID = new System.Windows.Forms.TextBox();
+            this.btnConfig = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // contactID
@@ -724,11 +725,22 @@
             this.sessionID.Size = new System.Drawing.Size(168, 22);
             this.sessionID.TabIndex = 80;
             // 
+            // btnConfig
+            // 
+            this.btnConfig.Location = new System.Drawing.Point(1256, 9);
+            this.btnConfig.Name = "btnConfig";
+            this.btnConfig.Size = new System.Drawing.Size(75, 50);
+            this.btnConfig.TabIndex = 82;
+            this.btnConfig.Text = "Config";
+            this.btnConfig.UseVisualStyleBackColor = true;
+            this.btnConfig.Click += new System.EventHandler(this.button4_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1343, 764);
+            this.Controls.Add(this.btnConfig);
             this.Controls.Add(this.lbl_sessionID);
             this.Controls.Add(this.sessionID);
             this.Controls.Add(this.label23);
@@ -875,6 +887,7 @@
         private System.Windows.Forms.TextBox kvp16;
         private System.Windows.Forms.Label lbl_sessionID;
         private System.Windows.Forms.TextBox sessionID;
+        private System.Windows.Forms.Button btnConfig;
     }
 }
 

@@ -90,6 +90,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AudioFilesCopyConfig.txt" />
     <Content Include="loading.gif" />
     <Content Include="MsSql_schema.sql" />
     <Content Include="progressBar.gif" />
