@@ -42,8 +42,6 @@
             this.button3 = new System.Windows.Forms.Button();
             this.test = new System.Windows.Forms.Label();
             this.txtBxPaths = new System.Windows.Forms.TextBox();
-            this.dropDownKvp = new System.Windows.Forms.ComboBox();
-            this.txtBxKvp1 = new System.Windows.Forms.TextBox();
             this.tblToSearchDD = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -235,26 +233,6 @@
             this.txtBxPaths.Name = "txtBxPaths";
             this.txtBxPaths.Size = new System.Drawing.Size(566, 613);
             this.txtBxPaths.TabIndex = 27;
-            // 
-            // dropDownKvp
-            // 
-            this.dropDownKvp.FormattingEnabled = true;
-            this.dropDownKvp.Location = new System.Drawing.Point(407, 289);
-            this.dropDownKvp.Margin = new System.Windows.Forms.Padding(4);
-            this.dropDownKvp.Name = "dropDownKvp";
-            this.dropDownKvp.Size = new System.Drawing.Size(160, 24);
-            this.dropDownKvp.Sorted = true;
-            this.dropDownKvp.TabIndex = 28;
-            this.dropDownKvp.Visible = false;
-            // 
-            // txtBxKvp1
-            // 
-            this.txtBxKvp1.Location = new System.Drawing.Point(586, 290);
-            this.txtBxKvp1.Margin = new System.Windows.Forms.Padding(4);
-            this.txtBxKvp1.Name = "txtBxKvp1";
-            this.txtBxKvp1.Size = new System.Drawing.Size(132, 22);
-            this.txtBxKvp1.TabIndex = 29;
-            this.txtBxKvp1.Visible = false;
             // 
             // tblToSearchDD
             // 
@@ -804,8 +782,6 @@
             this.Controls.Add(this.kvp1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tblToSearchDD);
-            this.Controls.Add(this.txtBxKvp1);
-            this.Controls.Add(this.dropDownKvp);
             this.Controls.Add(this.txtBxPaths);
             this.Controls.Add(this.test);
             this.Controls.Add(this.button3);
@@ -844,8 +820,6 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label test;
         private System.Windows.Forms.TextBox txtBxPaths;
-        private System.Windows.Forms.ComboBox dropDownKvp;
-        private System.Windows.Forms.TextBox txtBxKvp1;
         private System.Windows.Forms.ComboBox tblToSearchDD;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;

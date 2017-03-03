@@ -31,16 +31,18 @@ namespace FormFindCalls
     {
         #region Global variables
         //int connTimeOut = 30;
+        BackgroundWorker bw;
         #endregion
 
                 public Form1()
         {
             InitializeComponent();
             #region BackGround Worker
-            //BackgroundWorker bw = new BackgroundWorker();
-            //bw.WorkerReportsProgress = true;
-            //bw.WorkerSupportsCancellation = true;
-            //        bw.DoWork +=;
+            bw = new BackgroundWorker();
+            bw.WorkerReportsProgress = true;
+            bw.WorkerSupportsCancellation = true;
+            bw.DoWork += openConnection;
+            bw.RunWorkerCompleted += bwCompleted;
             #endregion
             #region DateTime Box's format
 
@@ -101,25 +103,12 @@ namespace FormFindCalls
             tblToSearchDD.SelectedIndex = 0;
             #endregion
 
-            #region Read init.txt file
-            //AudioFilesCopyConfig.txtstring[] iniTxt = File.ReadAllLines(Path.GetFullPath(@"..\..\ini.txt"), Encoding.UTF8);//http://www.csharp-examples.net/read-text-file/
-            if (!File.Exists("AudioFilesCopyConfig.txt")) createConfigFile();
-            string[] iniTxt = File.ReadAllLines(Path.GetFullPath(@"AudioFilesCopyConfig.txt"), Encoding.UTF8);
-            foreach (string line in iniTxt)
-            {
-                if (Regex.Match(line, "Server Name:").Success)
-                {
-                    var match = Regex.Match(line, ":");
-                    serverName = line.Substring(match.Index + 1).Trim();//assign this to sqlCommand
-                }
-                if (Regex.Match(line, "Database Name:").Success)
-                {
-                    var match = Regex.Match(line, ":");
-                    dbName = line.Substring(match.Index + 1).Trim();
-                }
-            }
-            #endregion
+            //readConfigFile();
+          
+         
         }
+
+             
       
         #region helpful web sites
 
@@ -149,7 +138,7 @@ namespace FormFindCalls
         #region btn to connect DB and generate PATHs
         private void button1_Click(object sender, EventArgs e)
         {
-           
+            readConfigFile();
 
             winAuth = true;
             if (checkBox1.Checked)
@@ -170,6 +159,26 @@ namespace FormFindCalls
            
         }
 
+        private void readConfigFile()
+        {
+            //AudioFilesCopyConfig.txtstring[] iniTxt = File.ReadAllLines(Path.GetFullPath(@"..\..\ini.txt"), Encoding.UTF8);//http://www.csharp-examples.net/read-text-file/
+            if (!File.Exists("AudioFilesCopyConfig.txt")) createConfigFile();
+            string[] iniTxt = File.ReadAllLines(Path.GetFullPath(@"AudioFilesCopyConfig.txt"), Encoding.UTF8);
+            foreach (string line in iniTxt)
+            {
+                if (Regex.Match(line, "Server Name:").Success)
+                {
+                    var match = Regex.Match(line, ":");
+                    serverName = line.Substring(match.Index + 1).Trim();//assign this to sqlCommand
+                }
+                if (Regex.Match(line, "Database Name:").Success)
+                {
+                    var match = Regex.Match(line, ":");
+                    dbName = line.Substring(match.Index + 1).Trim();
+                }
+            }
+        }
+
         private void pepareConnection()
         {
             //pictureBox1.Visible = true;
@@ -182,17 +191,15 @@ namespace FormFindCalls
             //circularProgressBar1.Visible = false;
 
             string conStr = makeConnectionString();
-            openConnection(conStr);
+            bw.RunWorkerAsync(conStr); //openConnection(conStr); converted this method to an EventHandler so that can run in b thread
 
             
 
-            button1.Enabled = true;
-            button2.Enabled = true;
         }
 
-        private void openConnection(string conStr)
+        private void openConnection(object s, DoWorkEventArgs e)
         {
-con = new SqlConnection(conStr);
+            con = new SqlConnection(e.Argument.ToString());//= new SqlConnection(conStr); conStr passed an bw.Argument; & rcvd here as e.Argument;
 
             //SqlCommand cmd = new SqlCommand("select * from rbc_contacts", con);
             cmd = new SqlCommand(query, con);
@@ -323,7 +330,17 @@ con = new SqlConnection(conStr);
             {
                 con.Close();
             }
-            lbl_paths.Text = howManyFilesFound + " files found. \n\n" + lbl_paths.Text;//total files found appended at beginning of all results        
+            //cannot access foreground thread(GUI) from bg thread directly:- //lbl_paths.Text = howManyFilesFound + " files found. \n\n" + lbl_paths.Text;//total files found appended at beginning of all results        
+            //Also cannot "return aString" and change VOID to STRING. Instead use e.Result prop.
+            e.Result = howManyFilesFound + " files found. \n\n" + lbl_paths.Text;
+        }
+
+        private void bwCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            lbl_paths.Text = e.Result.ToString();
+
+            button1.Enabled = true;
+            button2.Enabled = true;
         }
 
         private string makeConnectionString()
