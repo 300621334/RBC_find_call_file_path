@@ -390,18 +390,64 @@ namespace FormFindCalls
                     string fullDomain;
                     switch (x)
                     {
-                        case "871001":
-                            fullDomain = @"\\SE104421\h$\Calls\"; //older: fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
+                        //OCC
+                        case "471002":
+                            fullDomain = @"\\se441600\h$\Calls\"; //older: fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
                             break;
-                        case "871002":
-                            fullDomain = @"\\SE104422\h$\Calls\";
+                        case "471001":
+                            fullDomain = @"\\se441601\h$\Calls\";
                             break;
-                        case "871003":
-                            fullDomain = @"\\SE104426\h$\Calls\";
+                        case "471003":
+                            fullDomain = @"\\se441602\h$\Calls\";
                             break;
-                        case "871004":
-                            fullDomain = @"\\SE104427\h$\Calls\";
+                        case "471004":
+                            fullDomain = @"\\se441603\h$\Calls\";
                             break;
+                        case "471005":
+                            fullDomain = @"\\se441604\h$\Calls\";
+                            break;
+                        case "471006":
+                            fullDomain = @"\\se441605\h$\Calls\";
+                            break;
+                        case "471007":
+                            fullDomain = @"\\se441606\h$\Calls\";
+                            break;
+                        case "471008":
+                            fullDomain = @"\\se441607\h$\Calls\";
+                            break;
+                        case "471009":
+                            fullDomain = @"\\se441608\h$\Calls\";
+                            break;
+                        //GCC
+                        case "471010":
+                            fullDomain = @"\\se441902\h$\Calls\";
+                            break;
+                        case "471011":
+                            fullDomain = @"\\se441903\h$\Calls\";
+                            break;
+                        case "471012":
+                            fullDomain = @"\\se441904\h$\Calls\";
+                            break;
+                        case "471013":
+                            fullDomain = @"\\se441905\h$\Calls\"; //older: fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
+                            break;
+                        case "471014":
+                            fullDomain = @"\\se441906\h$\Calls\";
+                            break;
+                        case "471015":
+                            fullDomain = @"\\se441907\h$\Calls\";
+                            break;
+                        case "471016":
+                            fullDomain = @"\\se441908\h$\Calls\";
+                            break;
+                        case "471017":
+                            fullDomain = @"\\se441909\h$\Calls\"; //older: fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
+                            break;
+                        case "471018":
+                            fullDomain = @"\\se441910\h$\Calls\";
+                            break;
+
+
                         default:
                             continue;//passes control to next iterration of loop.
                     }
