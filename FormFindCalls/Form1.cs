@@ -174,7 +174,8 @@ namespace FormFindCalls
 
                     destinationPath = e.Argument.ToString();
 
-                    if(hasWriteAccessToFolder(destinationPath))//if need login and password to access files, give err msg & restart app
+                    //if(!hasWriteAccessToFolder(destinationPath))//if need login and password to access files, give err msg & restart app
+                    if (!File.Exists(audioFilesList.ElementAt(0)))//if user doesn't have permissions then returns "FALSE"
                     {
                         MessageBox.Show("You don't have permission to copy!", "Permission Denied");
                         Application.Restart();
@@ -183,7 +184,7 @@ namespace FormFindCalls
                     foreach (string file in audioFilesList) //switch 'paths' e 'audioFilesList' for actual files
                     {
                         linesRead++;
-                        if (File.Exists(file))//if user doesn't have permissions then returns "FALSE"//excludes lines like "\", "\\", "\\se", "SE123456\h$" etc that gave error "part of path not found"
+                        if (File.Exists(file))//excludes lines like "\", "\\", "\\se", "SE123456\h$" etc that gave error "part of path not found"
                         {
                             //circularProgressBar1.Value += step;//accepts ONLY int. but then if >100 files we get fraction that rounds to 0--problem!!
                             //counter += step;
@@ -210,24 +211,24 @@ namespace FormFindCalls
                         }
                         bwCopy.ReportProgress(linesRead * 100 / audioFilesList.Count);
                     }
-                    e.Result = "Files copied: " + found + "  Files NOT copied: " + missingFiles;
+                    e.Result = "Files copied: " + found + "  Files NOT found: " + (linesRead-found);
                     
                 }
 
-                private bool hasWriteAccessToFolder(string folderPath)
-                {//http://stackoverflow.com/questions/1410127/c-sharp-test-if-user-has-write-access-to-a-folder
-                    try
-                    {
-                        // Attempt to get a list of security permissions from the folder. 
-                        // This will raise an exception if the path is read only or do not have access to view the permissions. 
-                        System.Security.AccessControl.DirectorySecurity ds = Directory.GetAccessControl(folderPath);
-                        return true;
-                    }
-                    catch (UnauthorizedAccessException)
-                    {
-                        return false;
-                    }
-                }
+                //private bool hasWriteAccessToFolder(string folderPath)
+                //{//http://stackoverflow.com/questions/1410127/c-sharp-test-if-user-has-write-access-to-a-folder
+                //    try
+                //    {
+                //        // Attempt to get a list of security permissions from the folder. 
+                //        // This will raise an exception if the path is read only or do not have access to view the permissions. 
+                //        System.Security.AccessControl.DirectorySecurity ds = Directory.GetAccessControl(folderPath);
+                //        return true;
+                //    }
+                //    catch (UnauthorizedAccessException)
+                //    {
+                //        return false;
+                //    }
+                //}
                
                 private void copyCompleted(object sender, RunWorkerCompletedEventArgs e)
                 {
@@ -317,7 +318,7 @@ namespace FormFindCalls
             //pictureBox1.Visible = false;
             audioFilesList.Clear();
             howManyFilesFound = 0;
-            lbl_paths.Text = "Paths will show here:";
+            lbl_paths.Text = "Paths will show below:";
             txtBxPaths.Clear();//txtBxPaths.Text = "";
             //circularProgressBar1.Visible = false;
 
@@ -463,7 +464,7 @@ namespace FormFindCalls
             }
             //cannot access foreground thread(GUI) from bg thread directly:- //lbl_paths.Text = howManyFilesFound + " files found. \n\n" + lbl_paths.Text;//total files found appended at beginning of all results        
             //Also cannot "return aString" and change VOID to STRING. Instead use e.Result prop.
-            e.Result = new List<string>() { txtForLogFile, howManyFilesFound + " files found. \n\n" + lbl_paths.Text }; //howManyFilesFound + " files found. \n\n" + lbl_paths.Text;
+            e.Result = new List<string>() { txtForLogFile, howManyFilesFound + " Paths Created. \n\n" + lbl_paths.Text }; //howManyFilesFound + " files found. \n\n" + lbl_paths.Text;
         }
 
         private void bwCompleted(object sender, RunWorkerCompletedEventArgs e)

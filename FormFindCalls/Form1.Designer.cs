@@ -152,9 +152,9 @@
             this.lbl_paths.Location = new System.Drawing.Point(761, 9);
             this.lbl_paths.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbl_paths.Name = "lbl_paths";
-            this.lbl_paths.Size = new System.Drawing.Size(139, 17);
+            this.lbl_paths.Size = new System.Drawing.Size(142, 17);
             this.lbl_paths.TabIndex = 7;
-            this.lbl_paths.Text = "Paths will show here:";
+            this.lbl_paths.Text = "Paths will show below";
             // 
             // dateFrom
             // 
