@@ -96,6 +96,7 @@
             this.sessionID = new System.Windows.Forms.TextBox();
             this.btnConfig = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.lblProgress = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // contactID
@@ -723,11 +724,21 @@
             this.checkBox1.Text = "Use Login And Password";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
+            // lblProgress
+            // 
+            this.lblProgress.AutoSize = true;
+            this.lblProgress.Location = new System.Drawing.Point(459, 492);
+            this.lblProgress.Name = "lblProgress";
+            this.lblProgress.Size = new System.Drawing.Size(54, 17);
+            this.lblProgress.TabIndex = 85;
+            this.lblProgress.Text = "label18";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1343, 764);
+            this.Controls.Add(this.lblProgress);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.btnConfig);
             this.Controls.Add(this.lbl_sessionID);
@@ -874,6 +885,7 @@
         private System.Windows.Forms.TextBox sessionID;
         private System.Windows.Forms.Button btnConfig;
         private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Label lblProgress;
     }
 }
 

@@ -32,6 +32,10 @@ namespace FormFindCalls
         #region Global variables
         //int connTimeOut = 30;
         BackgroundWorker bw, bwCopy;
+        int linesRead = 0;
+        //double counter = 0;
+        int missingFiles = 0;
+        int found = 0;
         #endregion
 
                 public Form1()
@@ -43,13 +47,15 @@ namespace FormFindCalls
             bw.WorkerSupportsCancellation = true;
             bw.DoWork += openConnection; //implicitly converts to += new DoWorkEventHandler(openConnection);//same as casting +=(DoWorkEventHandler)openConnection;
             bw.RunWorkerCompleted += bwCompleted;
+            bw.ProgressChanged +=bw_ProgressChanged;
             
             //a 2nd bw for copying process
             bwCopy = new BackgroundWorker();
             bwCopy.WorkerReportsProgress = true;
             bwCopy.WorkerSupportsCancellation = true;
-            //bwCopy.DoWork+=;
-            //bwCopy.RunWorkerCompleted +=;
+            bwCopy.DoWork+= new DoWorkEventHandler(startCopying);
+            bwCopy.RunWorkerCompleted += copyCompleted;
+            bwCopy.ProgressChanged +=bwCopy_ProgressChanged;
 
             #endregion
            
@@ -117,6 +123,94 @@ namespace FormFindCalls
          
         }
 
+                private void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
+                {
+                    lblProgress.Text = e.ProgressPercentage.ToString() + " %";
+                }
+
+                private void bwCopy_ProgressChanged(object sender, ProgressChangedEventArgs e)
+                {
+                    lblProgress.Text = e.ProgressPercentage.ToString() + " %";
+                }
+
+                private void startCopying(object sender, DoWorkEventArgs e)
+                {
+                    //circularProgressBar1.Value = 0;
+                    //circularProgressBar1.Update();
+                    //circularProgressBar1.Visible = true;
+
+
+                    //List<string> paths = new List<string>();
+                    //paths.Add(@"C:\Users\Zoya\Google Drive\RBC\a\file1.txt");
+                    //paths.Add(@"C:\Users\Zoya\Google Drive\RBC\a\file2.txt");
+                    //paths.Add(@"C:\Users\Zoya\Google Drive\RBC\b\file3.txt");
+
+                    string destinationPath = @"C:\Users\SVYX0SRVOAT\Desktop\Test\"; //this might as well be an empty str as it's being changed later based on dialogue box selection
+
+                    //string filesToDelete = @"*_DONE.wav";   // Only delete WAV files ending by "_DONE" in their filenames
+                    //string[] fileList = System.IO.Directory.GetFiles(rootFolderPath, filesToDelete);
+
+                    //open dialogue to overwrite "destinationPath"
+                    //OpenFileDialog d = new OpenFileDialog();//it's to OPEN files
+                    //SaveFileDialog d = new SaveFileDialog();
+                    //d.Title = "Where to save files?";
+
+                    FolderBrowserDialog d = new FolderBrowserDialog();
+                    //d.ShowDialog();
+                    if (d.ShowDialog() == DialogResult.OK)//this pops up dialogue as well as checks if OK was clicked aft that.
+                    {
+                        destinationPath = d.SelectedPath + "\\";//need a backslash aft folder path
+                    }//if cancel or close is pressed then "destinationPath" is NOT overriden
+
+
+                    
+                    linesRead = 0;
+                    //double counter = 0;
+                    missingFiles = 0;
+                    found = 0;
+                    
+
+
+                    foreach (string file in audioFilesList) //switch 'paths' e 'audioFilesList' for actual files
+                    {
+                        linesRead++;
+                        if (File.Exists(file))//excludes lines like "\", "\\", "\\se", "SE123456\h$" etc that gave error "part of path not found"
+                        {
+                            //circularProgressBar1.Value += step;//accepts ONLY int. but then if >100 files we get fraction that rounds to 0--problem!!
+                            //counter += step;
+                            //circularProgressBar1.Value = (int)counter;
+                            //circularProgressBar1.Update();
+                            //circularProgressBar1.Text = (int)counter + "%";
+
+
+                            string moveTo = destinationPath + file.Substring(file.LastIndexOf('\\') + 1); //\\SE104427.saimaple.fg.rbc.com\h$\Calls\871001\000\04\92\871001000049202.wav
+                            try
+                            {
+                                File.Copy(file, moveTo, true);//true to overwrite existing files, else err
+                                found++;
+                            }
+                            catch (System.IO.FileNotFoundException excep)
+                            {
+                                missingFiles++;
+                                continue;
+                            }
+                        }
+                        bwCopy.ReportProgress(linesRead * 100 / audioFilesList.Count);
+                    }
+                    e.Result = "Files copied: " + found + "  Files NOT copied: " + missingFiles;
+                    
+                }
+               
+                private void copyCompleted(object sender, RunWorkerCompletedEventArgs e)
+                {
+                    lbl_paths.Text = e.Result.ToString();
+                    //circularProgressBar1.Value = 100;
+                    //circularProgressBar1.Update();
+                    linesRead = 0;
+                    missingFiles = 0;
+                    button1.Enabled = true;
+                    button2.Enabled = true;
+                }
              
       
         #region helpful web sites
@@ -236,7 +330,7 @@ namespace FormFindCalls
             {
                 con.Open();
                 reader = cmd.ExecuteReader();
-
+                
                 //lbl_paths.Text += "\n";
 
                 //File.WriteAllText(@"C:\Users\Zoya\Google Drive\RBC\Form_find_contacts\paths.txt", string.Empty);//clear content of file if any
@@ -506,68 +600,12 @@ namespace FormFindCalls
         {
             button1.Enabled = false;
             button2.Enabled = false;
-            //circularProgressBar1.Value = 0;
-            //circularProgressBar1.Update();
-            //circularProgressBar1.Visible = true;
-
-
-            //List<string> paths = new List<string>();
-            //paths.Add(@"C:\Users\Zoya\Google Drive\RBC\a\file1.txt");
-            //paths.Add(@"C:\Users\Zoya\Google Drive\RBC\a\file2.txt");
-            //paths.Add(@"C:\Users\Zoya\Google Drive\RBC\b\file3.txt");
-
-            string destinationPath = @"C:\Users\SVYX0SRVOAT\Desktop\Test\"; //this might as well be an empty str as it's being changed later based on dialogue box selection
-
-            //string filesToDelete = @"*_DONE.wav";   // Only delete WAV files ending by "_DONE" in their filenames
-            //string[] fileList = System.IO.Directory.GetFiles(rootFolderPath, filesToDelete);
-
-            //open dialogue to overwrite "destinationPath"
-            //OpenFileDialog d = new OpenFileDialog();//it's to OPEN files
-            //SaveFileDialog d = new SaveFileDialog();
-            //d.Title = "Where to save files?";
-
-            FolderBrowserDialog d = new FolderBrowserDialog();
-            //d.ShowDialog();
-            if (d.ShowDialog() == DialogResult.OK)//this pops up dialogue as well as checks if OK was clicked aft that.
+            if(!bwCopy.IsBusy)
             {
-                destinationPath = d.SelectedPath + "\\";//need a backslash aft folder path
-            }//if cancel or close is pressed then "destinationPath" is NOT overriden
-
-
-            #region CircularProgressBar's progress defined
-            double step = 100/audioFilesList.Count;
-            double counter = 0;
-            int missingFiles = 0;
-            #endregion
-
-
-            foreach (string file in audioFilesList) //switch 'paths' e 'audioFilesList' for actual files
-            {
-                //circularProgressBar1.Value += step;//accepts ONLY int. but then if >100 files we get fraction that rounds to 0--problem!!
-                counter += step;
-                //circularProgressBar1.Value = (int)counter;
-                //circularProgressBar1.Update();
-                //circularProgressBar1.Text = (int)counter + "%";
-
-
-                string moveTo = destinationPath + file.Substring(file.LastIndexOf('\\') + 1); //\\SE104427.saimaple.fg.rbc.com\h$\Calls\871001\000\04\92\871001000049202.wav
-                try
-                {
-                    File.Copy(file, moveTo, true);//true to overwrite existing files, else err
-                }
-                catch (System.IO.FileNotFoundException excep)
-                {
-                    missingFiles++;
-                    continue;
-                }
-                
+                bwCopy.RunWorkerAsync();
             }
-            lbl_paths.Text = " Files NOT found: " + missingFiles;
-            //circularProgressBar1.Value = 100;
-            //circularProgressBar1.Update();
 
-            button1.Enabled = true;
-            button2.Enabled = true;
+           
         }
         #endregion
 
