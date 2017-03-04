@@ -232,6 +232,7 @@
             this.txtBxPaths.Margin = new System.Windows.Forms.Padding(4);
             this.txtBxPaths.Multiline = true;
             this.txtBxPaths.Name = "txtBxPaths";
+            this.txtBxPaths.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtBxPaths.Size = new System.Drawing.Size(566, 613);
             this.txtBxPaths.TabIndex = 27;
             // 

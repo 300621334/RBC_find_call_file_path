@@ -36,6 +36,8 @@ namespace FormFindCalls
         //double counter = 0;
         int missingFiles = 0;
         int found = 0;
+        string txtForLogFile = "";
+        string destinationPath = "";
         #endregion
 
                 public Form1()
@@ -145,7 +147,7 @@ namespace FormFindCalls
                     //paths.Add(@"C:\Users\Zoya\Google Drive\RBC\a\file2.txt");
                     //paths.Add(@"C:\Users\Zoya\Google Drive\RBC\b\file3.txt");
 
-                    string destinationPath = @"C:\Users\SVYX0SRVOAT\Desktop\Test\"; //this might as well be an empty str as it's being changed later based on dialogue box selection
+                    //string destinationPath = @"C:\Users\SVYX0SRVOAT\Desktop\Test\"; //this might as well be an empty str as it's being changed later based on dialogue box selection
 
                     //string filesToDelete = @"*_DONE.wav";   // Only delete WAV files ending by "_DONE" in their filenames
                     //string[] fileList = System.IO.Directory.GetFiles(rootFolderPath, filesToDelete);
@@ -154,27 +156,34 @@ namespace FormFindCalls
                     //OpenFileDialog d = new OpenFileDialog();//it's to OPEN files
                     //SaveFileDialog d = new SaveFileDialog();
                     //d.Title = "Where to save files?";
+                   
+                    //destinationPath = "";
+                    //linesRead = 0;
+                    ////douFle counter = 0;
+                    //missingFiles = 0;
+                    //found = 0;
+                    //FolderBrowserDialog d = new FolderBrowserDialog();
+                    ////d.ShowDialog();
+                    //if (d.ShowDialog() == DialogResult.OK)//this pops up dialogue as well as checks if OK was clicked aft that.
+                    //{
+                    //    destinationPath = d.SelectedPath + "\\";//need a backslash aft folder path
+                    //}//if cancel or close is pressed then "destinationPath" is NOT overriden
 
-                    FolderBrowserDialog d = new FolderBrowserDialog();
-                    //d.ShowDialog();
-                    if (d.ShowDialog() == DialogResult.OK)//this pops up dialogue as well as checks if OK was clicked aft that.
+
+
+
+                    destinationPath = e.Argument.ToString();
+
+                    if(hasWriteAccessToFolder(destinationPath))//if need login and password to access files, give err msg & restart app
                     {
-                        destinationPath = d.SelectedPath + "\\";//need a backslash aft folder path
-                    }//if cancel or close is pressed then "destinationPath" is NOT overriden
-
-
-                    
-                    linesRead = 0;
-                    //double counter = 0;
-                    missingFiles = 0;
-                    found = 0;
-                    
-
+                        MessageBox.Show("You don't have permission to copy!", "Permission Denied");
+                        Application.Restart();
+                    }
 
                     foreach (string file in audioFilesList) //switch 'paths' e 'audioFilesList' for actual files
                     {
                         linesRead++;
-                        if (File.Exists(file))//excludes lines like "\", "\\", "\\se", "SE123456\h$" etc that gave error "part of path not found"
+                        if (File.Exists(file))//if user doesn't have permissions then returns "FALSE"//excludes lines like "\", "\\", "\\se", "SE123456\h$" etc that gave error "part of path not found"
                         {
                             //circularProgressBar1.Value += step;//accepts ONLY int. but then if >100 files we get fraction that rounds to 0--problem!!
                             //counter += step;
@@ -189,16 +198,35 @@ namespace FormFindCalls
                                 File.Copy(file, moveTo, true);//true to overwrite existing files, else err
                                 found++;
                             }
-                            catch (System.IO.FileNotFoundException excep)
+                            catch (Exception ex)
                             {
+                                if (ex is System.IO.FileNotFoundException || ex is UnauthorizedAccessException)
+                                {
                                 missingFiles++;
                                 continue;
+                                }
+                               
                             }
                         }
                         bwCopy.ReportProgress(linesRead * 100 / audioFilesList.Count);
                     }
                     e.Result = "Files copied: " + found + "  Files NOT copied: " + missingFiles;
                     
+                }
+
+                private bool hasWriteAccessToFolder(string folderPath)
+                {//http://stackoverflow.com/questions/1410127/c-sharp-test-if-user-has-write-access-to-a-folder
+                    try
+                    {
+                        // Attempt to get a list of security permissions from the folder. 
+                        // This will raise an exception if the path is read only or do not have access to view the permissions. 
+                        System.Security.AccessControl.DirectorySecurity ds = Directory.GetAccessControl(folderPath);
+                        return true;
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        return false;
+                    }
                 }
                
                 private void copyCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -361,65 +389,19 @@ namespace FormFindCalls
                     #region Path's 1st segment. Server-to-Serial No.
                     string fullDomain;
                     switch (x)
-                     {
-                        //OCC
-                        case "471002":
-                            fullDomain = @"\\se441600\h$\Calls\"; //older: fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
+                    {
+                        case "871001":
+                            fullDomain = @"\\SE104421\h$\Calls\"; //older: fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
                             break;
-                        case "471001":
-                            fullDomain = @"\\se441601\h$\Calls\";
+                        case "871002":
+                            fullDomain = @"\\SE104422\h$\Calls\";
                             break;
-                        case "471003":
-                            fullDomain = @"\\se441602\h$\Calls\";
+                        case "871003":
+                            fullDomain = @"\\SE104426\h$\Calls\";
                             break;
-                        case "471004":
-                            fullDomain = @"\\se441603\h$\Calls\";
+                        case "871004":
+                            fullDomain = @"\\SE104427\h$\Calls\";
                             break;
-                        case "471005":
-                            fullDomain = @"\\se441604\h$\Calls\";
-                            break;
-                        case "471006":
-                            fullDomain = @"\\se441605\h$\Calls\";
-                            break;
-                        case "471007":
-                            fullDomain = @"\\se441606\h$\Calls\";
-                            break;
-                        case "471008":
-                            fullDomain = @"\\se441607\h$\Calls\";
-                            break;
-                        case "471009":
-                            fullDomain = @"\\se441608\h$\Calls\";
-                            break;
-                        //GCC
-                        case "471010":
-                            fullDomain = @"\\se441902\h$\Calls\";
-                            break;
-                        case "471011":
-                            fullDomain = @"\\se441903\h$\Calls\";
-                            break;
-                        case "471012":
-                            fullDomain = @"\\se441904\h$\Calls\";
-                            break;
-                        case "471013":
-                            fullDomain = @"\\se441905\h$\Calls\"; //older: fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
-                            break;
-                        case "471014":
-                            fullDomain = @"\\se441906\h$\Calls\";
-                            break;
-                        case "471015":
-                            fullDomain = @"\\se441907\h$\Calls\";
-                            break;
-                        case "471016":
-                            fullDomain = @"\\se441908\h$\Calls\";
-                            break;
-                        case "471017":
-                            fullDomain = @"\\se441909\h$\Calls\"; //older: fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
-                            break;
-                        case "471018":
-                            fullDomain = @"\\se441910\h$\Calls\";
-                            break;
-
-
                         default:
                             continue;//passes control to next iterration of loop.
                     }
@@ -453,13 +435,13 @@ namespace FormFindCalls
                 }//while(reader.Read()) ends
 
                 #region Write whole collection to log file
-                string txtForLogFile = "";
+                txtForLogFile = "";
                 foreach (string x in audioFilesList)
                 {
                     txtForLogFile += (x + Environment.NewLine);
                 }
                 File.AppendAllText(@"C:\temp\paths.txt", DateTime.Now.ToString() + Environment.NewLine + txtForLogFile);
-                txtBxPaths.Text = txtForLogFile;
+                //txtBxPaths.Text = txtForLogFile;//e bg worker this cause err, since bg thread tries to reach out to fg thread directly
                 //File.AppendAllText(@"C:\temp\paths.txt", "=======================" + Environment.NewLine);
                 //File.AppendAllText(@"C:\Users\SVYX0SRVOAT\Desktop\Test\paths.txt", "=======================" + Environment.NewLine);
 
@@ -481,12 +463,14 @@ namespace FormFindCalls
             }
             //cannot access foreground thread(GUI) from bg thread directly:- //lbl_paths.Text = howManyFilesFound + " files found. \n\n" + lbl_paths.Text;//total files found appended at beginning of all results        
             //Also cannot "return aString" and change VOID to STRING. Instead use e.Result prop.
-            e.Result = howManyFilesFound + " files found. \n\n" + lbl_paths.Text;
+            e.Result = new List<string>() { txtForLogFile, howManyFilesFound + " files found. \n\n" + lbl_paths.Text }; //howManyFilesFound + " files found. \n\n" + lbl_paths.Text;
         }
 
         private void bwCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            lbl_paths.Text = e.Result.ToString();
+             List<string> resultsList = (List<string>)e.Result;
+             txtBxPaths.Text = resultsList.ElementAt(0);
+             lbl_paths.Text =resultsList.ElementAt(1);
 
             button1.Enabled = true;
             button2.Enabled = true;
@@ -600,9 +584,23 @@ namespace FormFindCalls
         {
             button1.Enabled = false;
             button2.Enabled = false;
+            
+            destinationPath = "";
+            linesRead = 0;
+            //double counter = 0;
+            missingFiles = 0;
+            found = 0;
+            
+            FolderBrowserDialog d = new FolderBrowserDialog();
+            //d.ShowDialog();
+            if (d.ShowDialog() == DialogResult.OK)//this pops up dialogue as well as checks if OK was clicked aft that.
+            {
+                destinationPath = d.SelectedPath + "\\";//need a backslash aft folder path
+            }//if cancel or close is pressed then "destinationPath" is NOT overriden
+
             if(!bwCopy.IsBusy)
             {
-                bwCopy.RunWorkerAsync();
+                bwCopy.RunWorkerAsync(destinationPath);
             }
 
            
