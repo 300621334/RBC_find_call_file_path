@@ -253,7 +253,7 @@ namespace FormFindCalls
 
         #region declare global vars
         bool winAuth = true;
-        string serverName, dbName;
+        string domainURI, serverName, dbName;
         SqlConnection con;
         SqlCommand cmd;
         SqlDataReader reader;
@@ -298,6 +298,11 @@ namespace FormFindCalls
             string[] iniTxt = File.ReadAllLines(Path.GetFullPath(@"AudioFilesCopyConfig.txt"), Encoding.UTF8);
             foreach (string line in iniTxt)
             {
+                if (Regex.Match(line, "Domain:").Success)
+                {
+                    var match = Regex.Match(line, ":");
+                    domainURI = line.Substring(match.Index + 1).Trim();
+                } 
                 if (Regex.Match(line, "Server Name:").Success)
                 {
                     var match = Regex.Match(line, ":");
@@ -552,8 +557,8 @@ namespace FormFindCalls
             //string conStr = @"Data Source=SE104499;Initial Catalog=CentralDWH;Integrated Security=True;Connect Timeout=30";
             //==================================================
             SqlConnectionStringBuilder conStrBuilder = new SqlConnectionStringBuilder();
-            conStrBuilder.DataSource = serverName;//IP: 10.241.205.88
-            conStrBuilder.InitialCatalog = dbName;
+            conStrBuilder.DataSource = serverName + "." + domainURI; //conStrBuilder.DataSource = serverName;//IP: 10.241.205.88
+            conStrBuilder.InitialCatalog = dbName; 
             conStrBuilder.IntegratedSecurity = winAuth;//if false then put username & password
             conStrBuilder.UserID = string.IsNullOrWhiteSpace(popUsrName) ? "test" : popUsrName; //cannot use .IsNullOrWhiteSpace(txtUser.Text) bcoz once popUp form is closed it becomes empty str ""
             conStrBuilder.Password = string.IsNullOrWhiteSpace(popPass)? "Password.12345":popPass;
