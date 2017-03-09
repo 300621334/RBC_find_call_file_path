@@ -50,6 +50,19 @@ namespace FormFindCalls
         int found = 0;
         string txtForLogFile = "";
         string destinationPath = "";
+        bool winAuth = true;
+        string domainURI, serverName, dbName;
+        SqlConnection con;
+        SqlCommand cmd;
+        SqlDataReader reader;
+        string query;
+        List<string> audioFilesList = new List<string>();
+        int howManyFilesFound = 0;
+        Form popUp;
+        TextBox txtPass, txtUser, txtServer, txtDb, txtAuth;
+        CheckBox chkAuth;
+        string popUsrName, popPass;
+        string tblToSearchStr;
         #endregion
 
                 public Form1()
@@ -263,22 +276,7 @@ namespace FormFindCalls
          */
         #endregion
 
-        #region declare global vars
-        bool winAuth = true;
-        string domainURI, serverName, dbName;
-        SqlConnection con;
-        SqlCommand cmd;
-        SqlDataReader reader;
-        string query;
-        List<string> audioFilesList = new List<string>();
-        int howManyFilesFound = 0;
-        Form popUp;
-        TextBox txtPass, txtUser, txtServer, txtDb, txtAuth;
-        CheckBox chkAuth;
-        string popUsrName, popPass;
-        string tblToSearchStr;
-        #endregion
-
+      
         #region btn to connect DB and generate PATHs
         private void button1_Click(object sender, EventArgs e)
         {
