@@ -13,6 +13,18 @@ using System.IO;
 using System.Threading;
 using System.Text.RegularExpressions;//needed for RegEx
 
+/*
+ C#: SE104499 server name could be duplicated on more than one domains. So how to know whether we r trying to access SE104499 on Maple or on SaiMaple!! 
+*If want to specify domain:- SE104499.saimaple.saifg.rbc.com\MSSQLSERVER gives err BUT remove last part (instance name) then it works!
+*We tell usrNam/pwd when using SQL-login. But not when using NT login. But latter uses a service-A/C under tbl.
+ So we CAN use NT login for server where DB is, by using "impersonation" (instead of NT logi of my comp). 
+*If want to use NT login instead of SQL-login: http://stackoverflow.com/questions/4326105/sql-server-connection-string-different-domain
+			http://stackoverflow.com/questions/2108125/setting-the-asp-net-connectionstring-to-a-specific-domain-user
+*To find server="" value of connStr & instance name: https://blogs.msdn.microsoft.com/sqlforum/2010/12/20/faq-how-do-i-find-the-correct-server-or-data-source-value-for-an-sql-server-instance-in-a-connection-string/
+*ReadyMade class to impersonate (on same domain) as domain user instead of service a/c: http://stackoverflow.com/questions/125341/how-do-you-do-impersonation-in-net
+*But to impersonate over to a different dimain use Win32 API called "LogonUser ": http://stackoverflow.com/questions/997001/can-i-impersonate-a-user-on-a-different-active-directory-domain-in-net
+*
+*/
 
 /*Important:
  * user=test; pass=Password.12345;
@@ -253,7 +265,7 @@ namespace FormFindCalls
 
         #region declare global vars
         bool winAuth = true;
-        string serverName, dbName;
+        string domainURI, serverName, dbName;
         SqlConnection con;
         SqlCommand cmd;
         SqlDataReader reader;
@@ -298,6 +310,11 @@ namespace FormFindCalls
             string[] iniTxt = File.ReadAllLines(Path.GetFullPath(@"AudioFilesCopyConfig.txt"), Encoding.UTF8);
             foreach (string line in iniTxt)
             {
+                if (Regex.Match(line, "Domain:").Success)
+                {
+                    var match = Regex.Match(line, ":");
+                    domainURI = line.Substring(match.Index + 1).Trim();
+                }
                 if (Regex.Match(line, "Server Name:").Success)
                 {
                     var match = Regex.Match(line, ":");
@@ -506,7 +523,7 @@ namespace FormFindCalls
             //string conStr = @"Data Source=SE104499;Initial Catalog=CentralDWH;Integrated Security=True;Connect Timeout=30";
             //==================================================
             SqlConnectionStringBuilder conStrBuilder = new SqlConnectionStringBuilder();
-            conStrBuilder.DataSource = serverName;//IP: 10.241.205.88
+            conStrBuilder.DataSource = serverName+"."+domainURI;//@"SE104499.saimaple.saifg.rbc.com"; works too but NOT SE104499.saimaple.saifg.rbc.com\MSSQLSERVER //IP: 10.241.205.88
             conStrBuilder.InitialCatalog = dbName;
             conStrBuilder.IntegratedSecurity = winAuth;//if false then put username & password
             conStrBuilder.UserID = string.IsNullOrWhiteSpace(popUsrName) ? "test" : popUsrName; //cannot use .IsNullOrWhiteSpace(txtUser.Text) bcoz once popUp form is closed it becomes empty str ""
@@ -657,8 +674,9 @@ namespace FormFindCalls
         void createConfigFile()
         {
                 string configFileTxt =
-                "Server Name: SE104499" + System.Environment.NewLine +
-                "Database Name:	CentralDWH" + System.Environment.NewLine;
+                "Server Name: SE104499" + System.Environment.NewLine
+                + "Database Name:	CentralDWH" + System.Environment.NewLine
+                + "Domain: saimaple.saifg.rbc.com";
 
             File.WriteAllText("AudioFilesCopyConfig.txt", configFileTxt, Encoding.UTF8);
         }
