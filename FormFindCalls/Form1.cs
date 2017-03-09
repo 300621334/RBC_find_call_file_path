@@ -38,6 +38,19 @@ namespace FormFindCalls
         int found = 0;
         string txtForLogFile = "";
         string destinationPath = "";
+        bool winAuth = true;
+        string domainURI, serverName, dbName;
+        SqlConnection con;
+        SqlCommand cmd;
+        SqlDataReader reader;
+        string query;
+        List<string> audioFilesList = new List<string>();
+        int howManyFilesFound = 0;
+        Form popUp;
+        TextBox txtPass, txtUser, txtServer, txtDb, txtAuth;
+        CheckBox chkAuth;
+        string popUsrName, popPass;
+        string tblToSearchStr;
         #endregion
 
                 public Form1()
@@ -249,22 +262,6 @@ namespace FormFindCalls
          * //compare TimeOfDay in if-else: http://stackoverflow.com/questions/10290187/how-to-compare-time-part-of-datetime
          * --search entire DB in MS-Sql Server: http://stackoverflow.com/questions/15757263/find-a-string-by-searching-all-tables-in-sql-server-management-studio-2008
          */
-        #endregion
-
-        #region declare global vars
-        bool winAuth = true;
-        string domainURI, serverName, dbName;
-        SqlConnection con;
-        SqlCommand cmd;
-        SqlDataReader reader;
-        string query;
-        List<string> audioFilesList = new List<string>();
-        int howManyFilesFound = 0;
-        Form popUp;
-        TextBox txtPass, txtUser, txtServer, txtDb, txtAuth;
-        CheckBox chkAuth;
-        string popUsrName, popPass;
-        string tblToSearchStr;
         #endregion
 
         #region btn to connect DB and generate PATHs
