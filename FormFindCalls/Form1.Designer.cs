@@ -718,11 +718,11 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(438, 366);
+            this.checkBox1.Location = new System.Drawing.Point(428, 362);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(188, 21);
+            this.checkBox1.Size = new System.Drawing.Size(227, 21);
             this.checkBox1.TabIndex = 84;
-            this.checkBox1.Text = "Use Login And Password";
+            this.checkBox1.Text = "Use SQL Server Authentication";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // lblProgress
