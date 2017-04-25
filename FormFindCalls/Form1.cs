@@ -608,8 +608,9 @@ namespace FormFindCalls
             found = 0;
             
             FolderBrowserDialog d = new FolderBrowserDialog();
+            DialogResult btnClicked;
             //d.ShowDialog();
-            if (d.ShowDialog() == DialogResult.OK)//this pops up dialogue as well as checks if OK was clicked aft that.
+            if ((btnClicked = d.ShowDialog()) == DialogResult.OK)//this pops up dialogue as well as checks if OK was clicked aft that.
             {
                 destinationPath = d.SelectedPath + "\\";//need a backslash aft folder path
 
@@ -619,6 +620,14 @@ namespace FormFindCalls
             //}
             }//if cancel or close is pressed then "destinationPath" is NOT overriden
             
+            //if cancel is hit, exit this method & enable all buttons
+            if (btnClicked == DialogResult.Cancel)
+            {
+                button1.Enabled = true;
+                button2.Enabled = true;
+                return;
+            }
+
 
             if(!bwCopy.IsBusy)
             {
