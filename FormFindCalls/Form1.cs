@@ -200,7 +200,7 @@ namespace FormFindCalls
                     destinationPath = e.Argument.ToString();
 
                     //if(!hasWriteAccessToFolder(destinationPath))//if need login and password to access files, give err msg & restart app
-                    if (!File.Exists(audioFilesList.ElementAt(0)))//if user doesn't have permissions then returns "FALSE"
+                    if (audioFilesList.Any() && !File.Exists(audioFilesList.ElementAt(0)))//if user doesn't have permissions then returns "FALSE"
                     {
                         MessageBox.Show("You don't have permission to copy!", "Permission Denied");
                         Application.Restart();
@@ -612,7 +612,13 @@ namespace FormFindCalls
             if (d.ShowDialog() == DialogResult.OK)//this pops up dialogue as well as checks if OK was clicked aft that.
             {
                 destinationPath = d.SelectedPath + "\\";//need a backslash aft folder path
+
+            //    if(d.)
+            //{
+
+            //}
             }//if cancel or close is pressed then "destinationPath" is NOT overriden
+            
 
             if(!bwCopy.IsBusy)
             {

@@ -137,12 +137,12 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(388, 391);
+            this.button1.Location = new System.Drawing.Point(420, 391);
             this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(303, 28);
+            this.button1.Size = new System.Drawing.Size(239, 28);
             this.button1.TabIndex = 6;
-            this.button1.Text = "Create File with path to call files";
+            this.button1.Text = "Create File Paths";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
