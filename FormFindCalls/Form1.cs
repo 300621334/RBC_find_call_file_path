@@ -85,14 +85,15 @@ namespace FormFindCalls
             bwCopy.ProgressChanged +=bwCopy_ProgressChanged;
 
             #endregion
-           
-            #region DateTime Box's format
 
-
+            #region DateTime Box's format - default time set to midnight  http://stackoverflow.com/questions/13467230/how-to-set-time-to-midnight-for-current-day
             dateFrom.Format = DateTimePickerFormat.Custom;
             dateFrom.CustomFormat = "MMM/dd/yyyy --- HH:mm:ss";
+            DateTime now = DateTime.Now;
+            dateFrom.Value = new DateTime(now.Year,now.Month,now.Day,0,0,0,0);
             dateTo.Format = DateTimePickerFormat.Custom;
             dateTo.CustomFormat = "MMM/dd/yyyy --- HH:mm:ss";
+            dateTo.Value = new DateTime(now.Year, now.Month, now.Day, 23, 59, 59, 999);
 
             //timeFrom.MaxDate = DateTime.ParseExact("1900-01-01", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
             //timeTo.MaxDate = DateTime.ParseExact("1900-01-01", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
@@ -100,39 +101,39 @@ namespace FormFindCalls
             #endregion
 
             #region Add items to dropDownKvp(comboBox)
-            //in C#, a Dictionary contains key-value
-            Dictionary<string, string> kvp = new Dictionary<string, string>();
-            kvp.Add("p1", "Account_Aspect");
-            kvp.Add("p2", "SRF");
-            kvp.Add("p3", "IXN_Purpose");
-            kvp.Add("p4", "Language");
-            kvp.Add("p5", "Auth");
-            kvp.Add("p6", "CONNID");
-            kvp.Add("p7", "RG");
-            kvp.Add("p8", "CallPurpose");
-            kvp.Add("p9", "Original_SkillSet");
-            kvp.Add("p10", "CallPurpose_ID");
-            kvp.Add("p11", "DM_Campaign_Name");
-            kvp.Add("p12", "Province");
-            kvp.Add("p13", "Original_Language");
-            kvp.Add("p14", "Queue_Aspect");
-            kvp.Add("p15", "Termination_Aspect");
-            kvp.Add("p16", "CallId");
-            kvp.Add("p17", "ChannelName");
-            kvp.Add("p18", "DTMFdigits");
-            kvp.Add("p19", "EndDate");
-            kvp.Add("p20", "Custom_ThirdParty");
-            kvp.Add("p21", "CallDirection");
-            kvp.Add("p22", "NumberOfHolds");
-            kvp.Add("p23", "TimeOnHold");
-            kvp.Add("p43", "GSW_Phone");
-            kvp.Add("p48", "IPG");
-            //kvp.Add("", "");
-            //dropDownKvp.Text = "select KVP";
-            foreach(KeyValuePair<string, string> x in kvp)//instead of Dictionary<> use KeyValuePair<>
-            {
-                //dropDownKvp.Items.Add(x.Value);//in prop pane set "Sorted=true" for alphabetical sorting
-            }
+            ////in C#, a Dictionary contains key-value
+            //Dictionary<string, string> kvp = new Dictionary<string, string>();
+            //kvp.Add("p1", "Account_Aspect");
+            //kvp.Add("p2", "SRF");
+            //kvp.Add("p3", "IXN_Purpose");
+            //kvp.Add("p4", "Language");
+            //kvp.Add("p5", "Auth");
+            //kvp.Add("p6", "CONNID");
+            //kvp.Add("p7", "RG");
+            //kvp.Add("p8", "CallPurpose");
+            //kvp.Add("p9", "Original_SkillSet");
+            //kvp.Add("p10", "CallPurpose_ID");
+            //kvp.Add("p11", "DM_Campaign_Name");
+            //kvp.Add("p12", "Province");
+            //kvp.Add("p13", "Original_Language");
+            //kvp.Add("p14", "Queue_Aspect");
+            //kvp.Add("p15", "Termination_Aspect");
+            //kvp.Add("p16", "CallId");
+            //kvp.Add("p17", "ChannelName");
+            //kvp.Add("p18", "DTMFdigits");
+            //kvp.Add("p19", "EndDate");
+            //kvp.Add("p20", "Custom_ThirdParty");
+            //kvp.Add("p21", "CallDirection");
+            //kvp.Add("p22", "NumberOfHolds");
+            //kvp.Add("p23", "TimeOnHold");
+            //kvp.Add("p43", "GSW_Phone");
+            //kvp.Add("p48", "IPG");
+            ////kvp.Add("", "");
+            ////dropDownKvp.Text = "select KVP";
+            //foreach(KeyValuePair<string, string> x in kvp)//instead of Dictionary<> use KeyValuePair<>
+            //{
+            //    //dropDownKvp.Items.Add(x.Value);//in prop pane set "Sorted=true" for alphabetical sorting
+            //}
             #endregion
 
             #region populate month's comboBox
@@ -150,7 +151,7 @@ namespace FormFindCalls
          
         }
 
-                private void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
+                private void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)//this runs in GUI thread hence can change lable-text & receives info from other thread running SQL query
                 {
                     lblProgress.Text = e.ProgressPercentage.ToString() + " %";
                 }
@@ -162,6 +163,7 @@ namespace FormFindCalls
 
                 private void startCopying(object sender, DoWorkEventArgs e)
                 {
+                    #region old code
                     //circularProgressBar1.Value = 0;
                     //circularProgressBar1.Update();
                     //circularProgressBar1.Visible = true;
@@ -193,14 +195,12 @@ namespace FormFindCalls
                     //{
                     //    destinationPath = d.SelectedPath + "\\";//need a backslash aft folder path
                     //}//if cancel or close is pressed then "destinationPath" is NOT overriden
+                    #endregion
 
-
-
-
-                    destinationPath = e.Argument.ToString();
+                    destinationPath = e.Argument.ToString();//Arg comes from here:- bwCopy.RunWorkerAsync(destinationPath);
 
                     //if(!hasWriteAccessToFolder(destinationPath))//if need login and password to access files, give err msg & restart app
-                    if (audioFilesList.Any() && !File.Exists(audioFilesList.ElementAt(0)))//if user doesn't have permissions then returns "FALSE"
+                    if (audioFilesList.Any() && !File.Exists(audioFilesList.ElementAt(0)))//at least 1 item is there in list BUT no read permission//if user doesn't have read permissions then returns "FALSE"
                     {
                         MessageBox.Show("You don't have permission to copy!", "Permission Denied");
                         Application.Restart();
@@ -406,6 +406,7 @@ namespace FormFindCalls
                     string fullDomain;
                     switch (x)
                     {
+                            //Lab2
                         case "871001":
                             fullDomain = @"\\SE104421\h$\Calls\"; //older: fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
                             break;
@@ -417,6 +418,62 @@ namespace FormFindCalls
                             break;
                         case "871004":
                             fullDomain = @"\\SE104427\h$\Calls\";
+                            break;
+                        //OCC
+                        case "471002":
+                            fullDomain = @"\\se441600\h$\Calls\"; //older: fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
+                            break;
+                        case "471001":
+                            fullDomain = @"\\se441601\h$\Calls\";
+                            break;
+                        case "471003":
+                            fullDomain = @"\\se441602\h$\Calls\";
+                            break;
+                        case "471004":
+                            fullDomain = @"\\se441603\h$\Calls\";
+                            break;
+                        case "471005":
+                            fullDomain = @"\\se441604\h$\Calls\";
+                            break;
+                        case "471006":
+                            fullDomain = @"\\se441605\h$\Calls\";
+                            break;
+                        case "471007":
+                            fullDomain = @"\\se441606\h$\Calls\";
+                            break;
+                        case "471008":
+                            fullDomain = @"\\se441607\h$\Calls\";
+                            break;
+                        case "471009":
+                            fullDomain = @"\\se441608\h$\Calls\";
+                            break;
+                        //GCC
+                        case "471010":
+                            fullDomain = @"\\se441902\h$\Calls\";
+                            break;
+                        case "471011":
+                            fullDomain = @"\\se441903\h$\Calls\";
+                            break;
+                        case "471012":
+                            fullDomain = @"\\se441904\h$\Calls\";
+                            break;
+                        case "471013":
+                            fullDomain = @"\\se441905\h$\Calls\"; //older: fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
+                            break;
+                        case "471014":
+                            fullDomain = @"\\se441906\h$\Calls\";
+                            break;
+                        case "471015":
+                            fullDomain = @"\\se441907\h$\Calls\";
+                            break;
+                        case "471016":
+                            fullDomain = @"\\se441908\h$\Calls\";
+                            break;
+                        case "471017":
+                            fullDomain = @"\\se441909\h$\Calls\"; //older: fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
+                            break;
+                        case "471018":
+                            fullDomain = @"\\se441910\h$\Calls\";
                             break;
                         default:
                             continue;//passes control to next iterration of loop.
@@ -525,7 +582,7 @@ namespace FormFindCalls
             conStrBuilder.InitialCatalog = dbName;
             conStrBuilder.IntegratedSecurity = winAuth;//if false then put username & password
             conStrBuilder.UserID = string.IsNullOrWhiteSpace(popUsrName) ? "test" : popUsrName; //cannot use .IsNullOrWhiteSpace(txtUser.Text) bcoz once popUp form is closed it becomes empty str ""
-            conStrBuilder.Password = string.IsNullOrWhiteSpace(popPass)? "Password.12345":popPass;
+            conStrBuilder.Password = string.IsNullOrWhiteSpace(popPass)? "password":popPass;
             return conStrBuilder.ConnectionString;
             //==================================================        
         }
