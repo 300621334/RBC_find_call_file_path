@@ -1,4 +1,32 @@
-Server Name:			SE104499
-Database Name:			CentralDWH
-User Name:				test
-Password:				Password.12345
+﻿server name: SE104499
+database name:	CentralDWH
+domain: saimaple.saifg.rbc.com
+connection timeout in seconds: 10
+
+//Lab2
+serial-to-server: 871001, SE104421
+serial-to-server: 871002, SE104422
+serial-to-server: 871003, SE104426
+serial-to-server: 871004, SE104427
+
+//OCC
+serial-to-server: 471002, se441600
+serial-to-server: 471001, se441601
+serial-to-server: 471003, se441602
+serial-to-server: 471004, se441603
+serial-to-server: 471005, se441604
+serial-to-server: 471006, se441605
+serial-to-server: 471007, se441606
+serial-to-server: 471008, se441607
+serial-to-server: 471009, se441608
+
+//GCC
+serial-to-server: 471010, se441902
+serial-to-server: 471011, se441903
+serial-to-server: 471012, se441904
+serial-to-server: 471013, se441905
+serial-to-server: 471014, se441906
+serial-to-server: 471015, se441907
+serial-to-server: 471016, se441908
+serial-to-server: 471017, se441909
+serial-to-server: 471018, se441910

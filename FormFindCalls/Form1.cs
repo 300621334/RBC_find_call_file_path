@@ -42,7 +42,8 @@ namespace FormFindCalls
     public partial class Form1 : Form
     {
         #region Global variables
-        //int connTimeOut = 30;
+        Dictionary<string, string> serialSrvrPairs = new Dictionary<string, string>();
+        int connTimeOut = 10;
         BackgroundWorker bw, bwCopy;
         int linesRead = 0;
         //double counter = 0;
@@ -143,129 +144,10 @@ namespace FormFindCalls
             {
                 tblToSearchDD.Items.Add(x);
             }
-            tblToSearchDD.SelectedIndex = 0;
-            #endregion
-
-            //readConfigFile();
-          
-         
-        }
-
-                private void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)//this runs in GUI thread hence can change lable-text & receives info from other thread running SQL query
-                {
-                    lblProgress.Text = e.ProgressPercentage.ToString() + " %";
-                }
-
-                private void bwCopy_ProgressChanged(object sender, ProgressChangedEventArgs e)
-                {
-                    lblProgress.Text = e.ProgressPercentage.ToString() + " %";
-                }
-
-                private void startCopying(object sender, DoWorkEventArgs e)
-                {
-                    #region old code
-                    //circularProgressBar1.Value = 0;
-                    //circularProgressBar1.Update();
-                    //circularProgressBar1.Visible = true;
-
-
-                    //List<string> paths = new List<string>();
-                    //paths.Add(@"C:\Users\Zoya\Google Drive\RBC\a\file1.txt");
-                    //paths.Add(@"C:\Users\Zoya\Google Drive\RBC\a\file2.txt");
-                    //paths.Add(@"C:\Users\Zoya\Google Drive\RBC\b\file3.txt");
-
-                    //string destinationPath = @"C:\Users\SVYX0SRVOAT\Desktop\Test\"; //this might as well be an empty str as it's being changed later based on dialogue box selection
-
-                    //string filesToDelete = @"*_DONE.wav";   // Only delete WAV files ending by "_DONE" in their filenames
-                    //string[] fileList = System.IO.Directory.GetFiles(rootFolderPath, filesToDelete);
-
-                    //open dialogue to overwrite "destinationPath"
-                    //OpenFileDialog d = new OpenFileDialog();//it's to OPEN files
-                    //SaveFileDialog d = new SaveFileDialog();
-                    //d.Title = "Where to save files?";
-                   
-                    //destinationPath = "";
-                    //linesRead = 0;
-                    ////douFle counter = 0;
-                    //missingFiles = 0;
-                    //found = 0;
-                    //FolderBrowserDialog d = new FolderBrowserDialog();
-                    ////d.ShowDialog();
-                    //if (d.ShowDialog() == DialogResult.OK)//this pops up dialogue as well as checks if OK was clicked aft that.
-                    //{
-                    //    destinationPath = d.SelectedPath + "\\";//need a backslash aft folder path
-                    //}//if cancel or close is pressed then "destinationPath" is NOT overriden
-                    #endregion
-
-                    destinationPath = e.Argument.ToString();//Arg comes from here:- bwCopy.RunWorkerAsync(destinationPath);
-
-                    //if(!hasWriteAccessToFolder(destinationPath))//if need login and password to access files, give err msg & restart app
-                    if (audioFilesList.Any() && !File.Exists(audioFilesList.ElementAt(0)))//at least 1 item is there in list BUT no read permission//if user doesn't have read permissions then returns "FALSE"
-                    {
-                        MessageBox.Show("You don't have permission to copy!", "Permission Denied");
-                        Application.Restart();
-                    }
-
-                    foreach (string file in audioFilesList) //switch 'paths' e 'audioFilesList' for actual files
-                    {
-                        linesRead++;
-                        if (File.Exists(file))//excludes lines like "\", "\\", "\\se", "SE123456\h$" etc that gave error "part of path not found"
-                        {
-                            //circularProgressBar1.Value += step;//accepts ONLY int. but then if >100 files we get fraction that rounds to 0--problem!!
-                            //counter += step;
-                            //circularProgressBar1.Value = (int)counter;
-                            //circularProgressBar1.Update();
-                            //circularProgressBar1.Text = (int)counter + "%";
-
-
-                            string moveTo = destinationPath + file.Substring(file.LastIndexOf('\\') + 1); //\\SE104427.saimaple.fg.rbc.com\h$\Calls\871001\000\04\92\871001000049202.wav
-                            try
-                            {
-                                File.Copy(file, moveTo, true);//true to overwrite existing files, else err
-                                found++;
-                            }
-                            catch (Exception ex)
-                            {
-                                if (ex is System.IO.FileNotFoundException || ex is UnauthorizedAccessException)
-                                {
-                                missingFiles++;
-                                continue;
-                                }
-                               
-                            }
-                        }
-                        bwCopy.ReportProgress(linesRead * 100 / audioFilesList.Count);
-                    }
-                    e.Result = "Files copied: " + found + "  Files NOT found: " + (linesRead-found);
                     
-                }
-
-                //private bool hasWriteAccessToFolder(string folderPath)
-                //{//http://stackoverflow.com/questions/1410127/c-sharp-test-if-user-has-write-access-to-a-folder
-                //    try
-                //    {
-                //        // Attempt to get a list of security permissions from the folder. 
-                //        // This will raise an exception if the path is read only or do not have access to view the permissions. 
-                //        System.Security.AccessControl.DirectorySecurity ds = Directory.GetAccessControl(folderPath);
-                //        return true;
-                //    }
-                //    catch (UnauthorizedAccessException)
-                //    {
-                //        return false;
-                //    }
-                //}
-               
-                private void copyCompleted(object sender, RunWorkerCompletedEventArgs e)
-                {
-                    lbl_paths.Text = e.Result.ToString();
-                    //circularProgressBar1.Value = 100;
-                    //circularProgressBar1.Update();
-                    linesRead = 0;
-                    missingFiles = 0;
-                    button1.Enabled = true;
-                    button2.Enabled = true;
-                }
-             
+            tblToSearchDD.SelectedIndex = now.Month - 1;//set session_table_1 etc to current month
+            #endregion
+        }
       
         #region helpful web sites
 
@@ -275,7 +157,6 @@ namespace FormFindCalls
          * --search entire DB in MS-Sql Server: http://stackoverflow.com/questions/15757263/find-a-string-by-searching-all-tables-in-sql-server-management-studio-2008
          */
         #endregion
-
       
         #region btn to connect DB and generate PATHs
         private void button1_Click(object sender, EventArgs e)
@@ -303,25 +184,38 @@ namespace FormFindCalls
 
         private void readConfigFile()
         {
+            serialSrvrPairs.Clear();
             //AudioFilesCopyConfig.txtstring[] iniTxt = File.ReadAllLines(Path.GetFullPath(@"..\..\ini.txt"), Encoding.UTF8);//http://www.csharp-examples.net/read-text-file/
             if (!File.Exists("AudioFilesCopyConfig.txt")) createConfigFile();
             string[] iniTxt = File.ReadAllLines(Path.GetFullPath(@"AudioFilesCopyConfig.txt"), Encoding.UTF8);
             foreach (string line in iniTxt)
             {
-                if (Regex.Match(line, "Domain:").Success)
+                if (Regex.Match(line, "domain:").Success)
                 {
                     var match = Regex.Match(line, ":");
                     domainURI = line.Substring(match.Index + 1).Trim();
                 }
-                if (Regex.Match(line, "Server Name:").Success)
+                if (Regex.Match(line, "server name:").Success)
                 {
                     var match = Regex.Match(line, ":");
                     serverName = line.Substring(match.Index + 1).Trim();//assign this to sqlCommand
                 }
-                if (Regex.Match(line, "Database Name:").Success)
+                if (Regex.Match(line, "database name:").Success)
                 {
                     var match = Regex.Match(line, ":");
                     dbName = line.Substring(match.Index + 1).Trim();
+                }
+                if (Regex.Match(line, "serial-to-server:").Success)
+                {
+                    var match = Regex.Match(line, ":");
+                    string[] serialSrvrArray = line.Substring(match.Index + 1).Trim().Split(',');
+                    serialSrvrPairs.Add(serialSrvrArray[0].Trim(), serialSrvrArray[1].Trim());
+                }
+
+                if (Regex.Match(line, "connection timeout in seconds:").Success)
+                {
+                    var match = Regex.Match(line, ":");
+                    connTimeOut = Convert.ToInt32(line.Substring(match.Index + 1).Trim());
                 }
             }
         }
@@ -338,7 +232,7 @@ namespace FormFindCalls
             //circularProgressBar1.Visible = false;
 
             string conStr = makeConnectionString();
-            bw.RunWorkerAsync(conStr); //openConnection(conStr); converted this method to an EventHandler so that can run in b thread//To pass multiple args, create a List: https://social.msdn.microsoft.com/Forums/vstudio/en-US/d7c0ba24-29b7-4fc9-86ef-92fb8cd5e17a/sending-multiple-arguments-to-background-worker?forum=csharpgeneral
+            bw.RunWorkerAsync(conStr); //openConnection(conStr); I converted this method to an EventHandler so that can run in b thread//To pass multiple args, create a List: https://social.msdn.microsoft.com/Forums/vstudio/en-US/d7c0ba24-29b7-4fc9-86ef-92fb8cd5e17a/sending-multiple-arguments-to-background-worker?forum=csharpgeneral
 
             
 
@@ -349,8 +243,8 @@ namespace FormFindCalls
             con = new SqlConnection(e.Argument.ToString());//= new SqlConnection(conStr); conStr passed an bw.Argument; & rcvd here as e.Argument;
 
             //SqlCommand cmd = new SqlCommand("select * from rbc_contacts", con);
-            cmd = new SqlCommand(query, con);
-            //cmd.CommandTimeout = connTimeOut;
+            cmd = new SqlCommand(query, con);//sends query over this conn
+            cmd.CommandTimeout = connTimeOut;//one is timeout to connect to server & this one is timeout for sql to run!
             cmd.Parameters.AddWithValue("startDate", dateFrom.Value);
             cmd.Parameters.AddWithValue("endDate", dateTo.Value);
 
@@ -384,7 +278,7 @@ namespace FormFindCalls
                     #region Catenate audio_module_no and audio_ch_no and add zeros to make 15 digit, w is name of audio file and basis for nested folders too
 
 
-                    howManyFilesFound++;
+                    
                     //To getValue(byColName) //http://stackoverflow.com/questions/8655965/how-to-get-data-by-sqldatareader-getvalue-by-column-name
                     string x = reader.GetValue(12).ToString();//old: GetValue(2) //reader["audio_module_no"].ToString(); //reader.GetString(1);//audio_module_no//zero based index//getValue(1) same as Java's getObject().
                     string y = reader.GetValue(13).ToString();//old: GetValue(3)//reader["audio_ch_no"].ToString(); //reader.GetString(2);//audio_channel_no
@@ -403,91 +297,114 @@ namespace FormFindCalls
 
 
                     #region Path's 1st segment. Server-to-Serial No.
-                    string fullDomain;
-                    switch (x)
-                    {
-                            //Lab2
-                        case "871001":
-                            fullDomain = @"\\SE104421\h$\Calls\"; //older: fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
-                            break;
-                        case "871002":
-                            fullDomain = @"\\SE104422\h$\Calls\";
-                            break;
-                        case "871003":
-                            fullDomain = @"\\SE104426\h$\Calls\";
-                            break;
-                        case "871004":
-                            fullDomain = @"\\SE104427\h$\Calls\";
-                            break;
-                        //OCC
-                        case "471002":
-                            fullDomain = @"\\se441600\h$\Calls\"; //older: fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
-                            break;
-                        case "471001":
-                            fullDomain = @"\\se441601\h$\Calls\";
-                            break;
-                        case "471003":
-                            fullDomain = @"\\se441602\h$\Calls\";
-                            break;
-                        case "471004":
-                            fullDomain = @"\\se441603\h$\Calls\";
-                            break;
-                        case "471005":
-                            fullDomain = @"\\se441604\h$\Calls\";
-                            break;
-                        case "471006":
-                            fullDomain = @"\\se441605\h$\Calls\";
-                            break;
-                        case "471007":
-                            fullDomain = @"\\se441606\h$\Calls\";
-                            break;
-                        case "471008":
-                            fullDomain = @"\\se441607\h$\Calls\";
-                            break;
-                        case "471009":
-                            fullDomain = @"\\se441608\h$\Calls\";
-                            break;
-                        //GCC
-                        case "471010":
-                            fullDomain = @"\\se441902\h$\Calls\";
-                            break;
-                        case "471011":
-                            fullDomain = @"\\se441903\h$\Calls\";
-                            break;
-                        case "471012":
-                            fullDomain = @"\\se441904\h$\Calls\";
-                            break;
-                        case "471013":
-                            fullDomain = @"\\se441905\h$\Calls\"; //older: fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
-                            break;
-                        case "471014":
-                            fullDomain = @"\\se441906\h$\Calls\";
-                            break;
-                        case "471015":
-                            fullDomain = @"\\se441907\h$\Calls\";
-                            break;
-                        case "471016":
-                            fullDomain = @"\\se441908\h$\Calls\";
-                            break;
-                        case "471017":
-                            fullDomain = @"\\se441909\h$\Calls\"; //older: fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
-                            break;
-                        case "471018":
-                            fullDomain = @"\\se441910\h$\Calls\";
-                            break;
-                        default:
-                            continue;//passes control to next iterration of loop.
-                    }
+                    //string fullDomain;
+                    //switch (x)
+                    //{
+                    //        //Lab2
+                    //    case "871001":
+                    //        fullDomain = @"\\SE104421\h$\Calls\"; //older: fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
+                    //        break;
+                    //    case "871002":
+                    //        fullDomain = @"\\SE104422\h$\Calls\";
+                    //        break;
+                    //    case "871003":
+                    //        fullDomain = @"\\SE104426\h$\Calls\";
+                    //        break;
+                    //    case "871004":
+                    //        fullDomain = @"\\SE104427\h$\Calls\";
+                    //        break;
+                    //    //OCC
+                    //    case "471002":
+                    //        fullDomain = @"\\se441600\h$\Calls\"; //older: fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
+                    //        break;
+                    //    case "471001":
+                    //        fullDomain = @"\\se441601\h$\Calls\";
+                    //        break;
+                    //    case "471003":
+                    //        fullDomain = @"\\se441602\h$\Calls\";
+                    //        break;
+                    //    case "471004":
+                    //        fullDomain = @"\\se441603\h$\Calls\";
+                    //        break;
+                    //    case "471005":
+                    //        fullDomain = @"\\se441604\h$\Calls\";
+                    //        break;
+                    //    case "471006":
+                    //        fullDomain = @"\\se441605\h$\Calls\";
+                    //        break;
+                    //    case "471007":
+                    //        fullDomain = @"\\se441606\h$\Calls\";
+                    //        break;
+                    //    case "471008":
+                    //        fullDomain = @"\\se441607\h$\Calls\";
+                    //        break;
+                    //    case "471009":
+                    //        fullDomain = @"\\se441608\h$\Calls\";
+                    //        break;
+                    //    //GCC
+                    //    case "471010":
+                    //        fullDomain = @"\\se441902\h$\Calls\";
+                    //        break;
+                    //    case "471011":
+                    //        fullDomain = @"\\se441903\h$\Calls\";
+                    //        break;
+                    //    case "471012":
+                    //        fullDomain = @"\\se441904\h$\Calls\";
+                    //        break;
+                    //    case "471013":
+                    //        fullDomain = @"\\se441905\h$\Calls\"; //older: fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
+                    //        break;
+                    //    case "471014":
+                    //        fullDomain = @"\\se441906\h$\Calls\";
+                    //        break;
+                    //    case "471015":
+                    //        fullDomain = @"\\se441907\h$\Calls\";
+                    //        break;
+                    //    case "471016":
+                    //        fullDomain = @"\\se441908\h$\Calls\";
+                    //        break;
+                    //    case "471017":
+                    //        fullDomain = @"\\se441909\h$\Calls\"; //older: fullDomain = @"\\SE104421.saimaple.fg.rbc.com\h$\Calls\";
+                    //        break;
+                    //    case "471018":
+                    //        fullDomain = @"\\se441910\h$\Calls\";
+                    //        break;
+                    //    default:
+                    //        continue;//passes control to next iterration of loop.
+                    //}
                     #endregion
 
+                    #region duplicate using KeyValuePairs in Dictionary - Path's 1st segment. Server-to-Serial No.
+                    string fullDomain = "";
+                    //string[] serialNos = new string[serialSrvrPairs.Count];
+                    //string[] srvrNames = new string[serialSrvrPairs.Count];
+                    
+                    for(int i=0; i < serialSrvrPairs.Count; i++)
+                    {
+                        if (x == serialSrvrPairs.Keys.ElementAt(i))
+                        {
+                            fullDomain = @"\\" + serialSrvrPairs.Values.ElementAt(i)+ @"\h$\Calls\";
+                        }
+                    }
+                    #endregion
+                    
+                    
                     #region path created here
+                    if (fullDomain != "")
+                    {
                     string path = fullDomain + //e.g. \\SE104427.saimaple.fg.rbc.com\h$\Calls\871001\000\04\92\871001000049202.wav
                         x +
                         "\\" + y.Substring(0, 3) + //871001-000-049202
                         "\\" + y.Substring(3, 2) + //871001-000-04-9202
                         "\\" + y.Substring(5, 2) + //871001-000-04-92-02
                         "\\" + x + y + ".wav"; //871001000049202.wav
+
+                    audioFilesList.Add(path);
+                    howManyFilesFound++;
+
                     //+"\n\n";//this causes err sometimes when try to open file or copy: "Illegal characters in path". But if manually delete last few chars like .wav and reType then no-err bcoz that removes \n\n. Also have to hit back arrow few times before delete takes effect on last few chars again bcoz \n\n!!!
+                   
+                    }
                     #endregion
 
                     #region log file & display list
@@ -496,7 +413,7 @@ namespace FormFindCalls
                     //http://stackoverflow.com/questions/7569904/easiest-way-to-read-from-and-write-to-files
                     //http://stackoverflow.com/questions/2837020/open-existing-file-append-a-single-line
 
-                    audioFilesList.Add(path);
+                    
                     //File.AppendAllText(@"C:\Users\SVYX0SRVOAT\Desktop\Test\paths.txt", path+" "+DateTime.Now.ToString() + Environment.NewLine);
                     #endregion
 
@@ -580,6 +497,7 @@ namespace FormFindCalls
             SqlConnectionStringBuilder conStrBuilder = new SqlConnectionStringBuilder();
             conStrBuilder.DataSource = serverName+"."+domainURI;//@"SE104499.saimaple.saifg.rbc.com"; works too but NOT SE104499.saimaple.saifg.rbc.com\MSSQLSERVER //IP: 10.241.205.88
             conStrBuilder.InitialCatalog = dbName;
+            conStrBuilder.ConnectTimeout = connTimeOut;
             conStrBuilder.IntegratedSecurity = winAuth;//if false then put username & password
             conStrBuilder.UserID = string.IsNullOrWhiteSpace(popUsrName) ? "test" : popUsrName; //cannot use .IsNullOrWhiteSpace(txtUser.Text) bcoz once popUp form is closed it becomes empty str ""
             conStrBuilder.Password = string.IsNullOrWhiteSpace(popPass)? "password":popPass;
@@ -854,5 +772,124 @@ namespace FormFindCalls
             popUp.Controls.Add(btnLogin);
             popUp.Show();
         }
+
+
+        //================================================================================================ 
+
+        private void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)//this runs in GUI thread hence can change lable-text & receives info from other thread running SQL query
+        {
+            lblProgress.Text = e.ProgressPercentage.ToString() + " %";
+        }
+
+        private void bwCopy_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            lblProgress.Text = e.ProgressPercentage.ToString() + " %";
+        }
+
+        private void startCopying(object sender, DoWorkEventArgs e)
+        {
+            #region old code
+            //circularProgressBar1.Value = 0;
+            //circularProgressBar1.Update();
+            //circularProgressBar1.Visible = true;
+
+
+            //List<string> paths = new List<string>();
+            //paths.Add(@"C:\Users\Zoya\Google Drive\RBC\a\file1.txt");
+            //paths.Add(@"C:\Users\Zoya\Google Drive\RBC\a\file2.txt");
+            //paths.Add(@"C:\Users\Zoya\Google Drive\RBC\b\file3.txt");
+
+            //string destinationPath = @"C:\Users\SVYX0SRVOAT\Desktop\Test\"; //this might as well be an empty str as it's being changed later based on dialogue box selection
+
+            //string filesToDelete = @"*_DONE.wav";   // Only delete WAV files ending by "_DONE" in their filenames
+            //string[] fileList = System.IO.Directory.GetFiles(rootFolderPath, filesToDelete);
+
+            //open dialogue to overwrite "destinationPath"
+            //OpenFileDialog d = new OpenFileDialog();//it's to OPEN files
+            //SaveFileDialog d = new SaveFileDialog();
+            //d.Title = "Where to save files?";
+
+            //destinationPath = "";
+            //linesRead = 0;
+            ////douFle counter = 0;
+            //missingFiles = 0;
+            //found = 0;
+            //FolderBrowserDialog d = new FolderBrowserDialog();
+            ////d.ShowDialog();
+            //if (d.ShowDialog() == DialogResult.OK)//this pops up dialogue as well as checks if OK was clicked aft that.
+            //{
+            //    destinationPath = d.SelectedPath + "\\";//need a backslash aft folder path
+            //}//if cancel or close is pressed then "destinationPath" is NOT overriden
+            #endregion
+
+            destinationPath = e.Argument.ToString();//Arg comes from here:- bwCopy.RunWorkerAsync(destinationPath);
+
+            //if(!hasWriteAccessToFolder(destinationPath))//if need login and password to access files, give err msg & restart app
+            if (audioFilesList.Any() && !File.Exists(audioFilesList.ElementAt(0)))//at least 1 item is there in list BUT no read permission//if user doesn't have read permissions then returns "FALSE"
+            {
+                MessageBox.Show("You don't have permission to copy!", "Permission Denied");
+                Application.Restart();
+            }
+
+            foreach (string file in audioFilesList) //switch 'paths' e 'audioFilesList' for actual files
+            {
+                linesRead++;
+                if (File.Exists(file))//excludes lines like "\", "\\", "\\se", "SE123456\h$" etc that gave error "part of path not found"
+                {
+                    //circularProgressBar1.Value += step;//accepts ONLY int. but then if >100 files we get fraction that rounds to 0--problem!!
+                    //counter += step;
+                    //circularProgressBar1.Value = (int)counter;
+                    //circularProgressBar1.Update();
+                    //circularProgressBar1.Text = (int)counter + "%";
+
+
+                    string moveTo = destinationPath + file.Substring(file.LastIndexOf('\\') + 1); //\\SE104427.saimaple.fg.rbc.com\h$\Calls\871001\000\04\92\871001000049202.wav
+                    try
+                    {
+                        File.Copy(file, moveTo, true);//true to overwrite existing files, else err
+                        found++;
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex is System.IO.FileNotFoundException || ex is UnauthorizedAccessException)
+                        {
+                            missingFiles++;
+                            continue;
+                        }
+
+                    }
+                }
+                bwCopy.ReportProgress(linesRead * 100 / audioFilesList.Count);
+            }
+            e.Result = "Files copied: " + found + "  Files NOT found: " + (linesRead - found);
+
+        }
+
+        //private bool hasWriteAccessToFolder(string folderPath)
+        //{//http://stackoverflow.com/questions/1410127/c-sharp-test-if-user-has-write-access-to-a-folder
+        //    try
+        //    {
+        //        // Attempt to get a list of security permissions from the folder. 
+        //        // This will raise an exception if the path is read only or do not have access to view the permissions. 
+        //        System.Security.AccessControl.DirectorySecurity ds = Directory.GetAccessControl(folderPath);
+        //        return true;
+        //    }
+        //    catch (UnauthorizedAccessException)
+        //    {
+        //        return false;
+        //    }
+        //}
+
+        private void copyCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            lbl_paths.Text = e.Result.ToString();
+            //circularProgressBar1.Value = 100;
+            //circularProgressBar1.Update();
+            linesRead = 0;
+            missingFiles = 0;
+            button1.Enabled = true;
+            button2.Enabled = true;
+        }
+             
     }
 }
